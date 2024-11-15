@@ -1,9 +1,9 @@
-import My_form from "@/components/form"
+import MyForm from "@/components/form";
+
+
 
 export default function Home() {
   return (
-    <div>
-      <My_form />
-    </div>
-  )
+    <MyForm />
+  );
 }
