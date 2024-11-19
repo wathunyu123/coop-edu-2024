@@ -1,6 +1,7 @@
 'use client';
 
 import Thai from '@/dictionary/thai';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function MyForm() {
@@ -42,13 +43,15 @@ export default function MyForm() {
               </div>
 
             </div>
-            <div className="flex items-center justify-end">
-              <button
-                onClick={handleClick}
-                className="py-10 px-4 text-2xl font-bold shadow-2xl text-right ml-72 text-white p-3 pt-2 pb-2 rounded-xl bg-blue-500"
-              >
-                {Thai.Next}
-              </button>
+            <div className="flex items-center justify-center">
+              <Link href="/profile">
+                <button
+                  onClick={handleClick}
+                  className="py-10 px-4 text-2xl font-bold shadow-2xl text-right ml-72 text-white p-3 pt-2 pb-2 rounded-xl bg-blue-500"
+                >
+                  {Thai.Next}
+                </button>
+              </Link>
             </div>
           </div>
         </div>

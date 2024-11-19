@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar"
 import Container from "@/components/container"
+import Menu from "@/components/menu"
 
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {

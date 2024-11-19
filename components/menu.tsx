@@ -1,27 +1,50 @@
-import Container from "./container";
-import Link from "next/link";
-import Image from "next/image";
+"use client"; // บอก Next.js ว่านี่คือ Client Component
 
-const Menu = () => {
-    <Container>
-        <header className="px-5 py-2 bg-blue-200 shadow-sm font-work-sans">
-            <nav className="flex items-center justify-between font-bold">
+import Thai from '@/dictionary/thai';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-                <Link href="/" className="ml-10">
-                    <Image src="/logo.png" alt="logo" width={144} height={30} />
+export default function Menu() {
+    const pathname = usePathname(); // ดึงเส้นทางปัจจุบัน
+
+    // ตรวจสอบว่าลิงก์เป็น active หรือไม่
+    const isActive = (linkPath: string) => pathname === linkPath;
+
+    return (
+        <header className="px-5 py-2 bg-blue-400 shadow-sm font-work-sans rounded-2xl mt-10 mx-40">
+            <nav className="flex items-center justify-between font-bold px-10 text-white">
+                <Link
+                    href="/profile"
+                    className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/profile") ? "bg-white text-black" : ""
+                        }`}
+                >
+                    <h1>{Thai.Profile}</h1>
                 </Link>
-                <Link href="/" className="hover:bg-white rounded-md ml-96 p-1">
-                    <h1>หน้าหลัก</h1>
+
+                <Link
+                    href="/changeEM"
+                    className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/changeEM") ? "bg-white text-black" : ""
+                        }`}
+                >
+                    {Thai.ChangeEM}
                 </Link>
 
-                <Link href="/check_status" className="hover:bg-white rounded-md mr-96 p-1">
-                    <h1>ตรวจสอบสถานะ</h1>
+                <Link
+                    href="/"
+                    className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/") ? "bg-white text-black" : ""
+                        }`}
+                >
+                    {Thai.OTP}
                 </Link>
 
-
+                <Link
+                    href="/"
+                    className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/") ? "bg-white text-black" : ""
+                        }`}
+                >
+                    {Thai.Unlock}
+                </Link>
             </nav>
         </header>
-    </Container>
+    );
 }
-
-export default Menu
