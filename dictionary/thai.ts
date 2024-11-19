@@ -9,6 +9,7 @@ enum Thai {
     OTP = "OTP&PIN",
     Unlock = "ปลดล็อคอุปกรณ์",
     Data_menber = "ข้อมูลสมาชิก",
+    NumberEM = "เลขอุปกรณ์",
 
 }
 

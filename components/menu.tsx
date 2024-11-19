@@ -30,7 +30,7 @@ export default function Menu() {
                 </Link>
 
                 <Link
-                    href="/"
+                    href="/otp&pin"
                     className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/") ? "bg-white text-black" : ""
                         }`}
                 >
@@ -38,7 +38,7 @@ export default function Menu() {
                 </Link>
 
                 <Link
-                    href="/"
+                    href="/unlock"
                     className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/") ? "bg-white text-black" : ""
                         }`}
                 >
