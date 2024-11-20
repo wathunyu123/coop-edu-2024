@@ -20,6 +20,8 @@ enum Thai {
     DeviceSerial = "หมายเลขอุปกรณ์",
     DeviceModel = "รุ่นของอุปกรณ์",
     ChangeDate = "วันที่เปลี่ยน",
+    Status = "สถานะการใช้งานอุปกรณ์",
+    Notify_status = "แจ้งสถานะ",
 
 }
 

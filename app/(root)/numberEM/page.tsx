@@ -31,7 +31,7 @@ export default function ChangeEM() {
                     <div className="bg-white px-20 py-4 rounded-lg shadow-md">
                         {Thai.NumberEM}
                     </div>
-                </div>
+                </div> 
 
                 <div className="flex flex-col bg-white border-2 border-black rounded-2xl px-12 py-10 w-full max-w-2xl">
                     <div className="flex justify-between mb-6">
