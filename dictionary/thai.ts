@@ -15,7 +15,7 @@ enum Thai {
     SelectNewDevice = "SelectNewDevice",
     CurrentDeviceDescription = "CurrentDeviceDescription",
     CurrentDevice = "CurrentDevice",
-    ConnectionStatus = "ConnectionStatus",
+    ConnectionStatus = "สถานะการเชื่อมต่อ",
     DeviceName = "ชื่ออุปกรณ์",
     DeviceSerial = "หมายเลขอุปกรณ์",
     DeviceModel = "รุ่นของอุปกรณ์",
