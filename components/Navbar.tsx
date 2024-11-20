@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -10,37 +10,42 @@ const Navbar = () => {
 
     const isActive = (linkPath: string) => pathname === linkPath;
 
+    const navLinks = [
+        { href: "/", label: "Home" },
+        { href: "/profile", label: "ตรวจสอบสถานะ" },
+    ];
+
     return (
-        <header className="px-5 py-2 bg-blue-200 shadow-sm font-work-sans">
-            <nav className="flex items-center justify-between font-bold">
-                <Link href="/" className="ml-10">
+        <header className="bg-blue-200 shadow-sm py-3 font-work-sans">
+            <nav className="container mx-auto flex items-center justify-between px-5">
+                {/* Logo */}
+                <Link href="/" className="flex items-center">
                     <Image src="/logo.png" alt="logo" width={144} height={30} />
                 </Link>
 
-                <Link
-                    href="/"
-                    className={`hover:bg-white rounded-md ml-96 p-1 ${isActive("/") ? "bg-white text-blue-500" : ""
-                        }`}
-                >
-                    <h1>Home</h1>
-                </Link>
+                {/* Navigation Links */}
+                <div className="flex space-x-6">
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={`px-3 py-2 rounded-md text-lg font-medium transition-all ${isActive(link.href)
+                                ? "bg-white text-blue-500 shadow-md"
+                                : "text-gray-800 hover:bg-white hover:text-blue-500"
+                                }`}
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
+
 
                 <Link
                     href="/profile"
-                    className={`hover:bg-white rounded-md mr-96 p-1 ${isActive("/profile") ? "bg-white text-blue-500" : ""
+                    className={`flex items-center justify-center rounded-full transition-all ${isActive("/profile") ? "text-blue-500" : "text-black hover:text-blue-500"
                         }`}
                 >
-                    <h1>ตรวจสอบสถานะ</h1>
-                </Link>
-
-                <Link
-                    href="/profile"
-                    className={` mr-10 ${isActive("/profile") ? " text-blue-500" : ""}`}
-                >
-                    <h1>
-                        <FaUserCircle style={{ fontSize: "40px" }} />
-
-                    </h1>
+                    <FaUserCircle size={40} />
                 </Link>
             </nav>
         </header>

@@ -1,13 +1,12 @@
-"use client"; // บอก Next.js ว่านี่คือ Client Component
+"use client"; 
 
 import Thai from '@/dictionary/thai';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Menu() {
-    const pathname = usePathname(); // ดึงเส้นทางปัจจุบัน
+    const pathname = usePathname();
 
-    // ตรวจสอบว่าลิงก์เป็น active หรือไม่
     const isActive = (linkPath: string) => pathname === linkPath;
 
     return (
@@ -31,7 +30,7 @@ export default function Menu() {
 
                 <Link
                     href="/otp&pin"
-                    className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/") ? "bg-white text-black" : ""
+                    className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/otp&pin") ? "bg-white text-black" : ""
                         }`}
                 >
                     {Thai.OTP}
@@ -39,7 +38,7 @@ export default function Menu() {
 
                 <Link
                     href="/unlock"
-                    className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/") ? "bg-white text-black" : ""
+                    className={`hover:bg-white hover:text-black rounded-2xl p-2 ${isActive("/unlock") ? "bg-white text-black" : ""
                         }`}
                 >
                     {Thai.Unlock}

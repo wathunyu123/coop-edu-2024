@@ -19,7 +19,7 @@ export default function Profile() {
                 <div className="flex flex-col items-center justify-center w-1/3">
                     <div className="bg-white p-4  shadow-md">
                         <Image
-                            src="/profile-picture.jpg" // ใส่ path รูปภาพโปรไฟล์
+                            src="/profile-picture.jpg" 
                             alt="Profile Picture"
                             width={150}
                             height={150}
@@ -36,20 +36,20 @@ export default function Profile() {
                 <div className="flex flex-col w-2/3 bg-white p-6 rounded-lg shadow-md divide-y divide-gray-300">
                     <div className="flex justify-between py-4">
                         <span className="text-gray-500 font-medium">ชื่อ - นามสกุล:</span>
-                        <span className="text-gray-800 font-semibold">สมชาย ใจดี</span>
+                        <span className="text-gray-800 font-semibold">สมชาย สมศักดิ์</span>
                     </div>
                     <div className="flex justify-between py-4">
                         <span className="text-gray-500 font-medium">อีเมล:</span>
-                        <span className="text-gray-800 font-semibold">somchai@example.com</span>
+                        <span className="text-gray-800 font-semibold">test@gmail.com</span>
                     </div>
                     <div className="flex justify-between py-4">
                         <span className="text-gray-500 font-medium">เบอร์โทร:</span>
-                        <span className="text-gray-800 font-semibold">081-234-5678</span>
+                        <span className="text-gray-800 font-semibold">012-345-6789</span>
                     </div>
                     <div className="flex justify-between py-4">
                         <span className="text-gray-500 font-medium">ที่อยู่:</span>
                         <span className="text-gray-800 font-semibold">
-                            123/45 ถนนสุขใจ แขวงบางรัก เขตบางรัก กรุงเทพฯ 10500
+                            ...
                         </span>
                     </div>
                 </div>

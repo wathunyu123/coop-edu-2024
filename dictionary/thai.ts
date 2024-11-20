@@ -10,6 +10,16 @@ enum Thai {
     Unlock = "ปลดล็อคอุปกรณ์",
     Data_menber = "ข้อมูลสมาชิก",
     NumberEM = "เลขอุปกรณ์",
+    ChooseDevice = "ChooseDevice",
+    SelectNewDeviceDescription = "SelectNewDeviceDescription",
+    SelectNewDevice = "SelectNewDevice",
+    CurrentDeviceDescription = "CurrentDeviceDescription",
+    CurrentDevice = "CurrentDevice",
+    ConnectionStatus = "ConnectionStatus",
+    DeviceName = "ชื่ออุปกรณ์",
+    DeviceSerial = "หมายเลขอุปกรณ์",
+    DeviceModel = "รุ่นของอุปกรณ์",
+    ChangeDate = "วันที่เปลี่ยน",
 
 }
 
