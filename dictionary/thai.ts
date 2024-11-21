@@ -22,6 +22,8 @@ enum Thai {
     ChangeDate = "วันที่เปลี่ยน",
     Status = "สถานะการใช้งานอุปกรณ์",
     Notify_status = "แจ้งสถานะ",
+    Edit_status = "แก้ไขสถานะ",
+    Otp = "รหัส OTP",
 
 }
 

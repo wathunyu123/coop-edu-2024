@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaUserCircle } from "react-icons/fa";
 import { usePathname } from "next/navigation";
-
+import { TbEdit } from "react-icons/tb";
 const Navbar = () => {
     const pathname = usePathname();
 
