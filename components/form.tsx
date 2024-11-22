@@ -47,7 +47,7 @@ export default function MyForm() {
               <Link href="/profile">
                 <button
                   onClick={handleClick}
-                  className="py-10 px-4 text-2xl font-bold shadow-2xl text-right ml-72 text-white p-3 pt-2 pb-2 rounded-xl bg-blue-500 mr-72"
+                  className="py-10 px-4 text-2xl font-bold shadow-2xl text-right ml-72 text-white p-3 pt-2 pb-2 rounded-xl bg-blue-500 mr-70"
                 >
                   {Thai.Next}
                 </button>

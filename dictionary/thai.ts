@@ -24,6 +24,10 @@ enum Thai {
     Notify_status = "แจ้งสถานะ",
     Edit_status = "แก้ไขสถานะ",
     Otp = "รหัส OTP",
+    unlock = "ปลดล็อค",
+    Displaymonitor = "แสดงบนหน้าจอ",
+    Sms = "ส่งทาง sms",
+
 
 }
 

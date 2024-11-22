@@ -5,24 +5,49 @@ import Container from "@/components/container";
 import IDbox from "@/components/idnumberbox";
 import Menu from "@/components/menu";
 import Thai from "@/dictionary/thai";
-import { TbEdit } from "react-icons/tb";
 import Popup from "@/components/popup";
+import { TbEdit } from "react-icons/tb";
+import { MdOutlineTextsms } from "react-icons/md";
 import { RxLapTimer } from "react-icons/rx";
 import { IoIosDocument } from "react-icons/io";
-import { MdOutlineTextsms } from "react-icons/md";
 
 export default function OTP() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [popupType, setPopupType] = useState<"editStatus" | "otp" | "timer" | "document">("editStatus");
+    const [otp, setOtp] = useState<string | null>(null); // State สำหรับ OTP
+    const [countdown, setCountdown] = useState<number>(0); // นับถอยหลัง
+    const [countdownActive, setCountdownActive] = useState(false); // ควบคุมสถานะนับถอยหลัง
 
     const handleBoxClick = (type: "editStatus" | "otp" | "timer" | "document") => {
-        setPopupType(type);  // กำหนดประเภท Popup ที่จะเปิด
-        setIsPopupOpen(true); // เปิด Popup
+        setPopupType(type);
+        setIsPopupOpen(true);
     };
 
     const handleClosePopup = () => {
-        setIsPopupOpen(false); // ปิด Popup
+        setIsPopupOpen(false);
     };
+
+    const handleOtpReceive = (receivedOtp: string) => {
+        setOtp(receivedOtp);
+        setCountdown(180); // ตั้งเวลา 180 วินาที
+        setCountdownActive(true); // เริ่มนับถอยหลัง
+    };
+
+    useEffect(() => {
+        let countdownInterval: NodeJS.Timeout;
+
+        if (countdownActive && countdown > 0) {
+            countdownInterval = setInterval(() => {
+                setCountdown((prev) => prev - 1);
+            }, 1000);
+        } else if (countdown === 0) {
+            setCountdownActive(false); // หยุดนับถอยหลังเมื่อถึง 0
+        }
+
+        return () => clearInterval(countdownInterval);
+    }, [countdown, countdownActive]);
+
+
 
     return (
         <Container>
@@ -69,6 +94,25 @@ export default function OTP() {
                             <MdOutlineTextsms size={40} className="text-white" />
                             <h1 className="text-white mt-2">{Thai.Otp}</h1>
                         </div>
+                        <div className="flex flex-col justify-center items-center -ml-32">
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                                onClick={() => handleOtpReceive("123456")} // จำลอง OTP ที่เข้ามา
+                            >
+                                รับ OTP
+                            </button>
+
+                            <div className="text-center">
+                                <p className="text-lg">OTP: {otp ? otp : "ยังไม่มี OTP"}</p>
+                                {countdownActive && (
+                                    <p className="text-red-500 text-lg">
+                                        เวลาที่เหลือ: {Math.floor(countdown / 60)}:{String(countdown % 60).padStart(2, "0")}
+                                    </p>
+                                )}
+                            </div>
+
+                        </div>
+
 
                         <div className="flex gap-5">
                             <RxLapTimer size={50} className="text-black" onClick={() => handleBoxClick("timer")} />
@@ -93,11 +137,12 @@ export default function OTP() {
                 </div>
             </Container>
 
-            {/* ใช้ Popup */}
+
+            {/* Popup */}
             <Popup
                 isOpen={isPopupOpen}
                 onClose={handleClosePopup}
-                type={popupType} // ส่งประเภท Popup
+                type={popupType}
             />
         </Container>
     );

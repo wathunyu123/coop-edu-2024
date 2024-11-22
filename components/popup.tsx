@@ -1,24 +1,53 @@
-type PopupProps = {
+"use client";
+
+import React from "react";
+import { createPortal } from "react-dom";
+
+interface PopupProps {
     isOpen: boolean;
     onClose: () => void;
-    type: "editStatus" | "otp" | "timer" | "document"; // เพิ่ม 'type' ให้รองรับค่าที่ต้องการ
-};
+    type: "editStatus" | "otp" | "timer" | "document" | "Unlock" | "displaymonitor" | "sms";
+}
 
 const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
-    if (!isOpen) return null; // ถ้า Popup ไม่เปิดจะไม่แสดง
+    if (!isOpen) return null;
 
-    return (
-        <div className="popup-overlay">
-            <div className="popup-content">
-                <button onClick={onClose} className="close-button">Close</button>
-                <div>
-                    {type === "editStatus" && <p>นี่คือการแก้ไขสถานะ</p>}
-                    {type === "otp" && <p>นี่คือการตั้งค่ารหัส OTP</p>}
-                    {type === "timer" && <p>นี่คือการตั้งค่าจับเวลา</p>}
-                    {type === "document" && <p>นี่คือการดูเอกสาร</p>}
-                </div>
+    // แสดงเนื้อหาตามประเภทของ Popup
+    const renderContent = () => {
+        switch (type) {
+            case "editStatus":
+                return <p>ฟอร์มแก้ไขสถานะกำลังโหลด...</p>;
+            case "otp":
+                return <p>กรุณากรอก OTP ที่ส่งไปยังหมายเลขโทรศัพท์</p>;
+            case "timer":
+                return <p>เริ่มต้นจับเวลา...</p>;
+            case "document":
+                return <p>กำลังเปิดดูเอกสาร...</p>;
+            case "Unlock":
+                return <p> ปลดลล็อคอุปกรณ์ </p>
+            case "displaymonitor":
+                return <p> แสดงรหัสผ่านบนหน้าจอ </p>
+            case "sms":
+                return <p>ส่งรหัสผ่านไปยัง SMS</p>
+            default:
+                return null;
+        }
+    };
+
+    return createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg p-6 shadow-lg w-80">
+                <h2 className="text-lg font-semibold mb-4">Popup</h2>
+                {renderContent()}
+                <button
+                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+                    onClick={onClose}
+                >
+                    ปิด
+                </button>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

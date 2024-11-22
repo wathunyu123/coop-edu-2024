@@ -1,23 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Container from "@/components/container";
 import IDbox from "@/components/idnumberbox";
 import Menu from "@/components/menu";
 import Thai from "@/dictionary/thai";
-import { TbEdit } from "react-icons/tb"; import Popup from "@/components/popup";
+import Popup from "@/components/popup";
+import { FaUnlockKeyhole } from "react-icons/fa6";
+import { LuSmartphoneCharging } from "react-icons/lu";
 import { RxLapTimer } from "react-icons/rx";
 import { IoIosDocument } from "react-icons/io";
 import { GiVibratingSmartphone } from "react-icons/gi";
-import { LuSmartphoneCharging } from "react-icons/lu";
 
-import { FaUnlockKeyhole } from "react-icons/fa6";
-
-export default function OTP() {
+export default function Unlock() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [popupType, setPopupType] = useState<"editStatus" | "otp" | "timer" | "document">("editStatus");
+    const [popupType, setPopupType] = useState<"editStatus" | "otp" | "timer" | "document" | "Unlock" | "displaymonitor" | "sms">("editStatus");
 
-    const handleBoxClick = (type: "editStatus" | "otp" | "timer" | "document") => {
+    const handleBoxClick = (type: "editStatus" | "otp" | "timer" | "document" | "Unlock" | "displaymonitor" | "sms") => {
         setPopupType(type);
         setIsPopupOpen(true);
     };
@@ -32,21 +31,21 @@ export default function OTP() {
             <Menu />
             <Container className="flex flex-col items-start justify-start">
                 <div className="bg-gray-200 w-full px-6 py-10 mt-5 rounded-2xl">
-
+                    {/* Row 1 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
                         <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
                             <h1 className="text-white text-lg mb-2">{Thai.Status}</h1>
-                            <div className="bg-white px-4 py-2 rounded-lg shadow-md">
-                                {Thai.Notify_status}
-                            </div>
+                            <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.unlock}</div>
                         </div>
 
                         <h1 className="-ml-20">{<GiVibratingSmartphone size={50} />}</h1>
-                        <div className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52">
+                        <div
+                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
+                            onClick={() => handleBoxClick("Unlock")}
+                        >
                             <LuSmartphoneCharging size={40} className="text-white mr-2" />
-                            <h1 className="text-white mt-2">{Thai.Edit_status}</h1>
+                            <h1 className="text-white mt-2">{Thai.unlock}</h1>
                         </div>
-
 
                         <div className="flex gap-5">
                             <RxLapTimer size={50} className="text-black" onClick={() => handleBoxClick("timer")} />
@@ -54,21 +53,19 @@ export default function OTP() {
                         </div>
                     </div>
 
-
+                    {/* Row 2 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
                         <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
                             <h1 className="text-white text-lg mb-2">{Thai.Status}</h1>
-                            <div className="bg-white px-4 py-2 rounded-lg shadow-md">
-                                {Thai.Notify_status}
-                            </div>
+                            <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.unlock}</div>
                         </div>
 
                         <div
                             className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer "
-                            onClick={() => handleBoxClick("otp")}
+                            onClick={() => handleBoxClick("Unlock")}
                         >
                             <FaUnlockKeyhole size={40} className="text-white mr-2" />
-                            <h1 className="text-white mt-2">{Thai.Edit_status}</h1>
+                            <h1 className="text-white mt-2">{Thai.unlock}</h1>
                         </div>
 
                         <div className="flex gap-5">
@@ -77,23 +74,27 @@ export default function OTP() {
                         </div>
                     </div>
 
-
+                    {/* Row 3 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
                         <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
                             <h1 className="text-white text-lg mb-2">{Thai.Status}</h1>
-                            <div className="bg-white px-4 py-2 rounded-lg shadow-md">
-                                {Thai.Notify_status}
-                            </div>
+                            <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.Notify_status}</div>
                         </div>
 
-                        <div className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52">
+                        <div
+                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
+                            onClick={() => handleBoxClick("displaymonitor")}
+                        >
                             <LuSmartphoneCharging size={40} className="text-white mr-2" />
-                            <h1 className="text-white mt-2">{Thai.Edit_status}</h1>
+                            <h1 className="text-white mt-2">{Thai.Displaymonitor}</h1>
                         </div>
 
-                        <div className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52">
+                        <div
+                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
+                            onClick={() => handleBoxClick("sms")}
+                        >
                             <LuSmartphoneCharging size={40} className="text-white mr-2" />
-                            <h1 className="text-white mt-2">{Thai.Edit_status}</h1>
+                            <h1 className="text-white mt-2">{Thai.Sms}</h1>
                         </div>
 
                         <div className="flex gap-5">
@@ -104,12 +105,8 @@ export default function OTP() {
                 </div>
             </Container>
 
-
-            <Popup
-                isOpen={isPopupOpen}
-                onClose={handleClosePopup}
-                type={popupType}
-            />
+            {/* Popup */}
+            <Popup isOpen={isPopupOpen} onClose={handleClosePopup} type={popupType} />
         </Container>
     );
 }
