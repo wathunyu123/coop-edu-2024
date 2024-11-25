@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Container from "@/components/container";
 import IDbox from "@/components/idnumberbox";
@@ -26,31 +26,32 @@ export default function ChangeEM() {
             <Menu />
 
             <div className="flex flex-wrap items-start justify-between mt-5 gap-5">
-                <div className="flex flex-col bg-blue-400 px-20 py-10 rounded-2xl text-center">
+                {/* Device Information Card */}
+                <div className="flex flex-col bg-blue-400 px-8 py-6 lg:px-20 lg:py-10 rounded-2xl text-center w-full lg:w-1/3">
                     <h1 className="text-white text-lg mb-4">{Thai.NumberEM}</h1>
-                    <div className="bg-white px-20 py-4 rounded-lg shadow-md">
+                    <div className="bg-white px-8 py-4 rounded-lg shadow-md">
                         {Thai.NumberEM}
                     </div>
                 </div>
 
-                <div className="flex flex-col bg-white border-2 border-black rounded-2xl px-12 py-10 w-full max-w-2xl">
+                {/* Links to other sections */}
+                <div className="flex flex-col bg-white border-2 border-black rounded-2xl px-6 py-10 w-full max-w-2xl">
                     <div className="flex justify-between mb-6">
                         <Link
                             href="/changeEM"
-                            className={`hover:bg-blue-400 hover:text-white rounded-md px-4 py-2 ${isActive("/changeEM") ? "bg-blue-400 text-white" : ""
-                                }`}
+                            className={`hover:bg-blue-400 hover:text-white rounded-md px-4 py-2 ${isActive("/changeEM") ? "bg-blue-400 text-white" : ""}`}
                         >
                             {Thai.MemberNo}
                         </Link>
                         <Link
                             href="/numberEM"
-                            className={`hover:bg-blue-400 hover:text-white rounded-md px-4 py-2 ${isActive("/numberEM") ? "bg-blue-400 text-white" : ""
-                                }`}
+                            className={`hover:bg-blue-400 hover:text-white rounded-md px-4 py-2 ${isActive("/numberEM") ? "bg-blue-400 text-white" : ""}`}
                         >
                             {Thai.NumberEM}
                         </Link>
                     </div>
 
+                    {/* Device Info */}
                     <div className="bg-gray-200 rounded-2xl p-6">
                         <div className="flex flex-col space-y-4">
                             <div className="flex justify-between">

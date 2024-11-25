@@ -20,7 +20,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
             case "otp":
                 return <p>กรุณากรอก OTP ที่ส่งไปยังหมายเลขโทรศัพท์</p>;
             case "timer":
-                return <p>เริ่มต้นจับเวลา...</p>;
+                return <p>กำลังดำเนินการ</p>;
             case "document":
                 return <p>กำลังเปิดดูเอกสาร...</p>;
             case "Unlock":

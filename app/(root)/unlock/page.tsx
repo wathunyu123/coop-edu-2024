@@ -34,7 +34,7 @@ export default function Unlock() {
                     {/* Row 1 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
                         <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
-                            <h1 className="text-white text-lg mb-2">{Thai.Status}</h1>
+                            <h1 className="text-white text-lg mb-2">{Thai.Device_is_lock}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.unlock}</div>
                         </div>
 
@@ -56,7 +56,7 @@ export default function Unlock() {
                     {/* Row 2 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
                         <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
-                            <h1 className="text-white text-lg mb-2">{Thai.Status}</h1>
+                            <h1 className="text-white text-lg mb-2">{Thai.Account_is_lock}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.unlock}</div>
                         </div>
 
@@ -77,7 +77,7 @@ export default function Unlock() {
                     {/* Row 3 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
                         <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
-                            <h1 className="text-white text-lg mb-2">{Thai.Status}</h1>
+                            <h1 className="text-white text-lg mb-2">{Thai.Forgot_your_password}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.Notify_status}</div>
                         </div>
 
