@@ -57,7 +57,7 @@ export default function OTP() {
                 <div className="bg-gray-200 w-full px-6 py-10 mt-5 rounded-2xl">
                    
                     <div className="flex justify-between items-center gap-5 mb-5">
-                        <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
+                        <div className="flex flex-col max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center w-full">
                             <h1 className="text-white text-lg mb-2">{Thai.Status}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">
                                 {Thai.Notify_status}
@@ -65,7 +65,7 @@ export default function OTP() {
                         </div>
 
                         <div
-                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer "
+                            className="flex max-w-full items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer "
                             onClick={() => handleBoxClick("editStatus")}
                         >
                             <TbEdit size={40} className="text-white" />
@@ -78,9 +78,8 @@ export default function OTP() {
                         </div>
                     </div>
 
-                    {/* แถวที่สอง */}
-                    <div className="flex justify-between items-center gap-5 mb-5">
-                        <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
+                    <div className="flex justify-between items-center gap-5 mb-5 ">
+                        <div className="flex flex-col w-full max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
                             <h1 className="text-white text-lg mb-2">{Thai.request_otp}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">
                                 {Thai.Notify_status}
@@ -88,7 +87,7 @@ export default function OTP() {
                         </div>
 
                         <div
-                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer "
+                            className="flex max-w-full items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer "
                             onClick={() => handleBoxClick("otp")}
                         >
                             <MdOutlineTextsms size={40} className="text-white" />
@@ -96,7 +95,7 @@ export default function OTP() {
                         </div>
                         <div className="flex flex-col justify-center items-center -ml-32 space-y-4">
                             <button
-                                className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105"
+                                className="bg-blue-600 text-white max-w-full px-6 py-3 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 mt-10"
                                 onClick={() => handleOtpReceive("123456")} // จำลอง OTP ที่เข้ามา
                             >
                                 รับ OTP
@@ -125,7 +124,7 @@ export default function OTP() {
 
                     {/* แถวที่สาม */}
                     <div className="flex justify-between items-center gap-5 mb-5">
-                        <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
+                        <div className="flex flex-col w-full max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
                             <h1 className="text-white text-lg mb-2">{Thai.Entered_wrong_PIN}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">
                                 {Thai.Notify_status}

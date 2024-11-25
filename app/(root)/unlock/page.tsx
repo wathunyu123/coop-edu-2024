@@ -33,14 +33,14 @@ export default function Unlock() {
                 <div className="bg-gray-200 w-full px-6 py-10 mt-5 rounded-2xl">
                     {/* Row 1 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
-                        <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
+                        <div className="flex flex-col w-full max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
                             <h1 className="text-white text-lg mb-2">{Thai.Device_is_lock}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.unlock}</div>
                         </div>
 
                         <h1 className="-ml-20">{<GiVibratingSmartphone size={50} />}</h1>
                         <div
-                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
+                            className="flex max-w-full items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
                             onClick={() => handleBoxClick("Unlock")}
                         >
                             <LuSmartphoneCharging size={40} className="text-white mr-2" />
@@ -55,13 +55,13 @@ export default function Unlock() {
 
                     {/* Row 2 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
-                        <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
+                        <div className="flex flex-col w-full max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
                             <h1 className="text-white text-lg mb-2">{Thai.Account_is_lock}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.unlock}</div>
                         </div>
 
                         <div
-                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer "
+                            className="flex max-w-full items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer "
                             onClick={() => handleBoxClick("Unlock")}
                         >
                             <FaUnlockKeyhole size={40} className="text-white mr-2" />
@@ -76,13 +76,13 @@ export default function Unlock() {
 
                     {/* Row 3 */}
                     <div className="flex justify-between items-center gap-5 mb-5">
-                        <div className="flex flex-col w-auto max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
+                        <div className="flex flex-col w-full max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
                             <h1 className="text-white text-lg mb-2">{Thai.Forgot_your_password}</h1>
                             <div className="bg-white px-4 py-2 rounded-lg shadow-md">{Thai.Notify_status}</div>
                         </div>
 
                         <div
-                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
+                            className="flex max-w-full items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
                             onClick={() => handleBoxClick("displaymonitor")}
                         >
                             <LuSmartphoneCharging size={40} className="text-white mr-2" />
@@ -90,10 +90,10 @@ export default function Unlock() {
                         </div>
 
                         <div
-                            className="flex items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
+                            className="flex max-w-full items-center justify-between bg-blue-400 px-8 py-1 rounded-2xl cursor-pointer -ml-52"
                             onClick={() => handleBoxClick("sms")}
                         >
-                            <LuSmartphoneCharging size={40} className="text-white mr-2" />
+                            <LuSmartphoneCharging size={40} className="text-white max-w-full" />
                             <h1 className="text-white mt-2">{Thai.Sms}</h1>
                         </div>
 
