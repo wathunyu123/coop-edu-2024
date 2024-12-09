@@ -1,3 +1,4 @@
+import { color } from "framer-motion";
 import type { Config } from "tailwindcss";
 
 export default {
@@ -11,6 +12,11 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+      },
+
+      container: {
+        center: true,
+        padding: '15px',
       },
     },
   },

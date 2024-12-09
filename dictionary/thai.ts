@@ -1,7 +1,8 @@
 enum Thai {
     Next = "ถัดไป",
     MemberNo = "รหัสสมาชิก",
-    Name = "ชื่อ - สกุล",
+    Name = "ชื่อ",
+    Lastname = "นามสกุล",
     IdNumber = "เลขประจำตัวประชาชน",
     PhoneNumber = "เบอร์โทรศัพท์",
     Profile = "โปรไฟล์",

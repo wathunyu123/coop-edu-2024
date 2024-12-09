@@ -1,46 +1,41 @@
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React from "react";
 import { LiaSearchPlusSolid } from "react-icons/lia";
 
-const MemberForm = () => {
-    // State สำหรับเก็บค่า member number และ idNumber
-    const [memberNo, setMemberNo] = useState("");
-    const [idNumber, setIdNumber] = useState("1234567890"); // กำหนดค่าเริ่มต้นให้เป็นหมายเลข ID
+export default function IDbox() {
+  const searchParams = useSearchParams();
+  const memberNo = searchParams.get("memberNo");
+  const name = searchParams.get("name");
+  const idNumber = searchParams.get("idNumber");
+  const phoneNumber = searchParams.get("phoneNumber");
 
-    // ฟังก์ชันสำหรับการเปลี่ยนแปลงค่า input ของ memberNo
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMemberNo(e.target.value);
-    };
+  const handleSearch = () => {
+    if (memberNo) {
+      console.log("Searching for Member:", memberNo);
+    } else {
+      console.log("No memberNo found in query params");
+    }
+  };
 
-    // ฟังก์ชันสำหรับการเปลี่ยนแปลงค่า input ของ idNumber
-    const handleIdNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setIdNumber(e.target.value); // อัปเดตค่าของ idNumber
-    };
+  return (
+    <div className="relative mb-6 mt-5">
+      {/* แสดงค่า memberNo ที่ได้จาก query string */}
+      <div className="w-full max-w-md p-4 rounded-lg border border-gray-300 bg-white shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out transform hover:scale-105">
+        <span className="text-gray-800 font-semibold">
+          {memberNo || "ไม่ระบุ"}
+        </span>
+      </div>
 
-    // ฟังก์ชันค้นหาหรือการทำงานเมื่อคลิกที่ปุ่มค้นหา
-    const handleSearch = () => {
-        console.log("Searching for Member:", memberNo);
-    };
-
-    return (
-        <div className="relative mb-6 mt-5">
-            <input
-                type="text"
-                className="w-full max-w-md p-4 rounded-lg border border-gray-300 bg-white shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
-                placeholder="Enter Member Number"
-                value={memberNo}
-                onChange={handleChange} // อัปเดตค่า memberNo
-            />
-
-
-            {/* Icon Search */}
-            <div
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
-                onClick={handleSearch} // เมื่อคลิกปุ่มค้นหา
-            >
-                <LiaSearchPlusSolid size={30} className="text-gray-600 hover:text-blue-500 transition duration-300 ease-in-out" />
-            </div>
-        </div>
-    );
-};
-
-export default MemberForm;
+      {/* ไอคอนค้นหา */}
+      <div
+        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+        onClick={handleSearch}
+      >
+        <LiaSearchPlusSolid
+          size={30}
+          className="text-gray-600 hover:text-blue-500 transition duration-300 ease-in-out"
+        />
+      </div>
+    </div>
+  );
+}
