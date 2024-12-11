@@ -28,6 +28,7 @@ enum Thai {
     Device_is_lock = "อุปกรณ์ถูกล็อค",
     Account_is_lock = "บัญชีถูกล็อค",
     Forgot_your_password = "ลืมรหัสผ่าน",
+    ImUnlocked = "ImUnlocked",
     
 
 }

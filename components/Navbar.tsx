@@ -5,6 +5,10 @@ import { FiMenu } from "react-icons/fi";
 import { IoSearchCircle } from "react-icons/io5";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
+import Thai from "@/dictionary/thai";
+import { FaExchangeAlt } from "react-icons/fa";
+import { MdTextsms } from "react-icons/md";
+import { ImUnlocked } from "react-icons/im";
 
 /* import Link from "next/link";
 import Image from "next/image";
@@ -25,9 +29,41 @@ export default function Navbar() {
             <img
               src="https://psucoop.psu.ac.th/home/images/contact-us/logo.png"
               alt="logo"
-              className="bg-white shadow-2xl rounded-lg w-32 h-auto mx-auto my-4"
+              className="bg-white shadow-2xl rounded-full w-32 h-auto mx-auto my-4"
             />
           </Link>
+          <div className="flex flex-col my-10 justity-center items-start">
+            <Link
+              href={"/changeEM"}
+              className="text-black font-sans flex justify-center mt-10 text-xl hover:text-white hover:bg-cyan-700"
+            >
+              <FaExchangeAlt className="text-black mx-5 text-3xl" />
+
+              {Thai.ChangeEM}
+            </Link>
+          </div>
+
+          <div className="flex flex-col my-10 justity-center items-start">
+            <Link
+              href={"/otp&pin"}
+              className="text-black font-sans flex justify-center mt-10 text-xl"
+            >
+              <MdTextsms className="text-black mx-5 text-3xl" />
+
+              {Thai.OTP}
+            </Link>
+          </div>
+
+          <div className="flex flex-col my-10 justity-center items-start">
+            <Link
+              href={"/changeEM"}
+              className="text-black font-sans flex justify-center mt-10 text-xl"
+            >
+              <ImUnlocked className="text-black mx-5 text-3xl" />
+
+              {Thai.Unlock}
+            </Link>
+          </div>
         </section>
 
         <div className="flex justify-start items-start mx-10 my-6 p-4">

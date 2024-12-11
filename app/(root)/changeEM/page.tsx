@@ -3,6 +3,7 @@
 import Container from "@/components/container";
 import IDbox from "@/components/idnumberbox";
 import Menu from "@/components/menu";
+import Navbar from "@/components/Navbar";
 import Thai from "@/dictionary/thai";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -26,6 +27,7 @@ export default function ChangeEM() {
   return (
     <Container>
       <div>
+        <Navbar />
         <IDbox />
         <Menu />
       </div>
