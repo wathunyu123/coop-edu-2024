@@ -29,8 +29,8 @@ body {
   background-repeat: no-repeat;
   font-family: Arial, Helvetica, sans-serif;
   transition: background 0.3s, color 0.3s;
-  height: 100vh; /* ครอบคลุมทั้งหน้าจอ */
-  width: auto;
+  height: auto;
+    /* ครอบคลุมทั้งหน้าจอ */
   margin: 0; /* ลบ margin เริ่มต้น */
 }
 

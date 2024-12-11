@@ -5,29 +5,31 @@ import Container from "@/components/container";
 import IDbox from "@/components/idnumberbox";
 import Menu from "@/components/menu";
 import Image from "next/image";
+import Navbar from "@/components/Navbar";
 
 export default function Profile() {
-  const searchParams = useSearchParams();
+  /*  const searchParams = useSearchParams(); */
 
   //   const memberNo = searchParams.get("memberNo");
   //   const name = searchParams.get("name");
   //   const idNumber = searchParams.get("idNumber");
   //   const phoneNumber = searchParams.get("phoneNumber");
 
-  const memberNo = localStorage.getItem("memberNo");
+  /* const memberNo = localStorage.getItem("memberNo");
   const name = localStorage.getItem("name");
   const idNumber = localStorage.getItem("idNumber");
   const phoneNumber = localStorage.getItem("phoneNumber");
-
+ */
   return (
     <Container>
       <div>
-        <IDbox />
-        <Menu />
+        <Navbar />
       </div>
-
-      <div className="flex flex-col lg:flex-row bg-gray-200 px-16 py-20 mt-10 rounded-xl shadow-2xl justify-center items-center">
-        {/* Profile Picture Section */}
+    </Container>
+  );
+}
+{
+  /* <div className="flex flex-col lg:flex-row bg-gray-200 px-16 py-20 mt-10 rounded-xl shadow-2xl justify-center items-center">
         <div className="flex flex-col items-center justify-center w-full lg:w-1/3">
           <div className="bg-white p-4 shadow-md">
             <Image
@@ -42,10 +44,10 @@ export default function Profile() {
           </h2>
         </div>
 
-        {/* Divider */}
+       
         <div className="border-l-2 h-full mx-10 border-gray-300 hidden lg:block"></div>
 
-        {/* Profile Information Section */}
+     
         <div className="flex flex-col w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-md divide-y divide-gray-300">
           <div className="flex justify-between py-4">
             <span className="text-gray-500 font-medium">ชื่อ - นามสกุล:</span>
@@ -68,7 +70,5 @@ export default function Profile() {
             <span className="text-gray-800 font-semibold">...</span>
           </div>
         </div>
-      </div>
-    </Container>
-  );
+      </div> */
 }

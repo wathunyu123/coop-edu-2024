@@ -10,13 +10,13 @@ interface ContainerProps {
 
 const Container: React.FC<ContainerProps> = ({ children, className, id, style }) => {
     return (
-        <div
-            id={id}
-            style={style}
-            className={classNames('max-w-7xl mx-auto px-4 sm:px-6 lg:px-8', className)}
-        >
-            {children}
-        </div>
+      <div
+        id={id}
+        style={style}
+        className="flex justify-start items-start m-0 p-0"
+      >
+        {children}
+      </div>
     );
 };
 
