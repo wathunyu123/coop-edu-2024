@@ -10,6 +10,7 @@ import Thai from "@/dictionary/thai";
 import { hrtime } from "process";
 import { HiRefresh } from "react-icons/hi";
 import { label } from "framer-motion/client";
+import { IoHome } from "react-icons/io5";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -26,7 +27,6 @@ export default function Navbar() {
   return (
     <nav>
       <div className="flex flex-col lg:flex-row w-full min-h-screen">
-        {/* Sidebar */}
         <section className="flex flex-col bg-white rounded-3xl min-h-screen m-10 w-72 px-6 py-6">
           <FiMenu className="text-black text-4xl mb-6" />
           <Link href={"/profile"}>
@@ -37,7 +37,7 @@ export default function Navbar() {
             />
           </Link>
 
-          <div className="flex flex-col items-start justify-center mx-5 gap-20 my-10 text-black">
+          <div className="flex flex-col items-start justify-center mx-10 gap-20 my-10 text-black">
             {navLinks.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
@@ -66,7 +66,6 @@ export default function Navbar() {
 
         <div className="flex justify-end items-start mx-5 my-10">
           <div className="flex justify-between items-center bg-white rounded-3xl px-2 py-1 w-[200px]">
-            {/* Notification Icon */}
             <Link href={"/"} className="relative group w-1/2">
               <IoNotifications
                 className={`text-3xl rounded-3xl p-1 w-full ${
@@ -77,7 +76,6 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* Profile Icon */}
             <Link href={"/profile"} className="relative group w-1/2">
               <FaUserCircle
                 className={`text-3xl rounded-3xl p-1 w-full ${
