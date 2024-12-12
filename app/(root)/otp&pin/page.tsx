@@ -13,7 +13,7 @@ import { RxLapTimer } from "react-icons/rx";
 import { IoIosDocument } from "react-icons/io";
 
 export default function OTP() {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  /* const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupType, setPopupType] = useState<
     "editStatus" | "otp" | "timer" | "document"
   >("editStatus");
@@ -50,7 +50,7 @@ export default function OTP() {
     }
 
     return () => clearInterval(countdownInterval);
-  }, [countdown, countdownActive]);
+  }, [countdown, countdownActive]); */
 
   return (
     <Container>
@@ -140,7 +140,6 @@ export default function OTP() {
               />
             </div>
           </div>
-≈ß
           <div className="flex justify-between items-center gap-5 mb-5">
             <div className="flex flex-col w-full max-w-xs bg-blue-400 px-16 py-1 rounded-2xl text-center">
               <h1 className="text-white text-lg mb-2">
@@ -167,8 +166,7 @@ export default function OTP() {
         </div>
       </Container>
 
-     
-      <Popup isOpen={isPopupOpen} onClose={handleClosePopup} type={popupType} />{ */}
+      <Popup isOpen={isPopupOpen} onClose={handleClosePopup} type={popupType} /> */}
     </Container>
   );
 }

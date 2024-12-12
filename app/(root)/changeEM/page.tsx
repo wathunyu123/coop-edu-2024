@@ -28,11 +28,10 @@ export default function ChangeEM() {
     <Container>
       <div>
         <Navbar />
-        <IDbox />
-        <Menu />
-      </div>
+        {/*  <IDbox />
+        <Menu /> */}
+        {/* </div>
       <div className="flex flex-wrap items-start justify-between mt-5 gap-5">
-        {/* Device Information Card */}
         <div className="flex flex-col bg-blue-400 px-8 py-6 lg:px-20 lg:py-10 rounded-2xl text-center w-full lg:w-1/3">
           <h1 className="text-white text-lg mb-4">{Thai.NumberEM}</h1>
           <div className="bg-white px-8 py-4 rounded-lg shadow-md">
@@ -40,7 +39,6 @@ export default function ChangeEM() {
           </div>
         </div>
 
-        {/* Links to other sections */}
         <div className="flex flex-col bg-white border-2 border-black rounded-2xl px-6 py-10 w-full max-w-2xl">
           <div className="flex justify-between mb-6">
             <Link
@@ -61,7 +59,6 @@ export default function ChangeEM() {
             </Link>
           </div>
 
-          {/* Device Info */}
           <div className="bg-gray-200 rounded-2xl p-6">
             <div className="flex flex-col space-y-4">
               <div className="flex justify-between">
@@ -86,7 +83,7 @@ export default function ChangeEM() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Container>
   );
