@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+
 // ใช้ฟอนต์จากโฟลเดอร์ public
 const geistSans = localFont({
-  src: "/fonts/GeistVF.woff",  // ใช้ path ที่เริ่มต้นจาก public/
+  src: "/fonts/GeistVF.woff", // ใช้ path ที่เริ่มต้นจาก public/
   variable: "--font-geist-sans",
   weight: "100 900",
 });
 const geistMono = localFont({
-  src: "/fonts/GeistMonoVF.woff",  // ใช้ path ที่เริ่มต้นจาก public/
+  src: "/fonts/GeistMonoVF.woff", // ใช้ path ที่เริ่มต้นจาก public/
   variable: "--font-geist-mono",
   weight: "100 900",
 });
@@ -26,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-r from-slate-700 to-cyan-600 `}
+      >
         {children}
       </body>
     </html>
