@@ -33,7 +33,6 @@ export default function RootLayout({
       >
         <Container>
           {children}
-          <Navbar />
         </Container>
       </body>
     </html>
