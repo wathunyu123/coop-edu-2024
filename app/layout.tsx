@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Container from "@/components/container";
+import Navbar from "@/components/Navbar";
 
 
-// ใช้ฟอนต์จากโฟลเดอร์ public
-const geistSans = localFont({
-  src: "/fonts/GeistVF.woff", // ใช้ path ที่เริ่มต้นจาก public/
+
+const geistSans = Geist({
   variable: "--font-geist-sans",
-  weight: "100 900",
+  subsets: ["latin"],
 });
-const geistMono = localFont({
-  src: "/fonts/GeistMonoVF.woff", // ใช้ path ที่เริ่มต้นจาก public/
+
+const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  weight: "100 900",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -28,9 +29,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-r from-slate-700 to-cyan-600 `}
+        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-r from-blue-950 to-sky-900`}
       >
-        {children}
+        <Container>
+          {children}
+          <Navbar />
+        </Container>
       </body>
     </html>
   );

@@ -3,8 +3,6 @@ import MyForm from "@/components/form";
 
 export default function Home() {
   return (
-    <UserProvider>
-      <MyForm />
-    </UserProvider>
+    <MyForm />
   );
 }

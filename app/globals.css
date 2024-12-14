@@ -2,35 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-/* กำหนดตัวแปรหลัง Tailwind utilities */
-:root {
-  --background-light: #405B71; /* สีอ่อน */
-  --background-dark: #202E39;  /* สีเข้ม */
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-light: #202E39;  /* สีเข้มในโหมดมืด */
-    --background-dark: #405B71;  /* สีอ่อนในโหมดมืด */
-    --foreground: #ffffff;
-  }
-}
-
-body {
-  color: var(--foreground);
-  /* ใช้ gradient ที่ไล่จากสีเข้มไปสีอ่อนจากล่างซ้ายไปบนขวา */
-  background-image: linear-gradient(
-    to top right,
-    var(--background-dark), /* สีเข้มที่ล่างซ้าย */
-    var(--background-light)  /* สีอ่อนที่บนขวา */
-  );
-  background-size: cover;
-  background-repeat: no-repeat;
-  font-family: Arial, Helvetica, sans-serif;
-  transition: background 0.3s, color 0.3s;
-  height: auto;
-    /* ครอบคลุมทั้งหน้าจอ */
-  margin: 0; /* ลบ margin เริ่มต้น */
-}
-
