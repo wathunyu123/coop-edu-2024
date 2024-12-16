@@ -21,7 +21,7 @@ export default function Navbar({ children }: NavbarProps) {
       {children}
       <div className="grid grid-cols-12 gap-4 min-h-screen py-8 ">
         {/* Sidebar */}
-        <div className="text-center col-start-1 col-span-3 h-4/5 bg-white p-6 rounded-3xl w-[250px]">
+        <div className="text-center col-start-1 col-span-3 min-h-3/4 bg-white p-6 rounded-3xl w-[250px]">
           <IoMenu className="text-3xl" />
           <div className="flex justify-center py-5">
             <img

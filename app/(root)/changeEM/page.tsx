@@ -58,23 +58,25 @@ export default function ChangeEM() {
             </div>
           </div>
 
-          <div className="text-white flex w-full h-12 bg-sky-700 my-10 rounded-3xl p-6 items-center justify-between">
+          <div className="text-white flex w-full h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
             <div className="flex w-full justify-between items-center ">
               <div className="w-full flex  justify-center ">
                 <Link
-                  href="/chageEM"
-                  className="px-6 hover:bg-white hover:text-black "
+                  href="/changeEM"
+                  className="px-6 py-1 hover:bg-white hover:text-black rounded-xl"
                 >
                   {Thai.MemberNo}
                 </Link>
               </div>
               <div className="w-full flex justify-center">
-                <Link href="/numberEM">{Thai.NumberEM}</Link>
+                <Link href="/numberEM" className="px-6 py-1 hover:bg-white hover:text-black rounded-xl">{Thai.NumberEM}</Link>
               </div>
             </div>
           </div>
 
-          <div className="flex w-full h-1/2 p-6 bg-gray-200 rounded-3xl"></div>
+          <div className="flex w-full h-3/4 p-6 bg-gray-300 rounded-3xl">
+            <h1 className="flex w-full items-center justify-center text-xl">ไม่พบข้อมูล</h1>
+          </div>
         </div>
       </div>
     </div>
