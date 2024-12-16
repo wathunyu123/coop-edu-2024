@@ -27,7 +27,7 @@ export default function Profile() {
     <div>
       <div className="grid grid-cols-12 gap-4 min-h-screen">
         <Navbar />
-        <div className="text-center col-start-5 col-span-8 py-6">
+        <div className="text-center col-start-5 col-span-8 py-8">
           <div className="flex justify-between">
             <div className="bg-white max-h-8 w-3/4 rounded-xl flex justify-between items-center px-5">
               <input
