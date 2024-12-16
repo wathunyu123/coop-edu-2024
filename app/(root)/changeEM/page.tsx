@@ -26,13 +26,12 @@ export default function ChangeEM() {
   const memberNo = searchParams.get("memberNo");
 
   return (
-    <Container>
-      <div>
-        <Navbar />
+    <div>
+      <Navbar />
 
-        {/*  <IDbox />
+      {/*  <IDbox />
         <Menu /> */}
-        {/* </div>
+      {/* </div>
       <div className="flex flex-wrap items-start justify-between mt-5 gap-5">
         <div className="flex flex-col bg-blue-400 px-8 py-6 lg:px-20 lg:py-10 rounded-2xl text-center w-full lg:w-1/3">
           <h1 className="text-white text-lg mb-4">{Thai.NumberEM}</h1>
@@ -86,7 +85,6 @@ export default function ChangeEM() {
             </div>
           </div>
         </div> */}
-      </div>
-    </Container>
+    </div>
   );
 }

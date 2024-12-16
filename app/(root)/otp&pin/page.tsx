@@ -53,7 +53,7 @@ export default function OTP() {
   }, [countdown, countdownActive]); */
 
   return (
-    <Container>
+    <div>
       <Navbar />
       {/*  <IDbox />
       <Menu /> */}
@@ -167,6 +167,6 @@ export default function OTP() {
       </Container>
 
       <Popup isOpen={isPopupOpen} onClose={handleClosePopup} type={popupType} /> */}
-    </Container>
+    </div>
   );
 }

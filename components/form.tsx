@@ -34,9 +34,6 @@ export default function MyForm() {
     localStorage.setItem("phoneNumber", formData.phoneNumber);
 
     router.push(`/profile`);
-
-    // const query = new URLSearchParams(formData).toString();
-    // router.push(`/profile?${query}`);
   };
 
   return (

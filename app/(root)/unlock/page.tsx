@@ -44,7 +44,7 @@ export default function Unlock() {
   };
 
   return (
-    <Container>
+    <div>
       <Navbar />
       {/*  <IDbox />
             <Menu /> */}
@@ -126,6 +126,6 @@ export default function Unlock() {
 
            
             <Popup isOpen={isPopupOpen} onClose={handleClosePopup} type={popupType} /> */}
-    </Container>
+    </div>
   );
 }
