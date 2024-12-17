@@ -7,6 +7,7 @@ import { IoNotifications, IoSearchSharp } from "react-icons/io5";
 import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Profile() {
   const [name, setName] = useState<string | null>(null);
@@ -23,13 +24,18 @@ export default function Profile() {
     setIdmember(localStorage.getItem("idNumber"));
   }, []);
 
+  const pathname = usePathname();
+
+  const isActive = (path: string) =>
+    pathname === path || pathname.startsWith(path);
+
   return (
     <div>
       <div className="grid grid-cols-12 gap-4 min-h-screen">
         <Navbar />
         <div className="text-center col-start-5 col-span-8 py-8">
           <div className="flex justify-between">
-            <div className="bg-white min-h-8 w-3/4 rounded-xl flex justify-between items-center px-5">
+            <div className="bg-white max-h-8 w-3/4 rounded-xl flex justify-between items-center px-5">
               <input
                 type="text"
                 placeholder="รหัสสมาชิก"
@@ -38,7 +44,7 @@ export default function Profile() {
               <IoSearchSharp />
             </div>
 
-            <div className="bg-white min-h-8 w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl">
+            <div className="bg-white max-h-8 w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl">
               <Link
                 href="/"
                 className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
@@ -47,14 +53,18 @@ export default function Profile() {
               </Link>
               <Link
                 href="/profile"
-                className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
+                className={`flex justify-center w-1/2 rounded-lg ${
+                  isActive("/profile")
+                    ? "bg-cyan-700 text-white"
+                    : "hover:bg-cyan-700 hover:text-white"
+                } rounded-lg`}
               >
                 <FaUserCircle />
               </Link>
             </div>
           </div>
 
-          <div className="flex w-full min-h-12 bg-gray-300 my-10 rounded-3xl p-6 items-center justify-between">
+          <div className="flex w-full h-1/2 bg-gray-200 my-10 rounded-3xl p-6 items-center justify-between">
             <div className="flex w-full justify-center">
               <div className="w-1/2 h-3/4">
                 <Image src="" alt="" className="bg-white w-full h-60 p-2" />

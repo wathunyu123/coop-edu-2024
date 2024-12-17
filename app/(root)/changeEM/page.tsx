@@ -11,10 +11,12 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { FaUserCircle } from "react-icons/fa";
 import { IoNotifications, IoSearchSharp } from "react-icons/io5";
 
+
 export default function ChangeEM() {
   const pathname = usePathname();
 
-  const isActive = (linkPath: string) => pathname === linkPath;
+  const isActive = (path: string) =>
+    pathname === path || pathname.startsWith(path);
 
   const newDeviceInfo = {
     deviceName: "iPhone 15 Pro Max",
@@ -60,22 +62,37 @@ export default function ChangeEM() {
 
           <div className="text-white flex w-full h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
             <div className="flex w-full justify-between items-center ">
-              <div className="w-full flex  justify-center ">
+              <div className="w-full flex justify-center">
                 <Link
                   href="/changeEM"
-                  className="px-6 py-1 hover:bg-white hover:text-black rounded-xl"
+                  className={`px-6 py-1 ${
+                    isActive("/changeEM")
+                      ? "bg-white text-black"
+                      : "hover:bg-white hover:text-black"
+                  } rounded-xl`}
                 >
                   {Thai.MemberNo}
                 </Link>
               </div>
               <div className="w-full flex justify-center">
-                <Link href="/numberEM" className="px-6 py-1 hover:bg-white hover:text-black rounded-xl">{Thai.NumberEM}</Link>
+                <Link
+                  href="/numberEM"
+                  className={`px-6 py-1 ${
+                    isActive("/numberEM")
+                      ? "bg-white text-black"
+                      : "hover:bg-white hover:text-black"
+                  } rounded-xl`}
+                >
+                  {Thai.NumberEM}
+                </Link>
               </div>
             </div>
           </div>
 
-          <div className="flex w-full h-3/4 p-6 bg-gray-300 rounded-3xl">
-            <h1 className="flex w-full items-center justify-center text-xl">ไม่พบข้อมูล</h1>
+          <div className="flex w-full h-3/4 p-6  bg-gray-300 rounded-3xl">
+            <h1 className="flex w-full items-center justify-center text-xl">
+              ไม่พบข้อมูล
+            </h1>
           </div>
         </div>
       </div>

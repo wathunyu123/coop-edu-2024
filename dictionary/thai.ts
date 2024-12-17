@@ -16,7 +16,7 @@ enum Thai {
     DeviceSerial = "หมายเลขอุปกรณ์",
     DeviceModel = "รุ่นของอุปกรณ์",
     ChangeDate = "วันที่เปลี่ยน",
-    Status = "สถานะการใช้งานอุปกรณ์",
+    Status = "สถานะการใช้งานธุรกรรม",
     Notify_status = "แจ้งสถานะ",
     Edit_status = "แก้ไขสถานะ",
     Otp = "รหัส OTP",

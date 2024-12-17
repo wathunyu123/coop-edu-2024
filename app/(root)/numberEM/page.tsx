@@ -41,13 +41,21 @@ export default function ChangeEM() {
             <div className="bg-white max-h-8 w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl">
               <Link
                 href="/"
-                className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
+                className={`flex justify-center w-1/2 rounded-lg ${
+                  isActive("/")
+                    ? "bg-cyan-700 text-white"
+                    : "hover:bg-cyan-700 hover:text-white"
+                } rounded-xl`}
               >
                 <IoNotifications />
               </Link>
               <Link
                 href="/profile"
-                className="w-1/2 rounded-lg forced-colors:hidden hover:bg-cyan-700 hover:text-white flex justify-center"
+                className={`flex justify-center w-1/2 rounded-lg ${
+                  isActive("/profile")
+                    ? "bg-cyan-700 text-white"
+                    : "hover:bg-cyan-700 hover:text-white"
+                } rounded-xl`}
               >
                 <FaUserCircle />
               </Link>
@@ -56,10 +64,14 @@ export default function ChangeEM() {
 
           <div className="text-white flex w-full h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
             <div className="flex w-full justify-between items-center ">
-              <div className="w-full flex  justify-center ">
+              <div className="w-full flex justify-center">
                 <Link
                   href="/changeEM"
-                  className="px-6 py-1 hover:bg-white hover:text-black rounded-xl"
+                  className={`px-6 py-1 ${
+                    isActive("/changeEM")
+                      ? "bg-white text-black"
+                      : "hover:bg-white hover:text-black"
+                  } rounded-xl`}
                 >
                   {Thai.MemberNo}
                 </Link>
@@ -67,7 +79,11 @@ export default function ChangeEM() {
               <div className="w-full flex justify-center">
                 <Link
                   href="/numberEM"
-                  className="px-6 py-1 hover:bg-white hover:text-black rounded-xl"
+                  className={`px-6 py-1 ${
+                    isActive("/numberEM")
+                      ? "bg-white text-black"
+                      : "hover:bg-white hover:text-black"
+                  } rounded-xl`}
                 >
                   {Thai.NumberEM}
                 </Link>
