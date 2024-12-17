@@ -37,12 +37,89 @@ export default function MyForm() {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row items-start">
+    <div className="grid grid-cols-12 gap-4 w-full min-h-screen">
+      <div className="flex items-center justify-center col-start-1 col-end-13 ">
+        <div className="flex justify-between items-center p-6 w-full h-4/5 bg-gray-200 rounded-3xl">
+          <div className="w-full h-full p-4 bg-white">
+            <img
+              src="https://psucoop.psu.ac.th/home/tmp/dbd92aa88a980205c55c0d8ec2a92ffa.jpg"
+              alt="page"
+              className="object-cover"
+            />
+          </div>
+
+          <div className="p-4 ">
+            <div className="flex flex-col lg:flex-row w-full gap-4">
+              <input
+                type="string"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="ชื่อ"
+                className="border border-black rounded-md text-center p-2 flex-1 text-black "
+              />
+              <input
+                type="string"
+                name="lastname"
+                value={formData.lastname}
+                onChange={handleChange}
+                placeholder="นามสกุล"
+                className="border border-black rounded-md text-center p-2 flex-1 text-black"
+              />
+            </div>
+
+            <div className="flex flex-col w-full mt-5">
+              <input
+                type="number"
+                name="memberNo"
+                value={formData.memberNo}
+                onChange={handleChange}
+                placeholder="เลขสมาชิก"
+                className="border border-black rounded-md text-center p-2 flex-1 text-black"
+              />
+            </div>
+
+            <div className="flex flex-col w-full mt-5">
+              <input
+                type="number"
+                name="idNumber"
+                value={formData.idNumber}
+                onChange={handleChange}
+                placeholder="เลชบัตรประชาชน"
+                className="border border-black rounded-md text-center p-2 flex-1 text-black"
+              />
+            </div>
+
+            <div className="flex flex-col w-full mt-5">
+              <input
+                type="number"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                placeholder="เบอร์โทรศัพท์"
+                className="border border-black rounded-md text-center p-2 text-black"
+              />
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              className="bg-blue-500 text-white w-full p-2 mt-5 border border-black rounded-md hover:bg-blue-950 hover:text-white hover:border-white"
+            >
+              {Thai.Next}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+{
+  /* <div className="w-full min-h-screen flex flex-col lg:flex-row items-start ">
       <div className="w-full lg:h-screen">
         <img
           alt="page_1"
           src="https://psucoop.psu.ac.th/home/tmp/dbd92aa88a980205c55c0d8ec2a92ffa.jpg"
-          className="lg:w-full lg:h-full object-cover"
+          className="lg:w-full lg:h-full object-contain"
         />
       </div>
 
@@ -51,7 +128,7 @@ export default function MyForm() {
           <img
             alt="logo"
             src="https://psucoop.psu.ac.th/home/images/contact-us/logo.png"
-            className="flex flex-1 mb-10"
+            className="flex flex-1 mb-10 object-cover"
           />
         </div>
         <div className="flex flex-col lg:flex-row w-full gap-4">
@@ -113,7 +190,5 @@ export default function MyForm() {
           {Thai.Next}
         </button>
       </div>
-    </div>
-
-  );
+    </div> */
 }
