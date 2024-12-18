@@ -1,8 +1,5 @@
 "use client";
 
-import Container from "@/components/container";
-import IDbox from "@/components/idnumberbox";
-import Menu from "@/components/menu";
 import Thai from "@/dictionary/thai";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";

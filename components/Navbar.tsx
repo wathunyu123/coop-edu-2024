@@ -21,9 +21,9 @@ export default function Navbar({ children }: NavbarProps) {
       {children}
       <div className="grid grid-cols-12 gap-4 min-h-screen py-8 ">
         {/* Sidebar */}
-        <div className="text-center col-start-1 col-span-3 min-h-1/2 bg-white p-6 rounded-3xl w-[250px]">
+        <div className="text-center col-start-1 col-span-3 max-h-[80%] bg-white p-6 rounded-3xl w-[250px]">
           <IoMenu className="text-3xl" />
-          <div className="flex justify-center py-5">
+          <div className="lg:flex justify-center py-5">
             <img
               src="https://psucoop.psu.ac.th/home/images/contact-us/logo.png"
               alt="logo"
@@ -31,23 +31,50 @@ export default function Navbar({ children }: NavbarProps) {
             />
           </div>
 
-          <div className="flex flex-col justify-center items-center my-12 ">
-            <div className="py-2 px-8 my-6 w-full rounded-xl hover:bg-cyan-700 hover:text-white">
-              <Link href="/changeEM" className="flex items-center py-2">
+          <div className="lg:flex flex-col justify-center items-center my-12 ">
+            <div
+              className={`flex items-start py-2 px-2 w-full rounded-xl ${
+                isActive("/changeEM")
+                  ? "bg-cyan-700 text-white"
+                  : "hover:bg-cyan-700 hover:text-white"
+              }`}
+            >
+              <Link
+                href="/changeEM"
+                className="flex justify-center items-center w-full"
+              >
                 <FaExchangeAlt className="pr-3 text-4xl" />
                 {Thai.ChangeEM}
               </Link>
             </div>
 
-            <div className="py-2 px-8 my-6 w-full rounded-xl hover:bg-cyan-700 hover:text-white">
-              <Link href="/otp&pin" className="flex items-center py-2">
+            <div
+              className={`flex items-center justify-start mt-16 py-2 px-2 w-full rounded-xl ${
+                isActive("/otp&pin")
+                  ? "bg-cyan-700 text-white"
+                  : "hover:bg-cyan-700 hover:text-white"
+              }`}
+            >
+              <Link
+                href="/otp&pin"
+                className="flex justify-center items-center w-full"
+              >
                 <MdSms className="pr-3 text-4xl" />
                 {Thai.OTP}
               </Link>
             </div>
 
-            <div className="py-2 px-8 my-6 w-full rounded-xl hover:bg-cyan-700 hover:text-white">
-              <Link href="/unlock" className="flex items-center py-2">
+            <div
+              className={`flex items-center justify-start mt-16 py-2 px-2 w-full rounded-xl ${
+                isActive("/unlock")
+                  ? "bg-cyan-700 text-white"
+                  : "hover:bg-cyan-700 hover:text-white"
+              }`}
+            >
+              <Link
+                href="/unlock"
+                className="flex justify-center items-center w-full"
+              >
                 <FaUnlockAlt className="pr-3 text-4xl" />
                 {Thai.unlock}
               </Link>

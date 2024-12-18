@@ -39,16 +39,16 @@ export default function MyForm() {
   return (
     <div className="grid grid-cols-12 gap-4 w-full min-h-screen">
       <div className="flex items-center justify-center col-start-1 col-end-13 ">
-        <div className="flex justify-between items-center p-6 w-full h-4/5 bg-gray-200 rounded-3xl">
-          <div className="w-full h-full p-4 bg-white">
+        <div className="lg:flex justify-between items-center p-6 w-full h-4/5 bg-gray-200 rounded-3xl">
+          <div className="max-w-full max-h-[77%] p-4 bg-white">
             <img
               src="https://psucoop.psu.ac.th/home/tmp/dbd92aa88a980205c55c0d8ec2a92ffa.jpg"
               alt="page"
-              className="object-cover"
+              className=" object-fill"
             />
           </div>
 
-          <div className="p-4 ">
+          <div className="p-4 lg:flex flex-col items-center justify-center">
             <div className="flex flex-col lg:flex-row w-full gap-4">
               <input
                 type="string"

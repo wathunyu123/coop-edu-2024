@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Container from "@/components/container";
 import IDbox from "@/components/idnumberbox";
-import Menu from "@/components/menu";
+
 import Thai from "@/dictionary/thai";
 import Popup from "@/components/popup";
 import { FaUnlockKeyhole } from "react-icons/fa6";
@@ -22,7 +22,7 @@ export default function Unlock() {
 
   const isActive = (linkPath: string) => pathname === linkPath;
 
-  /* const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupType, setPopupType] = useState<
     | "editStatus"
     | "otp"
@@ -49,7 +49,7 @@ export default function Unlock() {
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
-  }; */
+  };
 
   return (
     <div>
