@@ -19,19 +19,18 @@ export default function Navbar({ children }: NavbarProps) {
   return (
     <nav>
       {children}
-      <div className="grid grid-cols-12 gap-4 min-h-screen py-8 ">
+      <div className="grid md:grid-cols-12 gap-4 min-h-screen py-8 ">
         {/* Sidebar */}
-        <div className="text-center col-start-1 col-span-3 max-h-[80%] bg-white p-6 rounded-3xl w-[250px]">
+        <div className="md:flex flex-col text-center col-start-1 col-span-3 md:max-h-[80%] bg-white p-6 rounded-3xl w-[250px]">
           <IoMenu className="text-3xl" />
-          <div className="lg:flex justify-center py-5">
+          <div className="sm:flex justify-center py-5">
             <img
               src="https://psucoop.psu.ac.th/home/images/contact-us/logo.png"
               alt="logo"
               className="w-auto h-[80px] "
             />
           </div>
-
-          <div className="lg:flex flex-col justify-center items-center my-12 ">
+          <div className="sm:flex flex-col justify-center items-center my-12 ">
             <div
               className={`flex items-start py-2 px-2 w-full rounded-xl ${
                 isActive("/changeEM")

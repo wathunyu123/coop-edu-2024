@@ -32,12 +32,14 @@ export default function Profile() {
   return (
     <div>
       <div className="grid grid-cols-12 gap-4 min-h-screen">
-        <Navbar />
+        <Navbar children={undefined} />
         <div className="text-center col-start-5 col-span-8 py-8">
           <div className="lg:flex justify-between">
             <div className="bg-white min-h-8 w-3/4 rounded-xl lg:flex justify-between items-center px-5">
               <input
                 type="text"
+                value={memberNo || ""}
+                onChange={(e) => setMemberNO(e.target.value)}
                 placeholder="รหัสสมาชิก"
                 className="w-full outline-none"
               />

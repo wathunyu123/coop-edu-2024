@@ -9,21 +9,30 @@ import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function OTP() {
+export default function OtpPage() {
   const pathname = usePathname();
   const isActive = (linkPath: string) => pathname === linkPath;
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupType, setPopupType] = useState<
-    "editStatus" | "otp" | "timer" | "document"
-  >("editStatus");
+    | "editStatus"
+    | "otp"
+    | "pin"
+    | "timer"
+    | "document"
+    | "Device lock"
+    | "Account lock"
+    | "Forgot your password"
+    | "displaymonitor"
+    | "sms"
+  >("otp");
 
   const [otp, setOtp] = useState<string | null>(null); // State สำหรับ OTP
-  const [countdown, setCountdown] = useState<number>(0); // นับถอยหลัง
-  const [countdownActive, setCountdownActive] = useState(false); // ควบคุมสถานะนับถอยหลัง
+  const [countdown, setCountdown] = useState<number>(60); // นับถอยหลัง
+  const [countdownActive, setCountdownActive] = useState(true); // ควบคุมสถานะนับถอยหลัง
 
   const handleBoxClick = (
-    type: "editStatus" | "otp" | "timer" | "document"
+    type: "editStatus" | "otp" | "pin" | "timer" | "document"
   ) => {
     setPopupType(type);
     setIsPopupOpen(true);
@@ -38,6 +47,12 @@ export default function OTP() {
     setCountdown(180); // ตั้งเวลา 180 วินาที
     setCountdownActive(true); // เริ่มนับถอยหลัง
   };
+
+  const [memberNo, setMemberNo] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMemberNo(localStorage.getItem("memberNo"));
+  }, []);
 
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
@@ -56,12 +71,14 @@ export default function OTP() {
   return (
     <div>
       <div className="grid grid-cols-12 gap-4 min-h-screen">
-        <Navbar />
+        <Navbar children={undefined} />
         <div className="text-center col-start-5 col-span-8 py-8">
           <div className="flex justify-between">
             <div className="bg-white max-h-8 w-3/4 rounded-xl flex justify-between items-center px-5">
               <input
                 type="text"
+                value={memberNo || ""}
+                onChange={(e) => setMemberNo(e.target.value)}
                 placeholder="รหัสสมาชิก"
                 className="w-full outline-none"
               />
@@ -88,7 +105,7 @@ export default function OTP() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center min-w-full h-1/2 bg-sky-400 p-6 my-10 mx-auto rounded-3xl">
+          <div className="flex justify-between items-center min-w-full h-[50%] bg-sky-400 p-6 my-10 mx-auto rounded-3xl">
             <div className="w-64 h-80 p-3 m-2 bg-white ">
               <div className="flex flex-col items-center">
                 <h1 className="text-lg py-6 my-5">{Thai.Status}</h1>
@@ -114,9 +131,9 @@ export default function OTP() {
                 </p>
                 <button
                   className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-                  onClick={() => handleOtpReceive("otp")}
+                  onClick={() => handleBoxClick("otp")}
                 >
-                  Dtail
+                  Detail
                 </button>
               </div>
             </div>
@@ -130,7 +147,7 @@ export default function OTP() {
                 </p>
                 <button
                   className="text-white flex items-end jutify-end py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-                  onClick={() => handleBoxClick("timer")}
+                  onClick={() => handleBoxClick("pin")}
                 >
                   Detail
                 </button>
@@ -149,7 +166,7 @@ export default function OTP() {
 
       {/* Backdrop (Blurred background) */}
       {isPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-40"></div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
       )}
     </div>
   );

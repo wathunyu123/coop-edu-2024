@@ -7,35 +7,35 @@ import Navbar from "@/components/Navbar";
 import Thai from "@/dictionary/thai";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { use, useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { IoNotifications, IoSearchSharp } from "react-icons/io5";
 
-export default function ChangeEM() {
+export default function ChangeEmailPage() {
   const pathname = usePathname();
 
   const isActive = (path: string) =>
     pathname === path || pathname.startsWith(path);
 
-  const newDeviceInfo = {
-    deviceName: "iPhone 15 Pro Max",
-    deviceSerial: "ABC123XYZ456",
-    deviceModel: "Apple",
-    connectionStatus: "Connected",
-    changeDate: "20 Nov 2024",
-  };
-
   const searchParams = useSearchParams();
-  const memberNo = searchParams.get("memberNo");
+
+  const [memberNo, setMemberNo] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMemberNo(localStorage.getItem("memberNo"));
+  }, []);
 
   return (
     <div>
       <div className="grid grid-cols-12 gap-4 min-h-screen">
-        <Navbar />
+        <Navbar children={undefined} />
         <div className="text-center col-start-5 col-span-8 py-8">
           <div className="flex justify-between">
             <div className="bg-white max-h-8 w-3/4 rounded-xl flex justify-between items-center px-5">
               <input
                 type="text"
+                value={memberNo || ""}
+                onChange={(e) => setMemberNo(e.target.value)}
                 placeholder="รหัสสมาชิก"
                 className="w-full outline-none"
               />
@@ -87,7 +87,7 @@ export default function ChangeEM() {
             </div>
           </div>
 
-          <div className="flex w-full h-3/4 p-6  bg-gray-300 rounded-3xl">
+          <div className="flex w-full h-[50%] p-6  bg-gray-300 rounded-3xl">
             <h1 className="flex w-full items-center justify-center text-xl">
               ไม่พบข้อมูล
             </h1>
