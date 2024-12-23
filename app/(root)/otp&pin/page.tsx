@@ -71,10 +71,13 @@ export default function OtpPage() {
   return (
     <div>
       <div className="grid grid-cols-12 gap-4 min-h-screen">
-        <Navbar children={undefined} />
-        <div className="text-center col-start-5 col-span-8 py-8">
+        <div className="col-start-1 col-span-3">
+          <Navbar />
+        </div>
+
+        <div className="text-center col-start-4 col-span-8 py-8">
           <div className="flex justify-between">
-            <div className="bg-white max-h-8 w-3/4 rounded-xl flex justify-between items-center px-5">
+            <div className="bg-white min-h-8 w-3/4 rounded-xl lg:flex justify-between items-center px-5">
               <input
                 type="text"
                 value={memberNo || ""}
@@ -85,7 +88,7 @@ export default function OtpPage() {
               <IoSearchSharp />
             </div>
 
-            <div className="bg-white max-h-8 w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl">
+            <div className="bg-white lg:min-h-8 lg:min-w-32 rounded-xl lg:flex justify-between items-center py-2 px-2 text-2xl">
               <Link
                 href="/"
                 className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"

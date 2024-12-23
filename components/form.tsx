@@ -38,7 +38,7 @@ export default function MyForm() {
 
   return (
     <div className="grid grid-cols-12 gap-4 w-full min-h-screen">
-      <div className="flex items-center justify-center col-start-1 col-end-13 ">
+      <form className="flex items-center justify-center col-start-1 col-end-13 ">
         <div className="lg:flex justify-between items-center p-6 w-full h-4/5 bg-gray-200 rounded-3xl">
           <div className="max-w-full max-h-[77%] p-4 bg-white">
             <img
@@ -48,7 +48,7 @@ export default function MyForm() {
             />
           </div>
 
-          <div className="p-4 lg:flex flex-col items-center justify-center">
+          <form className="p-4 lg:flex flex-col items-center justify-center">
             <div className="flex flex-col lg:flex-row w-full gap-4">
               <input
                 type="string"
@@ -107,9 +107,9 @@ export default function MyForm() {
             >
               {Thai.Next}
             </button>
-          </div>
+          </form>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

@@ -89,7 +89,7 @@ export default function Unlock() {
 
         <div className="flex justify-between items-center min-w-full h-[50%] bg-sky-400 p-6 my-10 mx-auto rounded-3xl">
           {/* Device is locked */}
-          <div className="flex justify-center w-64 h-80 p-3 m-2 bg-white">
+          <div className="w-64 h-80 p-3 m-2 bg-white ">
             <div className="flex flex-col items-center">
               <h1 className="text-lg py-6 my-5">{Thai.Device_is_lock}</h1>
               <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">
@@ -105,7 +105,7 @@ export default function Unlock() {
           </div>
 
           {/* Account is locked */}
-          <div className="flex justify-center sm:w-64 sm:h-80 p-3 m-2 bg-white">
+          <div className="w-64 h-80 p-3 m-2 bg-white ">
             <div className="flex flex-col items-center">
               <h1 className="text-lg py-6 my-5">{Thai.Account_is_lock}</h1>
               <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">
@@ -121,7 +121,7 @@ export default function Unlock() {
           </div>
 
           {/* Forgot your password */}
-          <div className="flex justify-center sm:w-64 sm:h-80 p-3 m-2 bg-white">
+          <div className="w-64 h-80 p-3 m-2 bg-white ">
             <div className="flex flex-col items-center">
               <h1 className="text-lg py-6 my-5">{Thai.Forgot_your_password}</h1>
               <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">

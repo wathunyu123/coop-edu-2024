@@ -27,10 +27,10 @@ export default function ChangeEmailPage() {
 
   return (
     <div>
-      <div className="grid grid-cols-12 gap-4 min-h-screen">
-        <Navbar children={undefined} />
+      <div className="grid md:grid-cols-12 gap-4 min-h-screen">
+        <Navbar />
         <div className="text-center col-start-5 col-span-8 py-8">
-          <div className="flex justify-between">
+          <div className="md:flex flex-col justify-between">
             <div className="bg-white max-h-8 w-3/4 rounded-xl flex justify-between items-center px-5">
               <input
                 type="text"
@@ -58,9 +58,9 @@ export default function ChangeEmailPage() {
             </div>
           </div>
 
-          <div className="text-white flex w-full h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
-            <div className="flex w-full justify-between items-center ">
-              <div className="w-full flex justify-center">
+          <div className="text-white md:flex w-full h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
+            <div className="md:flex w-full justify-between items-center ">
+              <div className="w-full sm:flex justify-center">
                 <Link
                   href="/changeEM"
                   className={`px-6 py-1 ${
@@ -72,7 +72,7 @@ export default function ChangeEmailPage() {
                   {Thai.MemberNo}
                 </Link>
               </div>
-              <div className="w-full flex justify-center">
+              <div className="w-full sm:flex justify-center">
                 <Link
                   href="/numberEM"
                   className={`px-6 py-1 ${
@@ -87,7 +87,7 @@ export default function ChangeEmailPage() {
             </div>
           </div>
 
-          <div className="flex w-full h-[50%] p-6  bg-gray-300 rounded-3xl">
+          <div className="md:flex w-full h-[50%] p-6  bg-gray-300 rounded-3xl">
             <h1 className="flex w-full items-center justify-center text-xl">
               ไม่พบข้อมูล
             </h1>

@@ -8,20 +8,36 @@ import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import Popup from "@/components/popup";
+import { div } from "framer-motion/client";
 
-export default function Profile() {
+export default function ProfilePage() {
   const [name, setName] = useState<string | null>(null);
   const [lastname, setLastname] = useState<string | null>(null);
   const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
-  const [memberNo, setMemberNO] = useState<string | null>(null);
-  const [idNumber, setIdmember] = useState<string | null>(null);
+  const [memberNo, setMemberNo] = useState<string | null>(null);
+  const [idNumber, setIdNumber] = useState<string | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupType, setPopupType] = useState<
+    | "editStatus"
+    | "otp"
+    | "pin"
+    | "timer"
+    | "document"
+    | "Device lock"
+    | "Account lock"
+    | "Forgot your password"
+    | "displaymonitor"
+    | "sms"
+    | null
+  >(null);
 
   useEffect(() => {
     setName(localStorage.getItem("name"));
     setLastname(localStorage.getItem("lastname"));
     setPhoneNumber(localStorage.getItem("phoneNumber"));
-    setMemberNO(localStorage.getItem("memberNo"));
-    setIdmember(localStorage.getItem("idNumber"));
+    setMemberNo(localStorage.getItem("memberNo"));
+    setIdNumber(localStorage.getItem("idNumber"));
   }, []);
 
   const pathname = usePathname();
@@ -29,24 +45,31 @@ export default function Profile() {
   const isActive = (path: string) =>
     pathname === path || pathname.startsWith(path);
 
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
+
   return (
-    <div>
-      <div className="grid grid-cols-12 gap-4 min-h-screen">
-        <Navbar children={undefined} />
-        <div className="text-center col-start-5 col-span-8 py-8">
-          <div className="lg:flex justify-between">
-            <div className="bg-white min-h-8 w-3/4 rounded-xl lg:flex justify-between items-center px-5">
+    <div className="flex flex-col md:flex-row min-h-screen">
+      <div className="col-start-1 col-span-3">
+        <Navbar />
+      </div>
+
+      <div className="flex-1 p-8">
+        <div className="text-center py-8">
+          <div className="flex flex-col md:flex-row justify-between gap-2">
+            <div className="bg-white max-h-8 w-full md:w-full rounded-xl flex justify-between items-center px-2 py-2 ">
               <input
                 type="text"
                 value={memberNo || ""}
-                onChange={(e) => setMemberNO(e.target.value)}
+                onChange={(e) => setMemberNo(e.target.value)}
                 placeholder="รหัสสมาชิก"
                 className="w-full outline-none"
               />
               <IoSearchSharp />
             </div>
 
-            <div className="bg-white max-h-8 w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl">
+            <div className="bg-white max-h-8 w-full md:w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl mt-4 md:mt-0">
               <Link
                 href="/"
                 className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
@@ -55,25 +78,25 @@ export default function Profile() {
               </Link>
               <Link
                 href="/profile"
-                className={`flex justify-center w-1/2 rounded-lg ${
-                  isActive("/profile")
-                    ? "bg-cyan-700 text-white"
-                    : "hover:bg-cyan-700 hover:text-white"
-                } rounded-lg`}
+                className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
               >
                 <FaUserCircle />
               </Link>
             </div>
           </div>
 
-          <div className="lg:flex min-w-full h-1/2 bg-gray-200 my-10 rounded-3xl p-6 items-center justify-between">
-            <div className="flex w-full justify-center">
-              <div className="w-1/2 h-3/4">
-                <Image src="" alt="" className="bg-white w-full h-60 p-2" />
+          <div className="flex flex-col md:flex-row min-w-full min-h-1/2 bg-gray-200 my-10 rounded-3xl p-6 items-center justify-between">
+            <div className="flex w-full items-center justify-center">
+              <div className="w-[200px] h-full p-6">
+                <Image
+                  src=""
+                  alt=""
+                  className="bg-white w-full h-[200px] p-2"
+                />
               </div>
             </div>
 
-            <div className="lg:flex flex-col w-full bg-white p-6 rounded-lg divide-y divide-gray-300">
+            <div className="flex flex-col w-full bg-white p-6 rounded-lg divide-y divide-gray-300">
               <div className="flex justify-between py-4">
                 <span className="text-gray-500 font-medium">
                   ชื่อ - นามสกุล:
@@ -121,6 +144,18 @@ export default function Profile() {
           </div>
         </div>
       </div>
+
+      {/* Popup Component */}
+      <Popup
+        isOpen={isPopupOpen}
+        onClose={handleClosePopup}
+        type={popupType || "editStatus"}
+      />
+
+      {/* Backdrop (Blurred background) */}
+      {isPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
+      )}
     </div>
   );
 }
