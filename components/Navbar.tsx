@@ -31,10 +31,10 @@ export default function Navbar({ children }: NavbarProps) {
       {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out bg-white py-6 gap-4 rounded-3xl w-[250px] max-h-[900px] z-50 md:relative md:translate-x-0`}
+          isSidebarOpen ? "-translate-x-4" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out bg-gray-200 shadow-xl py-6 gap-4 rounded-3xl w-[250px] max-h-[900px] z-50 md:relative md:translate-x-0`}
       >
-        <div className="flex justify-between items-center p-5 mb-4">
+        <div className="flex justify-between items-center py-5 px-10 mb-4">
           <IoClose
             className="text-3xl cursor-pointer md:hidden"
             onClick={toggleSidebar}
@@ -49,7 +49,7 @@ export default function Navbar({ children }: NavbarProps) {
         </div>
         <div className="flex flex-col gap-8 justify-center items-center my-12 space-y-4">
           <div
-            className={`flex items-center py-2 px-2 w-full rounded-xl ${
+            className={`flex items-center py-2 px-2 w-4/5  rounded-xl ${
               isActive(["/changeEM", "/numberEM"])
                 ? "bg-cyan-700 text-white"
                 : "hover:bg-cyan-700 hover:text-white"
@@ -64,7 +64,7 @@ export default function Navbar({ children }: NavbarProps) {
             </Link>
           </div>
           <div
-            className={`flex items-center py-2 px-2 w-full rounded-xl ${
+            className={`flex items-center py-2 px-2 w-4/5 rounded-xl ${
               isActive(["/otp&pin"])
                 ? "bg-cyan-700 text-white"
                 : "hover:bg-cyan-700 hover:text-white"
@@ -79,7 +79,7 @@ export default function Navbar({ children }: NavbarProps) {
             </Link>
           </div>
           <div
-            className={`flex items-center py-2 px-2 w-full rounded-xl ${
+            className={`flex items-center py-2 px-2 w-4/5 rounded-xl ${
               isActive(["/unlock"])
                 ? "bg-cyan-700 text-white"
                 : "hover:bg-cyan-700 hover:text-white"
@@ -98,7 +98,7 @@ export default function Navbar({ children }: NavbarProps) {
 
       {/* Main content */}
       <div className="flex-1 px-8">
-        <div className="md:hidden flex justify-between items-center mb-4 text-white">
+        <div className="md:hidden flex justify-between items-center mb-4 text-black">
           <IoMenu className="text-3xl cursor-pointer" onClick={toggleSidebar} />
         </div>
         {children}

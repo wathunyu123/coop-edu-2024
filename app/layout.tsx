@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-r from-slate-900  via-slate-800  to-slate-700`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-slate-100`} /* bg-gradient-to-r from-slate-900  via-slate-800  to-slate-700 */
       >
         <Container>{children}</Container>
       </body>

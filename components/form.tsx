@@ -39,12 +39,12 @@ export default function MyForm() {
   return (
     <div className="grid grid-cols-12 gap-4 w-full min-h-screen">
       <form className="flex items-center justify-center col-start-1 col-end-13 ">
-        <div className="lg:flex justify-between items-center p-6 w-full h-4/5 bg-gray-200 rounded-3xl">
-          <div className="max-w-full max-h-[77%] p-4 bg-white">
+        <div className="lg:flex justify-between items-center p-6 w-full h-4/5 bg-slate-300 rounded-3xl">
+          <div className="max-w-full max-h-[77%] p-4 ">
             <img
               src="https://psucoop.psu.ac.th/home/tmp/dbd92aa88a980205c55c0d8ec2a92ffa.jpg"
               alt="page"
-              className=" object-fill"
+              className=" object-cover"
             />
           </div>
 
@@ -103,7 +103,7 @@ export default function MyForm() {
 
             <button
               onClick={handleSubmit}
-              className="bg-blue-500 text-white w-full p-2 mt-5 border border-black rounded-md hover:bg-blue-950 hover:text-white hover:border-white"
+              className="bg-blue-500 text-white w-full p-2 mt-5 rounded-md hover:bg-blue-950 hover:text-white"
             >
               {Thai.Next}
             </button>
