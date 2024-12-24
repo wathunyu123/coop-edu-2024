@@ -69,47 +69,44 @@ export default function OtpPage() {
   }, [countdown, countdownActive]);
 
   return (
-    <div>
+    <Navbar>
       <div className="grid grid-cols-12 gap-4 min-h-screen">
-        <div className="col-start-1 col-span-3">
-          <Navbar />
-        </div>
+        {/* search */}
+        <div className="text-center col-start-1 col-span-12 lg:col-start-2 lg:col-span-11 py-8">
+          <div className="md:flex flex-col justify-between">
+            <div className="flex flex-col md:flex-row justify-between gap-2">
+              <div className="bg-white max-h-8 w-full md:w-full rounded-xl flex justify-between items-center px-2 py-2 ">
+                <input
+                  type="text"
+                  value={memberNo || ""}
+                  onChange={(e) => setMemberNo(e.target.value)}
+                  placeholder="รหัสสมาชิก"
+                  className="w-full outline-none "
+                />
+                <IoSearchSharp />
+              </div>
 
-        <div className="text-center col-start-4 col-span-8 py-8">
-          <div className="flex justify-between">
-            <div className="bg-white min-h-8 w-3/4 rounded-xl lg:flex justify-between items-center px-5">
-              <input
-                type="text"
-                value={memberNo || ""}
-                onChange={(e) => setMemberNo(e.target.value)}
-                placeholder="รหัสสมาชิก"
-                className="w-full outline-none"
-              />
-              <IoSearchSharp />
-            </div>
-
-            <div className="bg-white lg:min-h-8 lg:min-w-32 rounded-xl lg:flex justify-between items-center py-2 px-2 text-2xl">
-              <Link
-                href="/"
-                className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
-              >
-                <IoNotifications />
-              </Link>
-              <Link
-                href="/profile"
-                className={`flex justify-center w-1/2 rounded-lg ${
-                  isActive("/profile")
-                    ? "bg-cyan-700 text-white"
-                    : "hover:bg-cyan-700 hover:text-white"
-                } rounded-lg`}
-              >
-                <FaUserCircle />
-              </Link>
+              <div className="bg-white max-h-8 w-full md:w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl mt-4 md:mt-0">
+                <Link
+                  href="/"
+                  className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
+                >
+                  <IoNotifications />
+                </Link>
+                <Link
+                  href="/profile"
+                  className={`w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center ${
+                    isActive("/profile") ? "bg-cyan-700 text-white" : ""
+                  }`}
+                >
+                  <FaUserCircle />
+                </Link>
+              </div>
             </div>
           </div>
 
-          <div className="flex justify-between items-center min-w-full h-[50%] bg-sky-400 p-6 my-10 mx-auto rounded-3xl">
-            <div className="w-64 h-80 p-3 m-2 bg-white ">
+          <div className="flex flex-wrap justify-between items-center w-full h-auto bg-slate-400 p-6 my-10 mx-auto rounded-3xl">
+            <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
               <div className="flex flex-col items-center">
                 <h1 className="text-lg py-6 my-5">{Thai.Status}</h1>
                 <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">
@@ -126,7 +123,7 @@ export default function OtpPage() {
             </div>
 
             {/* OTP Request */}
-            <div className="w-64 h-80 p-3 m-2 bg-white ">
+            <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
               <div className="flex flex-col items-center">
                 <h1 className="text-lg py-6 my-5">{Thai.request_otp}</h1>
                 <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">
@@ -142,14 +139,14 @@ export default function OtpPage() {
             </div>
 
             {/* OTP Wrong PIN */}
-            <div className="w-64 h-80 p-3 m-2 bg-white ">
+            <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
               <div className="flex flex-col items-center">
                 <h1 className="text-lg py-6 my-5">{Thai.Entered_wrong_PIN}</h1>
                 <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">
                   {Thai.Notify_status}
                 </p>
                 <button
-                  className="text-white flex items-end jutify-end py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
+                  className="text-white flex items-end justify-end py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
                   onClick={() => handleBoxClick("pin")}
                 >
                   Detail
@@ -171,6 +168,6 @@ export default function OtpPage() {
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
       )}
-    </div>
+    </Navbar>
   );
 }

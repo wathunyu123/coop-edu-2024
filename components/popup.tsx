@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface PopupProps {
@@ -38,7 +38,12 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
     setCountdownActive(true); // เริ่มการนับถอยหลัง
   };
 
-  const memberNO = localStorage.getItem("memberNo");
+  const memberNO = localStorage.getItem("memberNo") || "ไม่พบรหัสสมาชิก"; // เพิ่มการตรวจสอบ
+  const [memberNo, setMemberNo] = useState<string | null>(memberNO); // สร้าง state สำหรับรหัสสมาชิก
+  useEffect(() => {
+    setMemberNo(memberNO); // ตั้งค่ารหัสสมาชิกจาก localStorage
+  }, [memberNO]);
+
   // ฟังก์ชันที่จัดการการนับถอยหลัง
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
@@ -64,7 +69,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
       case "editStatus":
         return (
           <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
+            <h2 className="text-lg text-center w-full font-semibold p-4 bg-cyan-700 text-white rounded-xl">
               สถานะการใช้งานธุรกรรม
             </h2>
             <p className="flex items-center justify-center h-full w-full">
@@ -75,15 +80,15 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
       case "otp":
         return (
           <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
+            <h2 className="text-lg text-center w-full font-semibold p-4 bg-cyan-700 text-white rounded-xl">
               ขอ OTP
             </h2>
             {otp ? (
-              <p className="text-center text-xl outline flex items-center h-12 p-5">
+              <p className="text-center text-xl outline flex items-center p-5 my-5 h-12 ">
                 OTP ของคุณคือ: <strong>{memberNO}</strong>
               </p>
             ) : (
-              <p>กรุณากดปุ่ม "Action" เพื่อขอ OTP</p>
+              <p className="py-6">กรุณากดปุ่ม "Action" เพื่อขอ OTP</p>
             )}
             {countdown > 0 ? (
               <p className="mt-4 text-center text-lg outline p-4">
@@ -112,43 +117,15 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
           </div>
         );
       case "timer":
-        return (
-          <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
-              การดำเนินการ
-            </h2>
-            <p className="flex items-center justify-center h-full w-full">
-              กำลังดำเนินการ...
-            </p>
-          </div>
-        );
       case "document":
-        return (
-          <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
-              การดำเนินการ
-            </h2>
-            <p className="flex items-center justify-center h-full w-full">
-              กำลังดำเนินการ...
-            </p>
-          </div>
-        );
       case "Device lock":
-        return (
-          <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
-              อุปกรณ์ถูกล็อค
-            </h2>
-            <p className="flex items-center justify-center h-full w-full">
-              กำลังดำเนินการ...
-            </p>
-          </div>
-        );
       case "Account lock":
+      case "displaymonitor":
+      case "sms":
         return (
           <div className="flex flex-col w-full h-full items-center">
             <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
-              บัญชีถูกล็อค
+              กำลังดำเนินการ
             </h2>
             <p className="flex items-center justify-center h-full w-full">
               กำลังดำเนินการ...
@@ -168,33 +145,11 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
               className="border border-gray-300 my-6 rounded-md p-2 bg-gray-100 text-gray-800 text-center"
             />
             <button className="text-white bg-cyan-700 px-4 py-2 rounded-xl my-2">
-              แสดงบนหน้จอ
+              แสดงบนหน้าจอ
             </button>
             <button className="text-white bg-cyan-700 px-4 py-2 rounded-xl my-2">
               ส่งทาง SMS
             </button>
-          </div>
-        );
-      case "displaymonitor":
-        return (
-          <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
-              การดำเนินการ
-            </h2>
-            <p className="flex items-center justify-center h-full w-full">
-              กำลังดำเนินการ...
-            </p>
-          </div>
-        );
-      case "sms":
-        return (
-          <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
-              การดำเนินการ
-            </h2>
-            <p className="flex items-center justify-center h-full w-full">
-              กำลังดำเนินการ...
-            </p>
           </div>
         );
       default:
@@ -208,7 +163,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
       onClick={handleBackdropClick}
     >
       <motion.div
-        className="bg-white flex flex-col drop-shadow-2xl items-center rounded-lg p-6 shadow-lg w-[30%] h-[40%]"
+        className="bg-white flex flex-col drop-shadow-2xl items-center rounded-lg p-6 shadow-lg w-[350px] max-w-lg h-[400px] max-h-[80%] overflow-y-auto"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 50 }}

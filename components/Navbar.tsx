@@ -9,25 +9,32 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Thai from "@/dictionary/thai";
 
-export default function Navbar() {
+import { ReactNode } from "react";
+
+interface NavbarProps {
+  children: ReactNode;
+}
+
+export default function Navbar({ children }: NavbarProps) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const isActive = (path: string) =>
-    pathname === path || pathname.startsWith(path);
+  const isActive = (paths: string[]) =>
+    paths.some((path) => pathname === path || pathname.startsWith(path));
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen gap-4 ">
+    <div className="flex pt-8 flex-col md:flex-row min-h-screen ">
+      {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out bg-white py-8 p-6 rounded-3xl w-[250px] h-[900px] z-50 md:relative md:translate-x-0 md:col-span-3 my-auto`}
+        } transition-transform duration-300 ease-in-out bg-white py-6 gap-4 rounded-3xl w-[250px] max-h-[900px] z-50 md:relative md:translate-x-0`}
       >
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center p-5 mb-4">
           <IoClose
             className="text-3xl cursor-pointer md:hidden"
             onClick={toggleSidebar}
@@ -40,10 +47,10 @@ export default function Navbar() {
             className="w-auto h-[80px]"
           />
         </div>
-        <div className="flex flex-col justify-center items-center my-12 space-y-4 gap-10">
+        <div className="flex flex-col gap-8 justify-center items-center my-12 space-y-4">
           <div
             className={`flex items-center py-2 px-2 w-full rounded-xl ${
-              isActive("/changeEM")
+              isActive(["/changeEM", "/numberEM"])
                 ? "bg-cyan-700 text-white"
                 : "hover:bg-cyan-700 hover:text-white"
             }`}
@@ -58,7 +65,7 @@ export default function Navbar() {
           </div>
           <div
             className={`flex items-center py-2 px-2 w-full rounded-xl ${
-              isActive("/otp&pin")
+              isActive(["/otp&pin"])
                 ? "bg-cyan-700 text-white"
                 : "hover:bg-cyan-700 hover:text-white"
             }`}
@@ -73,7 +80,7 @@ export default function Navbar() {
           </div>
           <div
             className={`flex items-center py-2 px-2 w-full rounded-xl ${
-              isActive("/unlock")
+              isActive(["/unlock"])
                 ? "bg-cyan-700 text-white"
                 : "hover:bg-cyan-700 hover:text-white"
             }`}
@@ -89,13 +96,12 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="flex-1 px-3">
-        <div className="md:hidden flex justify-between items-center mb-4">
-          <IoMenu
-            className="text-white text-3xl cursor-pointer"
-            onClick={toggleSidebar}
-          />
+      {/* Main content */}
+      <div className="flex-1 px-8">
+        <div className="md:hidden flex justify-between items-center mb-4 text-white">
+          <IoMenu className="text-3xl cursor-pointer" onClick={toggleSidebar} />
         </div>
+        {children}
       </div>
     </div>
   );
