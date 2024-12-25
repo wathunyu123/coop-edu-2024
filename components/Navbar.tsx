@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { IoMenu, IoClose } from "react-icons/io5";
-import { FaExchangeAlt, FaUserCircle, FaUnlockAlt } from "react-icons/fa";
+import { FaExchangeAlt, FaUnlockAlt } from "react-icons/fa";
 import { MdSms } from "react-icons/md";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -40,13 +40,13 @@ export default function Navbar({ children }: NavbarProps) {
             onClick={toggleSidebar}
           />
         </div>
-        <div className="flex justify-center py-5">
+        <Link href="/" className="flex justify-center py-5">
           <img
             src="https://psucoop.psu.ac.th/home/images/contact-us/logo.png"
             alt="logo"
             className="w-auto h-[80px]"
           />
-        </div>
+        </Link>
         <div className="flex flex-col gap-8 justify-center items-center my-12 space-y-4">
           <div
             className={`flex items-center py-2 px-2 w-4/5  rounded-xl ${

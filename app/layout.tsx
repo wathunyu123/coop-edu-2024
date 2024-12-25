@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Container from "@/components/container";
-import Navbar from "@/components/Navbar";
-import MyForm from "@/components/form";
+import { UserProvider } from "@/contexts/UserContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,12 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-slate-100`} /* bg-gradient-to-r from-slate-900  via-slate-800  to-slate-700 */
-      >
-        <Container>{children}</Container>
-      </body>
-    </html>
+    <UserProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} bg-slate-100`}
+        >
+          <Container>{children}</Container>
+        </body>
+      </html>
+    </UserProvider>
   );
 }

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Thai from "@/dictionary/thai";
 import Popup from "@/components/popup";
-import { IoNotifications, IoSearchSharp } from "react-icons/io5";
+import { IoHome, IoNotifications, IoSearchSharp } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 export default function OtpPage() {
   const pathname = usePathname();
   const isActive = (linkPath: string) => pathname === linkPath;
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupType, setPopupType] = useState<
@@ -69,105 +70,111 @@ export default function OtpPage() {
   }, [countdown, countdownActive]);
 
   return (
-    <Navbar>
-      <div className="grid grid-cols-12 gap-4 min-h-screen">
-        {/* search */}
-        <div className="text-center col-start-1 col-span-12 lg:col-start-2 lg:col-span-11 ">
-          <div className="md:flex flex-col justify-between">
-            <div className="flex flex-col md:flex-row justify-between gap-2">
-              <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-full rounded-xl flex justify-between items-center px-2 py-2 ">
-                <input
-                  type="text"
-                  value={memberNo || ""}
-                  onChange={(e) => setMemberNo(e.target.value)}
-                  placeholder="รหัสสมาชิก"
-                  className="w-full outline-none bg-gray-200 px-6"
-                />
-                <IoSearchSharp />
-              </div>
+    <div
+      className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`}
+    >
+      <Navbar>
+        <div className="grid grid-cols-12 gap-4 min-h-screen">
+          {/* search */}
+          <div className="text-center col-start-1 col-span-12 lg:col-start-2 lg:col-span-11 ">
+            <div className="md:flex flex-col justify-between">
+              <div className="flex flex-col md:flex-row justify-between gap-2">
+                <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-full rounded-xl flex justify-between items-center px-2 py-2 ">
+                  <input
+                    type="text"
+                    value={memberNo || ""}
+                    onChange={(e) => setMemberNo(e.target.value)}
+                    placeholder="รหัสสมาชิก"
+                    className="w-full outline-none bg-gray-200 px-6"
+                  />
+                  <IoSearchSharp />
+                </div>
 
-              <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl mt-4 md:mt-0">
-                <Link
-                  href="/"
-                  className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
-                >
-                  <IoNotifications />
-                </Link>
-                <Link
-                  href="/profile"
-                  className={`w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center ${
-                    isActive("/profile") ? "bg-cyan-700 text-white" : ""
-                  }`}
-                >
-                  <FaUserCircle />
-                </Link>
+                <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl mt-4 md:mt-0">
+                  <Link
+                    href="/"
+                    className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
+                  >
+                    <IoHome />
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className={`w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center ${
+                      isActive("/profile") ? "bg-cyan-700 text-white" : ""
+                    }`}
+                  >
+                    <FaUserCircle />
+                  </Link>
+                </div>
               </div>
             </div>
+
+            <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-300 p-6 my-10 mx-auto rounded-3xl">
+              <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
+                <div className="flex flex-col items-center">
+                  <h1 className="text-lg py-6 my-5">{Thai.Status}</h1>
+                  <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
+                    {Thai.Notify_status}
+                  </p>
+                  <button
+                    className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
+                    onClick={() => handleBoxClick("editStatus")}
+                    aria-label="Click to view edit status details"
+                  >
+                    Detail
+                  </button>
+                </div>
+              </div>
+
+              {/* OTP Request */}
+              <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
+                <div className="flex flex-col items-center">
+                  <h1 className="text-lg py-6 my-5">{Thai.request_otp}</h1>
+                  <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
+                    {Thai.Notify_status}
+                  </p>
+                  <button
+                    className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
+                    onClick={() => handleBoxClick("otp")}
+                  >
+                    Detail
+                  </button>
+                </div>
+              </div>
+
+              {/* OTP Wrong PIN */}
+              <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
+                <div className="flex flex-col items-center">
+                  <h1 className="text-lg py-6 my-5">
+                    {Thai.Entered_wrong_PIN}
+                  </h1>
+                  <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
+                    {Thai.Notify_status}
+                  </p>
+                  <button
+                    className="text-white flex items-end justify-end py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
+                    onClick={() => handleBoxClick("pin")}
+                  >
+                    Detail
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Popup Component */}
+            <Popup
+              isOpen={isPopupOpen}
+              onClose={handleClosePopup}
+              type={popupType}
+            />
           </div>
-
-          <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-300 p-6 my-10 mx-auto rounded-3xl">
-            <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
-              <div className="flex flex-col items-center">
-                <h1 className="text-lg py-6 my-5">{Thai.Status}</h1>
-                <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">
-                  {Thai.Notify_status}
-                </p>
-                <button
-                  className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-                  onClick={() => handleBoxClick("editStatus")}
-                  aria-label="Click to view edit status details"
-                >
-                  Detail
-                </button>
-              </div>
-            </div>
-
-            {/* OTP Request */}
-            <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
-              <div className="flex flex-col items-center">
-                <h1 className="text-lg py-6 my-5">{Thai.request_otp}</h1>
-                <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">
-                  {Thai.Notify_status}
-                </p>
-                <button
-                  className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-                  onClick={() => handleBoxClick("otp")}
-                >
-                  Detail
-                </button>
-              </div>
-            </div>
-
-            {/* OTP Wrong PIN */}
-            <div className="w-full md:w-64 h-80 p-3 m-2 bg-white ">
-              <div className="flex flex-col items-center">
-                <h1 className="text-lg py-6 my-5">{Thai.Entered_wrong_PIN}</h1>
-                <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-blue-500">
-                  {Thai.Notify_status}
-                </p>
-                <button
-                  className="text-white flex items-end justify-end py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-                  onClick={() => handleBoxClick("pin")}
-                >
-                  Detail
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Popup Component */}
-          <Popup
-            isOpen={isPopupOpen}
-            onClose={handleClosePopup}
-            type={popupType}
-          />
         </div>
-      </div>
 
-      {/* Backdrop (Blurred background) */}
-      {isPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
-      )}
-    </Navbar>
+        {/* Backdrop (Blurred background) */}
+        {isPopupOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
+        )}
+      </Navbar>
+    </div>
   );
 }
