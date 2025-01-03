@@ -16,9 +16,19 @@ interface PopupProps {
     | "Forgot your password"
     | "displaymonitor"
     | "sms";
+  onSave?: () => void; // Optional onSave property
+  name?: string; // Optional name property
+  phoneNumber?: string; // Optional phoneNumber property
 }
 
-const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
+const Popup: React.FC<PopupProps> = ({
+  isOpen,
+  onClose,
+  type,
+
+  name,
+  phoneNumber,
+}) => {
   if (!isOpen) return null;
 
   const [otp, setOtp] = useState<string | null>(null); // OTP state

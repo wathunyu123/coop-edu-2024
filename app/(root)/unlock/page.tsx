@@ -28,6 +28,23 @@ type PopupType =
   | "displaymonitor"
   | "sms";
 
+interface PopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  type:
+    | "editStatus"
+    | "otp"
+    | "pin"
+    | "timer"
+    | "document"
+    | "Device lock"
+    | "Account lock"
+    | "Forgot your password"
+    | "displaymonitor"
+    | "sms";
+  name: string; // Add this line
+}
+
 export default function Unlock() {
   const [isFadingOut, setIsFadingOut] = useState(false);
   const pathname = usePathname();
@@ -148,6 +165,7 @@ export default function Unlock() {
                 isOpen={isPopupOpen}
                 type={popupType}
                 onClose={handleClosePopup}
+                name={memberNo || ""}
               />
             )}
           </div>

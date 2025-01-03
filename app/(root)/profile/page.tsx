@@ -1,22 +1,50 @@
-// pages/profile.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { IoNotifications, IoSearchSharp, IoHome } from "react-icons/io5";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Popup from "@/components/popup";
-
 import Image from "next/image";
 import { FaUserCircle } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { useUserContext } from "@/contexts/UserContext";
 
+interface PopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  type:
+    | "editStatus"
+    | "otp"
+    | "pin"
+    | "timer"
+    | "document"
+    | "Device lock"
+    | "Account lock"
+    | "Forgot your password"
+    | "displaymonitor"
+    | "sms";
+  onSave: () => void; // Add this line
+  name: string;
+  phoneNumber: string;
+}
+
 export default function ProfilePage() {
-  const { memberNo, setMemberNo, name, setName, phoneNumber, setPhoneNumber } =
+  const pathname = usePathname();
+  const { setName: setContextName, setPhoneNumber: setContextPhoneNumber } =
     useUserContext();
-  const [idNumber, setIdNumber] = useState<string | null>(null);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  const handlePageChange = (path: string) => {
+    console.log(`Navigating to ${path}`);
+    return null;
+  };
+
+  const isActive = (path: string) => {
+    return pathname === path;
+  };
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [fetchError, setFetchError] = useState<Error | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // สถานะโหลดข้อมูล
   const [popupType, setPopupType] = useState<
     | "editStatus"
     | "otp"
@@ -28,38 +56,84 @@ export default function ProfilePage() {
     | "Forgot your password"
     | "displaymonitor"
     | "sms"
-    | null
-  >(null);
-  const [isFadingOut, setIsFadingOut] = useState(false);
+  >("editStatus"); // Define popupType variable
+  const [memberNo, setMemberNo] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [idNumber, setIdNumber] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
+  const [email, setEmailState] = useState<string>("");
+  const [profileImage, setLocalProfileImage] = useState<string>("");
 
-  const pathname = usePathname();
+  // Handle fetching user data (mock API)
+  const fetchData = async (memberNo: string) => {
+    setLoading(true);
+    setFetchError(null); // Reset previous error
 
-  const isActive = (path: string) =>
-    pathname === path || pathname.startsWith(path);
+    try {
+      if (!memberNo) {
+        setFetchError(new Error("Member number is required"));
+        return;
+      }
 
-  useEffect(() => {
-    setMemberNo(localStorage.getItem("memberNo") || "");
-    setName(localStorage.getItem("name") || "");
-    setPhoneNumber(localStorage.getItem("phoneNumber") || "");
-    setIdNumber(localStorage.getItem("idNumber"));
-    setProfileImage(localStorage.getItem("profileImage"));
-  }, [setMemberNo, setName, setPhoneNumber]);
+      const response = await fetch(
+        `http://localhost:5000/dataUser/${memberNo}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      const data = await response.json();
+
+      if (!data) {
+        throw new Error("Received empty data");
+      }
+
+      setMemberNo(data.memberNo || "");
+      setName(data.name || "");
+      setPhoneNumber(data.phoneNumber || "");
+      setIdNumber(data.idNumber || "");
+      setLastname(data.lastname || "");
+      setEmailState(data.email || "");
+      setLocalProfileImage(data.profileImage || "");
+
+      // Update context values
+      setContextName(data.name);
+      setContextPhoneNumber(data.phoneNumber);
+    } catch (error) {
+      if (error instanceof Error) {
+        setFetchError(error);
+      } else {
+        setFetchError(new Error("Unknown error"));
+      }
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // ปิดสถานะโหลด
+    }
+  };
+
+  // Handle search button click
+  const handleSearch = () => {
+    if (memberNo) {
+      fetchData(memberNo);
+    }
+  };
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
 
-  const handlePageChange = (url: string) => {
-    setIsFadingOut(true);
-    setTimeout(() => {
-      window.location.href = url;
-    }, 1000); // Duration of the fade-out animation
+  const handleSave = () => {
+    // Implement save functionality here
+    console.log("Save button clicked");
   };
 
   return (
-    <div
-      className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`}
-    >
+    <div>
+      {fetchError && <div className="text-red-500">{fetchError.message}</div>}{" "}
+      {/* แสดงข้อผิดพลาด */}
+      {loading && <div>Loading...</div>} {/* แสดงสถานะกำลังโหลด */}
       <Navbar>
         <div className="grid grid-cols-12 gap-4 min-h-screen">
           <div className="flex flex-col col-start-2 col-span-11 min-h-screen">
@@ -70,19 +144,23 @@ export default function ProfilePage() {
                     <input
                       type="text"
                       value={memberNo || ""}
-                      onChange={(e) => setMemberNo(e.target.value)}
+                      onChange={(e) => setMemberNo(e.target.value)} // เก็บ memberNo ที่ผู้ใช้กรอก
                       placeholder="รหัสสมาชิก"
                       className="w-full outline-none bg-gray-200 px-6"
                     />
-                    <IoSearchSharp />
+                    <button
+                      onClick={handleSearch} // เรียกฟังก์ชันเมื่อกดค้นหา
+                      className="flex items-center justify-center"
+                    >
+                      <IoSearchSharp />
+                    </button>
                   </div>
 
-                  <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl mt-4 md:mt-0 ">
+                  <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl mt-4 md:mt-0 btn-hover-effect">
                     <Link
                       href="/"
                       className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
                       onClick={(e) => {
-                        e.preventDefault();
                         handlePageChange("/");
                       }}
                     >
@@ -110,7 +188,7 @@ export default function ProfilePage() {
                     <Image
                       src={profileImage || "/default-profile.png"}
                       alt="Profile Image"
-                      className="bg-white w-full h-[200px] p-2 rounded-lg"
+                      className="bg-white w-full h-[200px] p-2 "
                       width={200}
                       height={200}
                     />
@@ -130,7 +208,7 @@ export default function ProfilePage() {
                   <div className="lg:flex justify-between py-4">
                     <span className="text-gray-500 font-medium">อีเมล:</span>
                     <span className="text-gray-800 font-semibold">
-                      test@gmail.com
+                      {email || "ไม่ระบุ"}
                     </span>
                   </div>
 
@@ -165,6 +243,9 @@ export default function ProfilePage() {
           isOpen={isPopupOpen}
           onClose={handleClosePopup}
           type={popupType || "editStatus"}
+          onSave={handleSave}
+          name={name}
+          phoneNumber={phoneNumber}
         />
 
         {/* Backdrop (Blurred background) */}

@@ -1,0 +1,37 @@
+{
+    "dataUser": [
+        {
+            "id": 1,
+            "name": "John",
+            "lastname": "Doe",
+            "email": "Johndoe@gmail.com",
+            "phoneNumber": "123-456-7890",
+            "idNumber": "A123456789",
+            "memberNo": "M123456",
+            "address": "1234 Main St, City, State, 12345",
+            "profileImage": "/path/to/profile-image1.jpg"
+        },
+        {
+            "id": 2,
+            "name": "Jane",
+            "lastname": "Doe",
+            "email": "Janedoe@gmail.com",
+            "phoneNumber": "987-654-3210",
+            "idNumber": "B987654321",
+            "memberNo": "M987654",
+            "address": "5678 Another St, Town, Region, 67890",
+            "profileImage": "/path/to/profile-image2.jpg"
+        },
+        {
+            "id": 3,
+            "name": "John",
+            "lastname": "Smith",
+            "email": "Johnsmith@gmail.com",
+            "phoneNumber": "555-123-4567",
+            "idNumber": "C123456123",
+            "memberNo": "M123789",
+            "address": "9101 Different Rd, Village, Province, 11223",
+            "profileImage": "/path/to/profile-image3.jpg"
+        }
+    ]
+}

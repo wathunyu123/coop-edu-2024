@@ -9,6 +9,24 @@ import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+type PopupProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  type:
+    | "editStatus"
+    | "otp"
+    | "pin"
+    | "timer"
+    | "document"
+    | "Device lock"
+    | "Account lock"
+    | "Forgot your password"
+    | "displaymonitor"
+    | "sms";
+  phoneNumber: string;
+  name?: string;
+};
+
 export default function OtpPage() {
   const pathname = usePathname();
   const isActive = (linkPath: string) => pathname === linkPath;

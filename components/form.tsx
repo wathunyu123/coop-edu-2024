@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUserContext } from "@/contexts/UserContext";
 import Thai from "@/dictionary/thai";
 import { div } from "framer-motion/client";
 import Image from "next/image";
@@ -9,7 +8,6 @@ import Image from "next/image";
 
 export default function MyForm() {
   const router = useRouter();
-  const { setMemberNo, setName, setPhoneNumber } = useUserContext();
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -36,10 +34,6 @@ export default function MyForm() {
     localStorage.setItem("lastname", formData.lastname);
     localStorage.setItem("idNumber", formData.idNumber);
     localStorage.setItem("phoneNumber", formData.phoneNumber);
-
-    setMemberNo(formData.memberNo);
-    setName(formData.name);
-    setPhoneNumber(formData.phoneNumber);
 
     router.push(`/profile`);
   };
@@ -84,7 +78,7 @@ export default function MyForm() {
 
               <div className="flex flex-col w-full mt-5">
                 <input
-                  type="number"
+                  type="string"
                   name="memberNo"
                   value={formData.memberNo}
                   onChange={handleChange}
@@ -95,7 +89,7 @@ export default function MyForm() {
 
               <div className="flex flex-col w-full mt-5">
                 <input
-                  type="number"
+                  type="string"
                   name="idNumber"
                   value={formData.idNumber}
                   onChange={handleChange}
@@ -106,7 +100,7 @@ export default function MyForm() {
 
               <div className="flex flex-col w-full mt-5">
                 <input
-                  type="number"
+                  type="string"
                   name="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={handleChange}
