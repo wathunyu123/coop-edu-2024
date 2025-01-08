@@ -31,6 +31,7 @@ enum Thai {
   ImUnlocked = "ImUnlocked",
   Back = "ย้อนกลับ",
   Notfound = "ไม่พบข้อมูลสมาชิก",
+  Nodata = "ไม่พบข้อมูล",
 }
 
 export default Thai;
