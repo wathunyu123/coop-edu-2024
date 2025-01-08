@@ -25,7 +25,6 @@ const Popup: React.FC<PopupProps> = ({
   isOpen,
   onClose,
   type,
-
   name,
   phoneNumber,
 }) => {
@@ -95,7 +94,7 @@ const Popup: React.FC<PopupProps> = ({
             </h2>
             {otp ? (
               <p className="text-center text-xl outline flex items-center p-5 my-5 h-12 ">
-                OTP ของคุณคือ: <strong>{memberNO}</strong>
+                OTP ของคุณคือ: <strong>{memberNo}</strong>
               </p>
             ) : (
               <p className="py-6">กรุณากดปุ่ม "Action" เพื่อขอ OTP</p>
@@ -115,7 +114,7 @@ const Popup: React.FC<PopupProps> = ({
       case "pin":
         return (
           <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
+            <h2 className="text-lg text-center w-full font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
               ใส่ PIN ผิดพลาด
             </h2>
             <input
@@ -134,7 +133,7 @@ const Popup: React.FC<PopupProps> = ({
       case "sms":
         return (
           <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
+            <h2 className="text-lg text-center w-full font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
               กำลังดำเนินการ
             </h2>
             <p className="flex items-center justify-center h-full w-full">
@@ -145,7 +144,7 @@ const Popup: React.FC<PopupProps> = ({
       case "Forgot your password":
         return (
           <div className="flex flex-col w-full h-full items-center">
-            <h2 className="text-lg text-center w-1/2 font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
+            <h2 className="text-lg text-center w-full font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
               ลืมรหัสผ่าน
             </h2>
             <input

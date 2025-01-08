@@ -12,7 +12,7 @@ import Thai from "@/dictionary/thai";
 import { ReactNode } from "react";
 
 interface NavbarProps {
-  children: ReactNode;
+  children: ReactNode; // กำหนดประเภทของ children ให้เป็น ReactNode
 }
 
 export default function Navbar({ children }: NavbarProps) {

@@ -30,6 +30,7 @@ enum Thai {
   Forgot_your_password = "ลืมรหัสผ่าน",
   ImUnlocked = "ImUnlocked",
   Back = "ย้อนกลับ",
+  Notfound = "ไม่พบข้อมูลสมาชิก",
 }
 
 export default Thai;

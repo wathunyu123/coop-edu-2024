@@ -15,6 +15,7 @@ import { IoHome, IoNotifications, IoSearchSharp } from "react-icons/io5";
 import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
 import { usePathname } from "next/navigation";
+import Searchbar from "@/components/searchbar";
 
 // กำหนดประเภทของ PopupType
 type PopupType =
@@ -75,38 +76,9 @@ export default function Unlock() {
       className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`}
     >
       <Navbar>
+        <Searchbar setMemberNo={setMemberNo} />{" "}
         <div className="grid grid-cols-12 gap-4 min-h-screen">
-          <div className="text-center col-start-1 col-span-12 lg:col-start-2 lg:col-span-11 ">
-            <div className="flex flex-col md:flex-row justify-between gap-2">
-              <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-full rounded-xl flex justify-between items-center px-2 py-2 ">
-                <input
-                  type="text"
-                  value={memberNo || ""}
-                  onChange={(e) => setMemberNo(e.target.value)}
-                  placeholder="รหัสสมาชิก"
-                  className="w-full outline-none bg-gray-200 px-6"
-                />
-                <IoSearchSharp />
-              </div>
-
-              <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl mt-4 md:mt-0">
-                <Link
-                  href="/"
-                  className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
-                >
-                  <IoHome />
-                </Link>
-                <Link
-                  href="/profile"
-                  className={`w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center ${
-                    isActive("/profile") ? "bg-cyan-700 text-white" : ""
-                  }`}
-                >
-                  <FaUserCircle />
-                </Link>
-              </div>
-            </div>
-
+          <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
             <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-300 p-6 my-10 mx-auto rounded-3xl">
               {/* Device is locked */}
               <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white">

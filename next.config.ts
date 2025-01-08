@@ -5,3 +5,13 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+module.exports = {
+  images: {
+    domains: [
+      "www.w3schools.com",
+      "encrypted-tbn0.gstatic.com",
+      "images.ctfassets.net",
+    ],
+  },
+};

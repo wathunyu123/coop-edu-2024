@@ -3,7 +3,7 @@
 import Container from "@/components/container";
 import IDbox from "@/components/idnumberbox";
 import Navbar from "@/components/Navbar";
-
+import Searchbar from "@/components/searchbar";
 import Thai from "@/dictionary/thai";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -39,42 +39,11 @@ export default function ChangeEmailPage() {
       className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`}
     >
       <Navbar>
+        <Searchbar setMemberNo={setMemberNo} />{" "}
         <div className="grid md:grid-cols-12 gap-4 min-h-screen">
           {/* Add any children components here */}
 
-          <div className="text-center col-start-1 col-span-12 lg:col-start-2 lg:col-span-11  ">
-            <div className="md:flex flex-col justify-between">
-              <div className="flex flex-col md:flex-row justify-between gap-2">
-                <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-full rounded-xl flex justify-between items-center px-2 py-2 ">
-                  <input
-                    type="text"
-                    value={memberNo || ""}
-                    onChange={(e) => setMemberNo(e.target.value)}
-                    placeholder="รหัสสมาชิก"
-                    className="w-full outline-none bg-gray-200 px-6"
-                  />
-                  <IoSearchSharp />
-                </div>
-
-                <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-32 rounded-xl flex justify-between items-center py-2 px-2 text-2xl mt-4 md:mt-0">
-                  <Link
-                    href="/"
-                    className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
-                  >
-                    <IoHome />
-                  </Link>
-                  <Link
-                    href="/profile"
-                    className={`w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center ${
-                      isActive("/profile") ? "bg-cyan-700 text-white" : ""
-                    }`}
-                  >
-                    <FaUserCircle />
-                  </Link>
-                </div>
-              </div>
-            </div>
-
+          <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12  ">
             <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
               <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
                 <div className="w-full flex justify-center">
