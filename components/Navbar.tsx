@@ -28,7 +28,6 @@ export default function Navbar({ children }: NavbarProps) {
 
   return (
     <div className="flex pt-8 flex-col md:flex-row min-h-screen ">
-      {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "-translate-x-4" : "-translate-x-full"
@@ -50,47 +49,17 @@ export default function Navbar({ children }: NavbarProps) {
         <div className="flex flex-col gap-8 justify-center items-center my-12 space-y-4">
           <div
             className={`flex items-center py-2 px-2 w-4/5  rounded-xl ${
-              isActive(["/changeEM", "/numberEM"])
+              isActive(["/changeEM", "/numberEM", "/otp&pin", "/unlock"])
                 ? "bg-cyan-700 text-white"
                 : "hover:bg-cyan-700 hover:text-white"
             }`}
           >
             <Link
-              href="/changeEM"
+              href="/changeEM "
               className="flex justify-center items-center w-full"
             >
               <FaExchangeAlt className="pr-3 text-4xl" />
               {Thai.ChangeEM}
-            </Link>
-          </div>
-          <div
-            className={`flex items-center py-2 px-2 w-4/5 rounded-xl ${
-              isActive(["/otp&pin"])
-                ? "bg-cyan-700 text-white"
-                : "hover:bg-cyan-700 hover:text-white"
-            }`}
-          >
-            <Link
-              href="/otp&pin"
-              className="flex justify-center items-center w-full"
-            >
-              <MdSms className="pr-3 text-4xl" />
-              {Thai.OTP}
-            </Link>
-          </div>
-          <div
-            className={`flex items-center py-2 px-2 w-4/5 rounded-xl ${
-              isActive(["/unlock"])
-                ? "bg-cyan-700 text-white"
-                : "hover:bg-cyan-700 hover:text-white"
-            }`}
-          >
-            <Link
-              href="/unlock"
-              className="flex justify-center items-center w-full"
-            >
-              <FaUnlockAlt className="pr-3 text-4xl" />
-              {Thai.unlock}
             </Link>
           </div>
         </div>

@@ -11,13 +11,14 @@ enum Thai {
   Unlock = "ปลดล็อคอุปกรณ์",
   Data_menber = "ข้อมูลสมาชิก",
   NumberEM = "เลขอุปกรณ์",
-  ConnectionStatus = "สถานะการเชื่อมต่อ",
   DeviceName = "ชื่ออุปกรณ์",
   DeviceSerial = "หมายเลขอุปกรณ์",
   DeviceModel = "รุ่นของอุปกรณ์",
+  Brand = "ยี่ห้อ",
   ChangeDate = "วันที่เปลี่ยน",
   Status = "สถานะการใช้งานธุรกรรม",
   Notify_status = "แจ้งสถานะ",
+  Notify_status_error = "สถานะบัญชีผิดปกติ",
   Edit_status = "แก้ไขสถานะ",
   Otp = "รหัส OTP",
   unlock = "ปลดล็อค",
@@ -32,6 +33,11 @@ enum Thai {
   Back = "ย้อนกลับ",
   Notfound = "ไม่พบข้อมูลสมาชิก",
   Nodata = "ไม่พบข้อมูล",
+  Loading = "กำลังโหลด...",
+  Device_Status = "สถานะการเชื่อมต่อ",
+  Device_Id = "Id ของอุปกรณ์",
+  Device_Type = "ประเภทของอุปกรณ์",
+  Detail = "เพิ่มเติม",
 }
 
 export default Thai;

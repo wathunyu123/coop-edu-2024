@@ -1,0 +1,55 @@
+{
+    "otp&pin": [
+      {
+        "memberNo": "001",
+        "pinAttempts": 2,
+        "pinStatus": "normal"
+      },
+      {
+        "memberNo": "002",
+        "pinAttempts": 3,
+        "pinStatus": "locked"
+      },
+      {
+        "memberNo": "003",
+        "pinAttempts": 1,
+        "pinStatus": "normal"
+      },
+      {
+        "memberNo": "004",
+        "pinAttempts": 0,
+        "pinStatus": "normal"
+      },
+      {
+        "memberNo": "005",
+        "pinAttempts": 2,
+        "pinStatus": "normal"
+      },
+      {
+        "memberNo": "006",
+        "pinAttempts": 4,
+        "pinStatus": "locked"
+      },
+      {
+        "memberNo": "007",
+        "pinAttempts": 1,
+        "pinStatus": "normal"
+      },
+      {
+        "memberNo": "008",
+        "pinAttempts": 0,
+        "pinStatus": "normal"
+      },
+      {
+        "memberNo": "009",
+        "pinAttempts": 3,
+        "pinStatus": "locked"
+      },
+      {
+        "memberNo": "010",
+        "pinAttempts": 2,
+        "pinStatus": "normal"
+      }
+    ]
+  }
+  

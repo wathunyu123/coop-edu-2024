@@ -1,0 +1,124 @@
+{
+  "device_changes": [
+    {
+      "memberNo": "001",
+      "new_device": {
+        "device_id": "DEV001",
+        "device_type": "Laptop",
+        "brand": "Dell",
+        "model": "XPS 15",
+        "serial_number": "SN123456789",
+        "status": "Replaced",
+        "change_date": "2024-11-01"
+      }
+    },
+    {
+      "memberNo": "002",
+      "new_device": {
+        "device_id": "DEV002",
+        "device_type": "Laptop",
+        "brand": "HP",
+        "model": "Elite Dragonfly",
+        "serial_number": "SN987654321",
+        "status": "Assigned",
+        "change_date": "2024-10-15"
+      }
+    },
+    {
+      "memberNo": "003",
+      "new_device": {
+        "device_id": "DEV003",
+        "device_type": "Tablet",
+        "brand": "Apple",
+        "model": "iPad Pro",
+        "serial_number": "SN1122334455",
+        "status": "Replaced",
+        "change_date": "2024-09-30"
+      }
+    },
+    {
+      "memberNo": "004",
+      "new_device": {
+        "device_id": "DEV004",
+        "device_type": "Smartphone",
+        "brand": "Samsung",
+        "model": "Galaxy S23",
+        "serial_number": "SN6677889900",
+        "status": "Replaced",
+        "change_date": "2024-08-25"
+      }
+    },
+    {
+      "memberNo": "005",
+      "new_device": {
+        "device_id": "DEV005",
+        "device_type": "Laptop",
+        "brand": "Lenovo",
+        "model": "ThinkPad X1",
+        "serial_number": "SN9988776655",
+        "status": "Assigned",
+        "change_date": "2024-07-18"
+      }
+    },
+    {
+      "memberNo": "006",
+      "new_device": {
+        "device_id": "DEV006",
+        "device_type": "Laptop",
+        "brand": "MacBook",
+        "model": "MacBook Air M2",
+        "serial_number": "SN4433221100",
+        "status": "Replaced",
+        "change_date": "2024-06-10"
+      }
+    },
+    {
+      "memberNo": "007",
+      "new_device": {
+        "device_id": "DEV007",
+        "device_type": "Tablet",
+        "brand": "Microsoft",
+        "model": "Surface Pro 9",
+        "serial_number": "SN5566778899",
+        "status": "Assigned",
+        "change_date": "2024-05-05"
+      }
+    },
+    {
+      "memberNo": "008",
+      "new_device": {
+        "device_id": "DEV008",
+        "device_type": "Smartphone",
+        "brand": "Google",
+        "model": "Pixel 8",
+        "serial_number": "SN9988776655",
+        "status": "Replaced",
+        "change_date": "2024-04-20"
+      }
+    },
+    {
+      "memberNo": "009",
+      "new_device": {
+        "device_id": "DEV009",
+        "device_type": "Laptop",
+        "brand": "Asus",
+        "model": "ZenBook 14",
+        "serial_number": "SN2233445566",
+        "status": "Assigned",
+        "change_date": "2024-03-15"
+      }
+    },
+    {
+      "memberNo": "010",
+      "new_device": {
+        "device_id": "DEV010",
+        "device_type": "Smartphone",
+        "brand": "OnePlus",
+        "model": "OnePlus 11",
+        "serial_number": "SN4455667788",
+        "status": "Replaced",
+        "change_date": "2024-02-28"
+      }
+    }
+  ]
+}

@@ -1,101 +1,194 @@
 "use client";
 
-import Thai from "@/dictionary/thai";
+import ErrorPage from "@/components/404popup";
 import Navbar from "@/components/Navbar";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { FaUserCircle } from "react-icons/fa";
-import { IoHome, IoNotifications, IoSearchSharp } from "react-icons/io5";
-import { useEffect, useState } from "react";
 import Searchbar from "@/components/searchbar";
+import Thai from "@/dictionary/thai";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import Loading from "../changeEM/loading";
+import Menubar from "@/components/menubar";
 
-export default function ChangeEM() {
+export default function ChangeEmPage() {
   const pathname = usePathname();
   const [isFadingOut, setIsFadingOut] = useState(false);
+  const [fetchError, setFetchError] = useState<Error | null>(null); // ชัดเจนว่าเป็น Error หรือ null
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const isActive = (linkPath: string) => pathname === linkPath;
+  const [device_id, setDevice_Id] = useState<string>("");
+  const [device_type, setDevice_Type] = useState<string>("");
+  const [brand, setBrand] = useState<string>("");
+  const [model, setModel] = useState<string>("");
+  const [serial_number, setSerial_Number] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+  const [change_date, setChange_Date] = useState<string>("");
 
-  const newDeviceInfo = {
-    deviceName: "iPhone 15 Pro Max",
-    deviceSerial: "ABC123XYZ456",
-    deviceModel: "Apple",
-    connectionStatus: "Connected",
-    changeDate: "20 Nov 2024",
-  };
+  // เปลี่ยนชื่อเป็น isPathActive
+  const isPathActive = (path: string) =>
+    pathname === path || pathname.startsWith(path);
 
+  const searchParams = useSearchParams();
   const [memberNo, setMemberNo] = useState<string | null>(null);
 
+  // ดึง memberNo จาก localStorage เมื่อหน้าเพจถูกโหลด
   useEffect(() => {
-    setMemberNo(localStorage.getItem("memberNo"));
+    const storedMemberNo = localStorage.getItem("memberNo");
+    setMemberNo(storedMemberNo);
   }, []);
+
+  // ฟังก์ชันสำหรับดึงข้อมูลจาก API
+  const fetchData = async (memberNo: string) => {
+    setIsLoading(true);
+    setFetchError(null);
+
+    try {
+      if (!memberNo) {
+        throw new Error("Member number is required");
+      }
+
+      const response = await fetch(
+        `http://localhost:3000/api/device?id=${memberNo}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Device Not Found");
+      }
+
+      const data = await response.json();
+
+      if (!data) {
+        throw new Error("No data received");
+      }
+
+      // Set fetched data to state
+      setDevice_Id(data.device_id || "");
+      setDevice_Type(data.device_type || "");
+      setBrand(data.brand || "");
+      setModel(data.model || "");
+      setSerial_Number(data.serial_number || "");
+      setStatus(data.status || "");
+      setChange_Date(data.change_date || "");
+    } catch (error) {
+      setFetchError(
+        error instanceof Error ? error : new Error("Unknown error")
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // ใช้ useEffect เมื่อ memberNo เปลี่ยนแปลง
+  useEffect(() => {
+    if (memberNo) {
+      fetchData(memberNo); // ดึงข้อมูลจาก API เมื่อ memberNo ถูกตั้งค่า
+    }
+  }, [memberNo]);
+
+  // ตรวจสอบว่า fetchError เป็น Error ก่อนที่จะเข้าถึง message
+  if (fetchError instanceof Error) {
+    return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
+  }
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div
       className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`}
     >
       <Navbar>
-        <Searchbar setMemberNo={setMemberNo} />{" "}
+        <Searchbar setMemberNo={setMemberNo} />
+        <Menubar />
         <div className="grid md:grid-cols-12 gap-4 min-h-screen">
-          {/* Add any children components here */}
-
-          <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+          <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12">
             <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
               <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
                 <div className="w-full flex justify-center">
                   <Link
                     href="/changeEM"
                     className={`px-6 py-1 ${
-                      isActive("/changeEM")
+                      isPathActive("/changeEM")
                         ? "bg-white text-black"
                         : "hover:bg-white hover:text-black"
                     } rounded-xl`}
                   >
-                    {Thai.MemberNo}
+                    {Thai.MemberNo || "Member No"}
                   </Link>
                 </div>
                 <div className="w-full flex justify-center">
                   <Link
                     href="/numberEM"
                     className={`px-6 py-1 ${
-                      isActive("/numberEM")
+                      isPathActive("/numberEM")
                         ? "bg-white text-black"
                         : "hover:bg-white hover:text-black"
                     } rounded-xl`}
                   >
-                    {Thai.NumberEM}
+                    {Thai.NumberEM || "Number EM"}
                   </Link>
                 </div>
               </div>
             </div>
 
-            {memberNo ? (
+            {isLoading ? (
+              <div className="bg-gray-200 rounded-2xl p-6 text-center text-blue-500">
+                {Thai.Loading || "Loading..."}
+              </div>
+            ) : fetchError ? (
+              <div className="bg-gray-200 rounded-2xl p-6 text-center text-red-500">
+                {/* เราตรวจสอบว่าถ้า fetchError เป็น Error แล้ว */}
+                {/* {fetchError.message} */}
+              </div>
+            ) : memberNo ? (
               <div className="bg-gray-200 rounded-2xl p-6">
-                <div className="flex flex-col space-y-4">
+                <div className="flex flex-col space-y-4 mx-10 py-5">
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.DeviceName}:</span>
-                    <span>{newDeviceInfo.deviceName}</span>
+                    <span className="font-bold">
+                      {Thai.Device_Id || "Device ID"}:
+                    </span>
+                    <span>{device_id || "N/A"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.DeviceSerial}:</span>
-                    <span>{newDeviceInfo.deviceSerial}</span>
+                    <span className="font-bold">
+                      {Thai.Device_Type || "Device Type"}:
+                    </span>
+                    <span>{device_type || "N/A"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.DeviceModel}:</span>
-                    <span>{newDeviceInfo.deviceModel}</span>
+                    <span className="font-bold">{Thai.Brand || "Brand"}:</span>
+                    <span>{brand || "N/A"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.ConnectionStatus}:</span>
-                    <span>{newDeviceInfo.connectionStatus}</span>
+                    <span className="font-bold">
+                      {Thai.DeviceModel || "Device Model"}:
+                    </span>
+                    <span>{model || "N/A"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.ChangeDate}:</span>
-                    <span>{newDeviceInfo.changeDate}</span>
+                    <span className="font-bold">
+                      {Thai.DeviceSerial || "Device Serial"}:
+                    </span>
+                    <span>{serial_number || "N/A"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-bold">
+                      {Thai.Device_Status || "Device Status"}:
+                    </span>
+                    <span>{status || "N/A"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-bold">
+                      {Thai.ChangeDate || "Change Date"}:
+                    </span>
+                    <span>{change_date || "N/A"}</span>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="bg-gray-200 rounded-2xl p-6 text-center text-red-500">
-                ไม่พบข้อมูล
+                {Thai.Nodata || "No data available"}
               </div>
             )}
           </div>
@@ -103,69 +196,4 @@ export default function ChangeEM() {
       </Navbar>
     </div>
   );
-}
-{
-  /* <Container>
-      <div>
-        <IDbox />
-        <Menu />
-      </div>
-      <div className="flex flex-wrap items-start justify-between mt-5 gap-5">
-        
-        <div className="flex flex-col bg-blue-400 px-8 py-6 lg:px-20 lg:py-10 rounded-2xl text-center w-full lg:w-1/3">
-          <h1 className="text-white text-lg mb-4">{Thai.NumberEM}</h1>
-          <div className="bg-white px-8 py-4 rounded-lg shadow-md">
-            {Thai.NumberEM}
-          </div>
-        </div>
-
-       
-        <div className="flex flex-col bg-white border-2 border-black rounded-2xl px-6 py-10 w-full max-w-2xl">
-          <div className="flex justify-between mb-6">
-            <Link
-              href="/changeEM"
-              className={`hover:bg-blue-400 hover:text-white rounded-md px-4 py-2 ${
-                isActive("/changeEM") ? "bg-blue-400 text-white" : ""
-              }`}
-            >
-              {Thai.MemberNo}
-            </Link>
-            <Link
-              href="/numberEM"
-              className={`hover:bg-blue-400 hover:text-white rounded-md px-4 py-2 ${
-                isActive("/numberEM") ? "bg-blue-400 text-white" : ""
-              }`}
-            >
-              {Thai.NumberEM}
-            </Link>
-          </div>
-
-         
-          <div className="bg-gray-200 rounded-2xl p-6">
-            <div className="flex flex-col space-y-4">
-              <div className="flex justify-between">
-                <span className="font-bold">{Thai.DeviceName}:</span>
-                <span>{newDeviceInfo.deviceName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-bold">{Thai.DeviceSerial}:</span>
-                <span>{newDeviceInfo.deviceSerial}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-bold">{Thai.DeviceModel}:</span>
-                <span>{newDeviceInfo.deviceModel}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-bold">{Thai.ConnectionStatus}:</span>
-                <span>{newDeviceInfo.connectionStatus}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-bold">{Thai.ChangeDate}:</span>
-                <span>{newDeviceInfo.changeDate}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Container> */
 }

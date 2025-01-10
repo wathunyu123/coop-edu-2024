@@ -16,6 +16,7 @@ import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import Searchbar from "@/components/searchbar";
+import Menubar from "@/components/menubar";
 
 // กำหนดประเภทของ PopupType
 type PopupType =
@@ -73,15 +74,16 @@ export default function Unlock() {
 
   return (
     <div
-      className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`}
+    /* className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`} */
     >
       <Navbar>
-        <Searchbar setMemberNo={setMemberNo} />{" "}
+        <Searchbar setMemberNo={setMemberNo} />
+        <Menubar />
         <div className="grid grid-cols-12 gap-4 min-h-screen">
           <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
             <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-300 p-6 my-10 mx-auto rounded-3xl">
               {/* Device is locked */}
-              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white">
+              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white shadow-xl rounded-xl">
                 <div className="flex flex-col items-center">
                   <h1 className="text-lg py-6 my-5">{Thai.Device_is_lock}</h1>
                   <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
@@ -91,13 +93,13 @@ export default function Unlock() {
                     className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
                     onClick={() => handleBoxClick("Device lock")}
                   >
-                    Detail
+                    {Thai.Detail}
                   </button>
                 </div>
               </div>
 
               {/* Account is locked */}
-              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white">
+              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white shadow-xl rounded-xl">
                 <div className="flex flex-col items-center">
                   <h1 className="text-lg py-6 my-5">{Thai.Account_is_lock}</h1>
                   <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
@@ -107,13 +109,13 @@ export default function Unlock() {
                     className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
                     onClick={() => handleBoxClick("Account lock")}
                   >
-                    Detail
+                    {Thai.Detail}
                   </button>
                 </div>
               </div>
 
               {/* Forgot your password */}
-              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white">
+              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white shadow-xl rounded-xl">
                 <div className="flex flex-col items-center">
                   <h1 className="text-lg py-6 my-5">
                     {Thai.Forgot_your_password}
@@ -125,7 +127,7 @@ export default function Unlock() {
                     className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
                     onClick={() => handleBoxClick("Forgot your password")}
                   >
-                    Detail
+                    {Thai.Detail}
                   </button>
                 </div>
               </div>

@@ -1,39 +1,43 @@
 'use client';
 
+import ErrorPage from "@/components/404popup";
 import Navbar from "@/components/Navbar";
 import Searchbar from "@/components/searchbar";
 import Thai from "@/dictionary/thai";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Loading from "./loading";
+import Menubar from "@/components/menubar";
 
-export default function ChangeEmailPage() {
+export default function ChangeEmPage() {
   const pathname = usePathname();
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [fetchError, setFetchError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [name, setName] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [idNumber, setIdNumber] = useState<string>("");
-  const [lastname, setLastname] = useState<string>("");
-  const [email, setEmailState] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
-  const [profileImage, setLocalProfileImage] = useState<string>("");
-
-  const isActive = (path: string) =>
-    pathname === path || pathname.startsWith(path);
-
-  const searchParams = useSearchParams();
+  const [device_id, setDevice_Id] = useState<string>("");
+  const [device_type, setDevice_Type] = useState<string>("");
+  const [brand, setBrand] = useState<string>("");
+  const [model, setModel] = useState<string>("");
+  const [serial_number, setSerial_Number] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+  const [change_date, setChange_Date] = useState<string>("");
 
   const [memberNo, setMemberNo] = useState<string | null>(null);
 
+  // ดึงข้อมูลจาก localStorage เมื่อหน้าโหลด
   useEffect(() => {
-    setMemberNo(localStorage.getItem("memberNo"));
+    const storedMemberNo = localStorage.getItem("memberNo");
+    if (storedMemberNo) {
+      setMemberNo(storedMemberNo); // ตั้งค่าจาก localStorage
+    }
   }, []);
+
+  // ฟังก์ชันสำหรับดึงข้อมูลจาก API
   const fetchData = async (memberNo: string) => {
-    setIsLoading(true);
-    setFetchError(null);
+    setIsLoading(true); // ตั้งค่า isLoading เป็น true ก่อนการดึงข้อมูล
+    setFetchError(null); // รีเซ็ตข้อผิดพลาด
 
     try {
       if (!memberNo) {
@@ -41,11 +45,11 @@ export default function ChangeEmailPage() {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/users?id=${memberNo}`
+        `http://localhost:3000/api/device?id=${memberNo}`
       );
 
       if (!response.ok) {
-        throw new Error("Users Not Found");
+        throw new Error("Device Not Found");
       }
 
       const data = await response.json();
@@ -55,96 +59,133 @@ export default function ChangeEmailPage() {
       }
 
       // Set fetched data to state
-      setMemberNo(data.memberNo || "");
-      setName(data.name || "");
-      setPhoneNumber(data.phoneNumber || "");
-      setIdNumber(data.idNumber || "");
-      setLastname(data.lastname || "");
-      setEmailState(data.email || "");
-      setLocalProfileImage(data.profileImage || "");
-      setAddress(data.address || "");
+      setDevice_Id(data.device_id || "");
+      setDevice_Type(data.device_type || "");
+      setBrand(data.brand || "");
+      setModel(data.model || "");
+      setSerial_Number(data.serial_number || "");
+      setStatus(data.status || "");
+      setChange_Date(data.change_date || "");
     } catch (error) {
       setFetchError(
         error instanceof Error ? error : new Error("Unknown error")
       );
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // ตั้งค่า isLoading เป็น false เมื่อข้อมูลถูกโหลดเสร็จ
     }
   };
 
-  const newDeviceInfo = {
-    deviceName: "iPhone 15 Pro Max",
-    deviceSerial: "ABC123XYZ456",
-    deviceModel: "Apple",
-    connectionStatus: "Connected",
-    changeDate: "20 Nov 2024",
+  // เมื่อ memberNo เปลี่ยนแปลง, ให้ทำการดึงข้อมูลใหม่
+  useEffect(() => {
+    if (memberNo) {
+      fetchData(memberNo); // ดึงข้อมูลจาก API
+    }
+  }, [memberNo]);
+
+  // เมื่อมีการค้นหาข้อมูลใหม่, เก็บ memberNo ใน localStorage
+  const handleSearch = (newMemberNo: string) => {
+    localStorage.setItem("memberNo", newMemberNo); // เก็บข้อมูลใน localStorage
+    setMemberNo(newMemberNo); // ตั้งค่า memberNo ใหม่
   };
+
+  // ตรวจสอบว่า fetchError เป็น Error ก่อนที่จะเข้าถึง message
+  if (fetchError instanceof Error) {
+    return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
+  }
+
+  // แสดง loading เมื่อ isLoading เป็น true
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div
-      className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`}
+    /* className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`} */
     >
       <Navbar>
-        <Searchbar setMemberNo={setMemberNo} />{" "}
+        <Searchbar setMemberNo={handleSearch} /> {/* เพิ่ม onSearch */}
+        <Menubar />
         <div className="grid md:grid-cols-12 gap-4 min-h-screen">
-          <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12  ">
+          <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12">
             <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
               <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
                 <div className="w-full flex justify-center">
                   <Link
                     href="/changeEM"
                     className={`px-6 py-1 ${
-                      isActive("/changeEM")
+                      pathname === "/changeEM"
                         ? "bg-white text-black"
                         : "hover:bg-white hover:text-black"
                     } rounded-xl`}
                   >
-                    {Thai.MemberNo}
+                    {Thai.MemberNo || "Member No"}
                   </Link>
                 </div>
                 <div className="w-full flex justify-center">
                   <Link
                     href="/numberEM"
                     className={`px-6 py-1 ${
-                      isActive("/numberEM")
+                      pathname === "/numberEM"
                         ? "bg-white text-black"
                         : "hover:bg-white hover:text-black"
                     } rounded-xl`}
                   >
-                    {Thai.NumberEM}
+                    {Thai.NumberEM || "Number EM"}
                   </Link>
                 </div>
               </div>
             </div>
 
-            {memberNo ? (
+            {fetchError ? (
+              <div className="bg-gray-200 rounded-2xl p-6 text-center text-red-500"></div>
+            ) : memberNo ? (
               <div className="bg-gray-200 rounded-2xl p-6">
-                <div className="flex flex-col space-y-4">
+                <div className="flex flex-col space-y-4 mx-10 py-5">
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.DeviceName}:</span>
-                    <span>{newDeviceInfo.deviceName}</span>
+                    <span className="font-bold">
+                      {Thai.Device_Id || "Device ID"}:
+                    </span>
+                    <span>{device_id || "N/A"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.DeviceSerial}:</span>
-                    <span>{newDeviceInfo.deviceSerial}</span>
+                    <span className="font-bold">
+                      {Thai.Device_Type || "Device Type"}:
+                    </span>
+                    <span>{device_type || "N/A"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.DeviceModel}:</span>
-                    <span>{newDeviceInfo.deviceModel}</span>
+                    <span className="font-bold">{Thai.Brand || "Brand"}:</span>
+                    <span>{brand || "N/A"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.ConnectionStatus}:</span>
-                    <span>{newDeviceInfo.connectionStatus}</span>
+                    <span className="font-bold">
+                      {Thai.DeviceModel || "Device Model"}:
+                    </span>
+                    <span>{model || "N/A"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-bold">{Thai.ChangeDate}:</span>
-                    <span>{newDeviceInfo.changeDate}</span>
+                    <span className="font-bold">
+                      {Thai.DeviceSerial || "Device Serial"}:
+                    </span>
+                    <span>{serial_number || "N/A"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-bold">
+                      {Thai.Device_Status || "Device Status"}:
+                    </span>
+                    <span>{status || "N/A"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-bold">
+                      {Thai.ChangeDate || "Change Date"}:
+                    </span>
+                    <span>{change_date || "N/A"}</span>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="bg-gray-200 rounded-2xl p-6 text-center text-red-500">
-                {Thai.Nodata}
+                {Thai.Nodata || "No data available"}
               </div>
             )}
           </div>
@@ -153,4 +194,3 @@ export default function ChangeEmailPage() {
     </div>
   );
 }
-

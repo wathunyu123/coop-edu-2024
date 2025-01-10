@@ -16,18 +16,12 @@ interface PopupProps {
     | "Forgot your password"
     | "displaymonitor"
     | "sms";
-  onSave?: () => void; // Optional onSave property
-  name?: string; // Optional name property
-  phoneNumber?: string; // Optional phoneNumber property
+  onSave?: () => void;
+  name?: string;
+  phoneNumber?: string;
 }
 
-const Popup: React.FC<PopupProps> = ({
-  isOpen,
-  onClose,
-  type,
-  name,
-  phoneNumber,
-}) => {
+const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
   if (!isOpen) return null;
 
   const [otp, setOtp] = useState<string | null>(null); // OTP state
@@ -93,14 +87,16 @@ const Popup: React.FC<PopupProps> = ({
               ขอ OTP
             </h2>
             {otp ? (
-              <p className="text-center text-xl outline flex items-center p-5 my-5 h-12 ">
+              <p className="text-center text-xl w-full justify-center outline flex items-center p-2 my-5 h-12 rounded-md ">
                 OTP ของคุณคือ: <strong>{memberNo}</strong>
               </p>
             ) : (
-              <p className="py-6">กรุณากดปุ่ม "Action" เพื่อขอ OTP</p>
+              <p className="py-2 my-5 w-full flex items-center justify-center text-center outline rounded-md">
+                กรุณากดปุ่ม "Action" เพื่อขอ OTP
+              </p>
             )}
             {countdown > 0 ? (
-              <p className="mt-4 text-center text-lg outline p-4">
+              <p className="mt-4 text-center text-lg outline outline-slate-600 w-full p-2 rounded-md ">
                 เวลาเหลือ: {Math.floor(countdown / 60)}:
                 {(countdown % 60).toString().padStart(2, "0")}
               </p>
@@ -111,7 +107,7 @@ const Popup: React.FC<PopupProps> = ({
             )}
           </div>
         );
-      case "pin":
+      /* case "pin":
         return (
           <div className="flex flex-col w-full h-full items-center">
             <h2 className="text-lg text-center w-full font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
@@ -124,7 +120,7 @@ const Popup: React.FC<PopupProps> = ({
               className="border border-gray-300 rounded-md p-2 bg-gray-100 text-gray-800"
             />
           </div>
-        );
+        ); */
       case "timer":
       case "document":
       case "Device lock":
@@ -182,20 +178,22 @@ const Popup: React.FC<PopupProps> = ({
         {renderContent()}
 
         {/* ปุ่มปิดและปุ่ม Action */}
-        <div className="flex w-full justify-end mt-4">
-          <button
-            className="text-red-700 outline outline-red-700 px-4 py-2 h-full rounded-xl mx-2 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 hover:shadow-xl"
-            onClick={onClose}
-          >
-            Close
-          </button>
-          <button
-            className="text-white font-semibold bg-red-700 px-4 py-2 rounded-xl mx-2 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 hover:shadow-xl"
-            onClick={handleActionClick} // เรียกฟังก์ชัน handleActionClick
-          >
-            Action
-          </button>
-        </div>
+        {!countdownActive && (
+          <div className="flex w-full justify-end mt-4">
+            <button
+              className="text-red-700 outline outline-red-700 px-4 py-2 h-full rounded-xl mx-2 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 hover:shadow-xl"
+              onClick={onClose}
+            >
+              Close
+            </button>
+            <button
+              className="text-white font-semibold bg-red-700 px-4 py-2 rounded-xl mx-2 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 hover:shadow-xl"
+              onClick={handleActionClick} // เรียกฟังก์ชัน handleActionClick
+            >
+              Action
+            </button>
+          </div>
+        )}
       </motion.div>
     </div>,
     document.body
