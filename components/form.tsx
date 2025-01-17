@@ -47,7 +47,7 @@ export default function MyForm() {
           className="flex items-center justify-center col-start-1 col-end-13 "
           onSubmit={handleSubmit}
         >
-          <div className="lg:flex justify-between items-center p-6 w-full h-4/5 bg-slate-300 rounded-3xl">
+          <div className="lg:flex justify-between items-center p-6 w-full h-[650px] lg:h-4/5 bg-slate-300 rounded-3xl">
             <div className="max-w-full max-h-[77%] p-4 ">
               <img
                 src="https://psucoop.psu.ac.th/home/tmp/dbd92aa88a980205c55c0d8ec2a92ffa.jpg"
@@ -56,7 +56,7 @@ export default function MyForm() {
               />
             </div>
 
-            <div className="p-4 lg:flex flex-col items-center justify-center">
+            <div className="p-4 lg:flex w-1/2 flex-col  items-center justify-center">
               <div className="flex flex-col lg:flex-row w-full gap-4">
                 <input
                   type="string"
@@ -66,14 +66,14 @@ export default function MyForm() {
                   placeholder="ชื่อ"
                   className="border border-black rounded-md text-center p-2 flex-1 text-black "
                 />
-                <input
+                {/* <input
                   type="string"
                   name="lastname"
                   value={formData.lastname}
                   onChange={handleChange}
                   placeholder="นามสกุล"
                   className="border border-black rounded-md text-center p-2 flex-1 text-black"
-                />
+                /> */}
               </div>
 
               <div className="flex flex-col w-full mt-5">

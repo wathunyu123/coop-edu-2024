@@ -59,7 +59,7 @@ export default function Navbar({ children }: NavbarProps) {
               className="flex justify-center items-center w-full"
             >
               <FaExchangeAlt className="pr-3 text-4xl" />
-              {Thai.ChangeEM}
+              {Thai.Manage_transaction}
             </Link>
           </div>
         </div>

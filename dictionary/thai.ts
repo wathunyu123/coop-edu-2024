@@ -5,6 +5,8 @@ enum Thai {
   Lastname = "นามสกุล",
   IdNumber = "เลขประจำตัวประชาชน",
   PhoneNumber = "เบอร์โทรศัพท์",
+  Email = "อีเมลล์",
+  Address = "ที่อยู่",
   Profile = "โปรไฟล์",
   ChangeEM = "เปลี่ยนอุปกรณ์",
   OTP = "OTP&PIN",
@@ -38,6 +40,7 @@ enum Thai {
   Device_Id = "Id ของอุปกรณ์",
   Device_Type = "ประเภทของอุปกรณ์",
   Detail = "เพิ่มเติม",
+  Manage_transaction = "จัดการธุรกรรม",
 }
 
 export default Thai;

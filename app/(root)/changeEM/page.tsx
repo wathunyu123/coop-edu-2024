@@ -5,25 +5,22 @@ import Navbar from "@/components/Navbar";
 import Searchbar from "@/components/searchbar";
 import Thai from "@/dictionary/thai";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loading from "./loading";
 import Menubar from "@/components/menubar";
 
+import { Suspense } from "react";
+import React from "react";
+import IsLoading from "@/components/isloading";
+
 export default function ChangeEmPage() {
+  const DeviceInfo = React.lazy(() => import("@/components/diviceinfo"));
+
   const pathname = usePathname();
-  const [isFadingOut, setIsFadingOut] = useState(false);
+  const searchParams = useSearchParams(); // ใช้ useSearchParams แทน location.search
   const [fetchError, setFetchError] = useState<Error | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const [device_id, setDevice_Id] = useState<string>("");
-  const [device_type, setDevice_Type] = useState<string>("");
-  const [brand, setBrand] = useState<string>("");
-  const [model, setModel] = useState<string>("");
-  const [serial_number, setSerial_Number] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
-  const [change_date, setChange_Date] = useState<string>("");
-
+  const [loading, setLoading] = useState(false);
+  const [deviceData, setDeviceData] = useState<any>(null);
   const [memberNo, setMemberNo] = useState<string | null>(null);
 
   // ดึงข้อมูลจาก localStorage เมื่อหน้าโหลด
@@ -36,8 +33,8 @@ export default function ChangeEmPage() {
 
   // ฟังก์ชันสำหรับดึงข้อมูลจาก API
   const fetchData = async (memberNo: string) => {
-    setIsLoading(true); // ตั้งค่า isLoading เป็น true ก่อนการดึงข้อมูล
     setFetchError(null); // รีเซ็ตข้อผิดพลาด
+    setLoading(true); // ตั้งค่า loading เป็น true ก่อนการดึงข้อมูล
 
     try {
       if (!memberNo) {
@@ -58,31 +55,31 @@ export default function ChangeEmPage() {
         throw new Error("No data received");
       }
 
-      // Set fetched data to state
-      setDevice_Id(data.device_id || "");
-      setDevice_Type(data.device_type || "");
-      setBrand(data.brand || "");
-      setModel(data.model || "");
-      setSerial_Number(data.serial_number || "");
-      setStatus(data.status || "");
-      setChange_Date(data.change_date || "");
+      setDeviceData(data); // ตั้งค่า state ของ deviceData
     } catch (error) {
       setFetchError(
         error instanceof Error ? error : new Error("Unknown error")
       );
     } finally {
-      setIsLoading(false); // ตั้งค่า isLoading เป็น false เมื่อข้อมูลถูกโหลดเสร็จ
+      setLoading(false); // เมื่อข้อมูลถูกโหลดเสร็จ
     }
   };
 
-  // เมื่อ memberNo เปลี่ยนแปลง, ให้ทำการดึงข้อมูลใหม่
+  // เมื่อ `memberNo` เปลี่ยนแปลง, ให้ทำการดึงข้อมูลใหม่
   useEffect(() => {
     if (memberNo) {
-      fetchData(memberNo); // ดึงข้อมูลจาก API
+      fetchData(memberNo);
     }
   }, [memberNo]);
 
-  // เมื่อมีการค้นหาข้อมูลใหม่, เก็บ memberNo ใน localStorage
+  // ใช้ URL query parameter เป็น memberNo
+  useEffect(() => {
+    const memberNoFromURL = searchParams.get("id");
+    if (memberNoFromURL) {
+      setMemberNo(memberNoFromURL); // ตั้งค่า `memberNo` จาก URL
+    }
+  }, [searchParams]);
+
   const handleSearch = (newMemberNo: string) => {
     localStorage.setItem("memberNo", newMemberNo); // เก็บข้อมูลใน localStorage
     setMemberNo(newMemberNo); // ตั้งค่า memberNo ใหม่
@@ -93,15 +90,14 @@ export default function ChangeEmPage() {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
 
-  // แสดง loading เมื่อ isLoading เป็น true
-  if (isLoading) {
-    return <Loading />;
-  }
+  // ถ้ากำลังโหลดข้อมูล
+  /*   if (loading) {
+      return <Loading />;
+    } */
 
+  // แสดงข้อมูลจาก API หรือแสดงข้อความ No data หากไม่มีข้อมูล
   return (
-    <div
-    /* className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`} */
-    >
+    <div>
       <Navbar>
         <Searchbar setMemberNo={handleSearch} /> {/* เพิ่ม onSearch */}
         <Menubar />
@@ -136,58 +132,23 @@ export default function ChangeEmPage() {
               </div>
             </div>
 
-            {fetchError ? (
-              <div className="bg-gray-200 rounded-2xl p-6 text-center text-red-500"></div>
-            ) : memberNo ? (
-              <div className="bg-gray-200 rounded-2xl p-6">
-                <div className="flex flex-col space-y-4 mx-10 py-5">
-                  <div className="flex justify-between">
-                    <span className="font-bold">
-                      {Thai.Device_Id || "Device ID"}:
-                    </span>
-                    <span>{device_id || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-bold">
-                      {Thai.Device_Type || "Device Type"}:
-                    </span>
-                    <span>{device_type || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-bold">{Thai.Brand || "Brand"}:</span>
-                    <span>{brand || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-bold">
-                      {Thai.DeviceModel || "Device Model"}:
-                    </span>
-                    <span>{model || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-bold">
-                      {Thai.DeviceSerial || "Device Serial"}:
-                    </span>
-                    <span>{serial_number || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-bold">
-                      {Thai.Device_Status || "Device Status"}:
-                    </span>
-                    <span>{status || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-bold">
-                      {Thai.ChangeDate || "Change Date"}:
-                    </span>
-                    <span>{change_date || "N/A"}</span>
-                  </div>
+            <Suspense fallback={<IsLoading />}>
+              {deviceData ? (
+                <DeviceInfo
+                  device_id={deviceData.device_id}
+                  device_type={deviceData.device_type}
+                  brand={deviceData.brand}
+                  model={deviceData.model}
+                  serial_number={deviceData.serial_number}
+                  status={deviceData.status}
+                  change_date={deviceData.change_date}
+                />
+              ) : (
+                <div className="bg-gray-200 rounded-2xl p-6 text-center text-red-500">
+                  {Thai.Nodata || "No data available"}
                 </div>
-              </div>
-            ) : (
-              <div className="bg-gray-200 rounded-2xl p-6 text-center text-red-500">
-                {Thai.Nodata || "No data available"}
-              </div>
-            )}
+              )}
+            </Suspense>
           </div>
         </div>
       </Navbar>
