@@ -1,20 +1,12 @@
 "use client";
-
-import React, {
-  useState,
-  useEffect,
-  Suspense,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useUserContext } from "@/contexts/UserContext";
 import ErrorPage from "@/components/404popup";
 import Searchbar from "@/components/searchbar";
-import IsLoading from "@/components/isloading"; // นำเข้า IsLoading
-import ProfileInfo from "@/components/profileinfo"; // คอมโพเนนต์โปรไฟล์ที่ใช้แสดงข้อมูล
+import ProfileInfo from "@/components/profileinfo";
+import IsLoading from "@/components/isloading";
 
 interface ProfileData {
   name: string;
@@ -29,14 +21,13 @@ interface ProfileData {
 
 export default function ProfilePage() {
   const pathname = usePathname();
-  const { setName: setContextName, setPhoneNumber: setContextPhoneNumber } =
-    useUserContext();
+  const { setName, setPhoneNumber } = useUserContext();
   const [fetchError, setFetchError] = useState<Error | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // ใช้เช็คสถานะการโหลด
-  const [memberNo, setMemberNo] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [memberNo, setMemberNo] = useState<string>("");
 
-  // ใช้ localStorage ในการดึงค่า memberNo
+  // ดึงข้อมูล memberNo จาก localStorage เมื่อเริ่มต้น
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("memberNo");
     if (storedMemberNo) {
@@ -57,14 +48,13 @@ export default function ProfilePage() {
     }
   };
 
-  // ฟังก์ชันอัพเดตข้อมูลผู้ใช้
+  // ฟังก์ชันอัปเดตข้อมูลใน Context และ localStorage
   const updateProfileData = useCallback(
     (data: ProfileData) => {
       setProfileData(data);
-      setContextName(data.name);
-      setContextPhoneNumber(data.phoneNumber);
+      setName(data.name);
+      setPhoneNumber(data.phoneNumber);
 
-      // เก็บข้อมูลใน localStorage
       localStorage.setItem("memberNo", data.memberNo);
       localStorage.setItem("name", data.name);
       localStorage.setItem("phoneNumber", data.phoneNumber);
@@ -72,27 +62,25 @@ export default function ProfilePage() {
       localStorage.setItem("address", data.address);
       localStorage.setItem("profileImage", data.profileImage || "");
     },
-    [setContextName, setContextPhoneNumber]
+    [setName, setPhoneNumber]
   );
 
-  // ฟังก์ชันดึงข้อมูลเมื่อ memberNo เปลี่ยน
+  // useEffect สำหรับการดึงข้อมูลผู้ใช้
   useEffect(() => {
     if (memberNo) {
       setLoading(true);
-      setFetchError(null);
-
-      fetchUserData(memberNo)
-        .then((data) => {
-          updateProfileData(data); // อัพเดตข้อมูลที่ได้จาก API
-        })
-        .catch((error) => {
+      setTimeout(async () => {
+        try {
+          const data = await fetchUserData(memberNo);
+          updateProfileData(data);
+        } catch (error) {
           setFetchError(
             error instanceof Error ? error : new Error("Unknown error")
           );
-        })
-        .finally(() => {
-          setLoading(false); // เมื่อการโหลดเสร็จแล้ว
-        });
+        } finally {
+          setLoading(false);
+        }
+      }, 2000); // หน่วงเวลา 2 วินาที
     }
   }, [memberNo, updateProfileData]);
 
@@ -101,12 +89,6 @@ export default function ProfilePage() {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
 
-  // หากกำลังโหลดหรือยังไม่ได้ข้อมูลจาก API
-  if (loading || !profileData) {
-    return <IsLoading />; // แสดง IsLoading ขณะกำลังโหลดข้อมูล
-  }
-
-  // หากโหลดข้อมูลสำเร็จ แสดงข้อมูลโปรไฟล์
   const {
     name,
     lastname,
@@ -115,53 +97,28 @@ export default function ProfilePage() {
     idNumber,
     address,
     profileImage,
-  } = profileData;
+  } = profileData || {};
 
   return (
     <div>
       <Navbar>
         <Searchbar setMemberNo={setMemberNo} />
-        <div className="grid grid-cols-12 gap-4 min-h-screen">
-          <div className="flex flex-col col-start-1 col-span-12 min-h-screen">
-            <div className="flex-1">
-              <div className="flex flex-col md:flex-row min-w-full min-h-1/2 bg-gray-200 my-10 rounded-3xl p-6 items-center justify-between slide-in">
-                <Suspense fallback={<IsLoading />}>
-                  <div className="flex w-full items-center justify-center">
-                    <div className="w-[200px] h-full p-6">
-                      {profileImage ? (
-                        <Image
-                          src={profileImage}
-                          alt="Profile Image"
-                          className="w-full h-[200px] p-2"
-                          width={200}
-                          height={200}
-                        />
-                      ) : (
-                        <svg
-                          viewBox="0 0 1024 1024"
-                          className="icon"
-                          version="1.1"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="#000000"
-                        >
-                          {/* SVG สำหรับรูปโปรไฟล์ */}
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                  <ProfileInfo
-                    name={name}
-                    lastname={lastname}
-                    email={email}
-                    phoneNumber={phoneNumber}
-                    idNumber={idNumber}
-                    address={address}
-                  />
-                </Suspense>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Suspense fallback={<IsLoading />}>
+          {loading ? (
+            <IsLoading />
+          ) : (
+            <ProfileInfo
+              name={name ?? "Not Provided"}
+              lastname={lastname ?? "Not Provided"}
+              email={email ?? "Not Provided"}
+              phoneNumber={phoneNumber ?? "Not Provided"}
+              idNumber={idNumber ?? "Not Provided"}
+              address={address ?? "Not Provided"}
+              memberNo={memberNo ?? "Not Provided"}
+              profileImage={profileImage ?? ""}
+            />
+          )}
+        </Suspense>
       </Navbar>
     </div>
   );

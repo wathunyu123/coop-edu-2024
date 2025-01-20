@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-// กำหนดประเภทของข้อมูล context
 interface UserContextType {
   memberNo: string;
   setMemberNo: (memberNo: string) => void;
@@ -12,10 +11,8 @@ interface UserContextType {
   setPhoneNumber: (phoneNumber: string) => void;
 }
 
-// สร้าง Context โดยตั้งค่าเป็น undefined เพื่อให้ใช้ในกรณีที่ไม่มี UserProvider
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// สร้าง UserProvider สำหรับการจัดการ Context ให้สามารถใช้งานในแอปพลิเคชัน
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [memberNo, setMemberNo] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -37,7 +34,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook เพื่อดึงข้อมูลจาก UserContext
 export const useUserContext = (): UserContextType => {
   const context = useContext(UserContext);
 

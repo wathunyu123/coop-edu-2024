@@ -1,13 +1,14 @@
 "use client";
+
 import { useState, useEffect, Suspense } from "react";
 import Navbar from "@/components/Navbar";
-import Thai from "@/dictionary/thai";
-import Popup from "@/components/popup";
-import { usePathname } from "next/navigation";
 import Searchbar from "@/components/searchbar";
 import Menubar from "@/components/menubar";
-import ErrorPage from "@/components/404popup";
+import Popup from "@/components/popup";
 import IsLoading from "@/components/isloading";
+import ErrorPage from "@/components/404popup";
+import PinInfo from "@/components/pininfo";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 type PopupProps = {
@@ -29,103 +30,109 @@ type PopupProps = {
 };
 
 export default function OtpPage() {
-  const PinInfo = React.lazy(() => import("@/components/pininfo"));
   const pathname = usePathname();
-  const isActive = (linkPath: string) => pathname === linkPath;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<Error | null>(null);
+  const [status, setStatus] = useState<string>("normal");
+  const [pinAttempts, setPinAttempts] = useState<number>(0);
+  const [memberNo, setMemberNo] = useState<string | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupType, setPopupType] = useState<"otp" | "pin" | "editStatus">(
+    "otp"
+  );
 
-  const [status, setStatus] = useState<string>("normal"); // สถานะสมาชิก
-  const [pinAttempts, setPinAttempts] = useState<number>(0); // จำนวนครั้งที่ใส่ PIN ผิด
-  const [memberNo, setMemberNo] = useState<string | null>(null); // หมายเลขสมาชิก
-
+  // Handle memberNo from localStorage
   useEffect(() => {
     const savedMemberNo = localStorage.getItem("memberNo");
     if (savedMemberNo) {
-      setMemberNo(savedMemberNo); // ดึงหมายเลขสมาชิกจาก localStorage
+      setMemberNo(savedMemberNo);
     }
   }, []);
 
+  // Fetch user data when memberNo is set
   useEffect(() => {
+    if (!memberNo) return;
+
     const fetchUserData = async () => {
-      setIsLoading(true);
+      setIsLoading(true); // เริ่มการโหลด
       setFetchError(null);
-      if (memberNo) {
-        try {
-          const response = await fetch(`/api/otp&pin?id=${memberNo}`);
-          if (!response.ok) {
-            throw new Error("Device Not Found");
-          }
 
-          const data = await response.json();
+      try {
+        const response = await fetch(`/api/otp&pin?id=${memberNo}`);
+        if (!response.ok) throw new Error("Device Not Found");
 
-          if (!data) {
-            throw new Error("No data received");
-          }
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
 
-          setStatus(data.pinStatus);
-          setPinAttempts(data.pinAttempts);
-        } catch (error) {
-          setFetchError(
-            error instanceof Error ? error : new Error("Unknown error")
-          );
-        } finally {
+        setStatus(data.pinStatus);
+        setPinAttempts(data.pinAttempts);
+
+        // เพิ่มการหน่วงเวลา (delay) ก่อนที่จะปิดสถานะการโหลด
+        setTimeout(() => {
           setIsLoading(false);
-        }
+        }, 1000); // หน่วงเวลา 1 วินาที
+      } catch (error) {
+        setFetchError(
+          error instanceof Error ? error : new Error("Unknown error")
+        );
       }
     };
 
     fetchUserData();
   }, [memberNo]);
 
+  // Reset pin attempts and store in localStorage
   const resetPinAttempts = () => {
     setPinAttempts(0);
     localStorage.setItem("pinAttempts", "0");
   };
 
+  // Determine status message and style
   const getStatusMessage = (status: string) => {
-    let message = "";
-    let bgColorClass = "";
-    let textColor = "";
+    const statusMessages: Record<
+      string,
+      { message: string; bgColorClass: string; textColor: string }
+    > = {
+      normal: {
+        message: "สถานะปกติ",
+        bgColorClass: "bg-green-500",
+        textColor: "text-white",
+      },
+      locked: {
+        message: "บัญชีถูกล็อค",
+        bgColorClass: "bg-red-500",
+        textColor: "text-white",
+      },
+      error: {
+        message: "สถานะผิดพลาด",
+        bgColorClass: "bg-red-500",
+        textColor: "text-white",
+      },
+      pending: {
+        message: "สถานะรอดำเนินการ",
+        bgColorClass: "bg-yellow-500",
+        textColor: "text-white",
+      },
+    };
 
-    if (status === "normal") {
-      message = "สถานะปกติ";
-      bgColorClass = "bg-green-500";
-      textColor = "text-white";
-    } else if (status === "locked") {
-      message = "บัญชีถูกล็อค";
-      bgColorClass = "bg-red-500";
-      textColor = "text-white";
-    } else if (status === "error") {
-      message = "สถานะผิดพลาด";
-      bgColorClass = "bg-red-500";
-      textColor = "text-white";
-    } else if (status === "pending") {
-      message = "สถานะรอดำเนินการ";
-      bgColorClass = "bg-yellow-500";
-      textColor = "text-white";
-    } else {
-      message = "สถานะไม่รู้จัก";
-      bgColorClass = "bg-gray-500";
-      textColor = "text-white";
-    }
-
-    return { message, bgColorClass, textColor };
+    return (
+      statusMessages[status] || {
+        message: "สถานะไม่รู้จัก",
+        bgColorClass: "bg-gray-500",
+        textColor: "text-white",
+      }
+    );
   };
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [popupType, setPopupType] = useState<"otp" | "pin" | "editStatus">(
-    "otp"
-  );
+  // Handle popup close
+  const handleClosePopup = () => setIsPopupOpen(false);
 
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-  };
-
-  if (fetchError instanceof Error) {
+  // Error handling
+  if (fetchError) {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
 
+  // Get status and style
   const { message, bgColorClass, textColor } = getStatusMessage(status);
 
   return (
@@ -136,7 +143,6 @@ export default function OtpPage() {
         <div className="grid grid-cols-12 gap-4 min-h-screen">
           <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
             <Suspense fallback={<IsLoading />}>
-              {/* ส่ง props ที่จำเป็นให้กับ PinInfo */}
               <PinInfo
                 pinAttempts={pinAttempts}
                 status={status}

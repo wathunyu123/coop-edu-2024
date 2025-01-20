@@ -1,10 +1,11 @@
+"use client";
 import React, { useState, useEffect } from "react";
 
-interface IsLoadingProps {
+interface LoadingProps {
   message?: string;
 }
 
-function IsLoading({ message = "กำลังโหลด" }: IsLoadingProps) {
+function Loading({ message = "กำลังโหลด" }: LoadingProps) {
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [dots, setDots] = useState<string>("");
 
@@ -32,8 +33,8 @@ function IsLoading({ message = "กำลังโหลด" }: IsLoadingProps) 
   }
 
   return (
-    <div className="flex min-h-[600px] min-w-full items-center justify-center space-x-4 bg-gray-100 my-10">
-      <div className="flex flex-col items-center justify-center space-y-4 h-2/3">
+    <div className="flex min-h-screen min-w-full items-center justify-center space-x-4">
+      <div className="flex flex-col items-center justify-center space-y-4">
         <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
         <div className="text-lg text-gray-600">
           {message}
@@ -44,4 +45,4 @@ function IsLoading({ message = "กำลังโหลด" }: IsLoadingProps) 
   );
 }
 
-export default IsLoading;
+export default Loading;
