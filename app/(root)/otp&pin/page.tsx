@@ -31,7 +31,7 @@ type PopupProps = {
 
 export default function OtpPage() {
   const pathname = usePathname();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<Error | null>(null);
   const [status, setStatus] = useState<string>("normal");
   const [pinAttempts, setPinAttempts] = useState<number>(0);
@@ -51,10 +51,10 @@ export default function OtpPage() {
 
   // Fetch user data when memberNo is set
   useEffect(() => {
-    if (!memberNo) return;
+    if (memberNo) return;
 
     const fetchUserData = async () => {
-      setIsLoading(true); // เริ่มการโหลด
+      setLoading(true); // เริ่มการโหลด
       setFetchError(null);
 
       try {
@@ -69,7 +69,7 @@ export default function OtpPage() {
 
         // เพิ่มการหน่วงเวลา (delay) ก่อนที่จะปิดสถานะการโหลด
         setTimeout(() => {
-          setIsLoading(false);
+          setLoading(false);
         }, 1000); // หน่วงเวลา 1 วินาที
       } catch (error) {
         setFetchError(

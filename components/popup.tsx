@@ -22,6 +22,7 @@ interface PopupProps {
 }
 
 const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
+  // ถ้า Popup ไม่เปิด, จะไม่แสดง
   if (!isOpen) return null;
 
   const [otp, setOtp] = useState<string | null>(null); // OTP state
@@ -35,17 +36,18 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
 
   // ฟังก์ชันที่เรียกเมื่อคลิกปุ่ม Action
   const handleActionClick = () => {
-    const generatedOtp = generateOtp(); // สร้าง OTP
-    setOtp(generatedOtp); // ตั้งค่า OTP ที่ถูกสร้าง
-    setCountdown(180); // ตั้งเวลาเป็น 3 นาที
-    setCountdownActive(true); // เริ่มการนับถอยหลัง
+    const generatedOtp = generateOtp();
+    setOtp(generatedOtp);
+    setCountdown(180);
+    setCountdownActive(true);
   };
 
-  const memberNO = localStorage.getItem("memberNo") || "ไม่พบรหัสสมาชิก"; // เพิ่มการตรวจสอบ
-  const [memberNo, setMemberNo] = useState<string | null>(memberNO); // สร้าง state สำหรับรหัสสมาชิก
+  const memberNo = localStorage.getItem("memberNo") || "ไม่พบรหัสสมาชิก"; // เพิ่มการตรวจสอบ
+  const [memberNoState, setMemberNo] = useState<string | null>(memberNo); // สร้าง state สำหรับรหัสสมาชิก
+
   useEffect(() => {
-    setMemberNo(memberNO); // ตั้งค่ารหัสสมาชิกจาก localStorage
-  }, [memberNO]);
+    setMemberNo(memberNo); // ตั้งค่ารหัสสมาชิกจาก localStorage
+  }, [memberNo]);
 
   // ฟังก์ชันที่จัดการการนับถอยหลัง
   useEffect(() => {
@@ -87,8 +89,8 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
               ขอ OTP
             </h2>
             {otp ? (
-              <p className="text-center text-xl w-full justify-center outline flex items-center p-2 my-5 h-12 rounded-md ">
-                OTP ของคุณคือ: <strong>{memberNo}</strong>
+              <p className="text-center text-xl w-full justify-center outline flex items-center p-2 my-5 h-12 rounded-md">
+                OTP ของคุณคือ: <strong>{memberNoState}</strong>
               </p>
             ) : (
               <p className="py-2 my-5 w-full flex items-center justify-center text-center outline rounded-md">
@@ -96,7 +98,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
               </p>
             )}
             {countdown > 0 ? (
-              <p className="mt-4 text-center text-lg outline outline-slate-600 w-full p-2 rounded-md ">
+              <p className="mt-4 text-center text-lg outline outline-slate-600 w-full p-2 rounded-md">
                 เวลาเหลือ: {Math.floor(countdown / 60)}:
                 {(countdown % 60).toString().padStart(2, "0")}
               </p>
@@ -107,7 +109,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
             )}
           </div>
         );
-      /* case "pin":
+      case "pin":
         return (
           <div className="flex flex-col w-full h-full items-center">
             <h2 className="text-lg text-center w-full font-semibold mb-4 p-4 bg-cyan-700 text-white rounded-xl">
@@ -120,7 +122,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
               className="border border-gray-300 rounded-md p-2 bg-gray-100 text-gray-800"
             />
           </div>
-        ); */
+        );
       case "timer":
       case "document":
       case "Device lock":

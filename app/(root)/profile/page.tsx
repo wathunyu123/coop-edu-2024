@@ -42,9 +42,14 @@ export default function ProfilePage() {
         `http://localhost:3000/api/users?id=${memberNo}`
       );
       if (!response.ok) throw new Error("Users Not Found");
-      return await response.json();
+      const data = await response.json();
+      setProfileData(data); // เก็บข้อมูลที่ได้รับ
+      return data;
     } catch (error) {
-      throw error;
+      setProfileData(null); // ถ้าไม่พบข้อมูลให้เป็น null
+      throw error instanceof Error ? error : new Error("Unknown error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,7 +89,12 @@ export default function ProfilePage() {
     }
   }, [memberNo, updateProfileData]);
 
-  // หากมีข้อผิดพลาดในการดึงข้อมูล
+  useEffect(() => {
+    if (memberNo) {
+      setProfileData(null); // รีเซ็ตข้อมูลโปรไฟล์ก่อนค้นหาครั้งใหม่
+    }
+  }, [memberNo]);
+
   if (fetchError) {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
@@ -96,6 +106,7 @@ export default function ProfilePage() {
     phoneNumber,
     idNumber,
     address,
+
     profileImage,
   } = profileData || {};
 
@@ -107,16 +118,31 @@ export default function ProfilePage() {
           {loading ? (
             <IsLoading />
           ) : (
-            <ProfileInfo
-              name={name ?? "Not Provided"}
-              lastname={lastname ?? "Not Provided"}
-              email={email ?? "Not Provided"}
-              phoneNumber={phoneNumber ?? "Not Provided"}
-              idNumber={idNumber ?? "Not Provided"}
-              address={address ?? "Not Provided"}
-              memberNo={memberNo ?? "Not Provided"}
-              profileImage={profileImage ?? ""}
-            />
+            <>
+              {profileData ? (
+                <ProfileInfo
+                  name={profileData.name ?? "-"}
+                  lastname={profileData.lastname ?? "-"}
+                  email={profileData.email ?? "-"}
+                  phoneNumber={profileData.phoneNumber ?? "-"}
+                  idNumber={profileData.idNumber ?? "-"}
+                  address={profileData.address ?? "-"}
+                  memberNo={profileData.memberNo ?? "-"}
+                  profileImage={profileData.profileImage ?? ""}
+                />
+              ) : (
+                <ProfileInfo
+                  name="-"
+                  lastname="-"
+                  email="-"
+                  phoneNumber="-"
+                  idNumber="-"
+                  address="-"
+                  memberNo="-"
+                  profileImage=""
+                />
+              )}
+            </>
           )}
         </Suspense>
       </Navbar>

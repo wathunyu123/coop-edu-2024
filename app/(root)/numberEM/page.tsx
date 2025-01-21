@@ -5,11 +5,12 @@ import { usePathname, useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Searchbar from "@/components/searchbar";
 import Menubar from "@/components/menubar";
-import DeviceInfo from "@/components/diviceinfo"; // ใช้ import ปกติแทน React.lazy สำหรับการโหลด component
+import DeviceInfo from "@/components/diviceinfo";
 import IsLoading from "@/components/isloading";
 import ErrorPage from "@/components/404popup";
+import Link from "next/link";
+import Thai from "@/dictionary/thai";
 
-// ฟังก์ชันดึงข้อมูลจาก API
 const fetchDeviceData = async (memberNo: string) => {
   try {
     const response = await fetch(
@@ -35,7 +36,6 @@ export default function ChangeEmPage() {
   const [fetchError, setFetchError] = useState<Error | null>(null);
   const [memberNo, setMemberNo] = useState<string | null>(null);
 
-  // ดึง memberNo จาก localStorage
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("memberNo");
     if (storedMemberNo) {
@@ -43,7 +43,6 @@ export default function ChangeEmPage() {
     }
   }, []);
 
-  // ดึงข้อมูลจาก API เมื่อ memberNo เปลี่ยน
   useEffect(() => {
     if (memberNo) {
       setLoading(true);
@@ -60,13 +59,12 @@ export default function ChangeEmPage() {
           .finally(() => {
             setLoading(false);
           });
-      }, 2000); // หน่วงเวลา 2 วินาที
+      }, 2000);
 
-      return () => clearTimeout(fetchDataWithDelay); // เคลียร์ timeout เมื่อ `memberNo` เปลี่ยน
+      return () => clearTimeout(fetchDataWithDelay);
     }
   }, [memberNo]);
 
-  // ใช้ URL query parameter เป็น memberNo
   useEffect(() => {
     const memberNoFromURL = searchParams.get("id");
     if (memberNoFromURL) {
@@ -74,37 +72,91 @@ export default function ChangeEmPage() {
     }
   }, [searchParams]);
 
-  // ฟังก์ชัน handleSearch สำหรับการค้นหา
   const handleSearch = (newMemberNo: string) => {
     localStorage.setItem("memberNo", newMemberNo);
     setMemberNo(newMemberNo);
   };
+  useEffect(() => {
+    if (memberNo) {
+      setDeviceData(null); // รีเซ็ตข้อมูลโปรไฟล์ก่อนค้นหาครั้งใหม่
+    }
+  }, [memberNo]);
 
-  // ถ้ามีข้อผิดพลาดให้แสดง ErrorPage
   if (fetchError) {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
+
+  const deviceInfo = deviceData || {};
+  const {
+    device_id = "-",
+    device_type = "-",
+    brand = "-",
+    model = "-",
+    serial_number = "-",
+    status = "-",
+    change_date = "-",
+  } = deviceInfo;
 
   return (
     <div>
       <Navbar>
         <Searchbar setMemberNo={handleSearch} />
         <Menubar />
-
-        {/* ใช้ Suspense สำหรับการแสดงข้อมูลระหว่างที่ยังไม่โหลด */}
+        <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
+          <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
+            <div className="w-full flex justify-center">
+              <Link
+                href="/changeEM"
+                className={`px-6 py-1 ${
+                  pathname === "/changeEM"
+                    ? "bg-white text-black"
+                    : "hover:bg-white hover:text-black"
+                } rounded-xl`}
+              >
+                {Thai.MemberNo || "Member No"}
+              </Link>
+            </div>
+            <div className="w-full flex justify-center">
+              <Link
+                href="/numberEM"
+                className={`px-6 py-1 ${
+                  pathname === "/numberEM"
+                    ? "bg-white text-black"
+                    : "hover:bg-white hover:text-black"
+                } rounded-xl`}
+              >
+                {Thai.NumberEM || "Number EM"}
+              </Link>
+            </div>
+          </div>
+        </div>
         <Suspense fallback={<IsLoading />}>
-          {loading || !deviceData ? (
+          {loading ? (
             <IsLoading />
           ) : (
-            <DeviceInfo
-              device_id={deviceData.device_id || "Not Provided"}
-              device_type={deviceData.device_type || "Not Provided"}
-              brand={deviceData.brand || "Not Provided"}
-              model={deviceData.model || "Not Provided"}
-              serial_number={deviceData.serial_number || "Not Provided"}
-              status={deviceData.status || "Not Provided"}
-              change_date={deviceData.change_date || "Not Provided"}
-            />
+            <>
+              {deviceData ? (
+                <DeviceInfo
+                  device_id={deviceData.device_id ?? "-"}
+                  device_type={deviceData.device_type ?? "-"}
+                  brand={deviceData.brand ?? "-"}
+                  model={deviceData.model ?? "-"}
+                  serial_number={deviceData.serial_number ?? "-"}
+                  status={deviceData.status ?? "-"}
+                  change_date={deviceData.change_date ?? "-"}
+                />
+              ) : (
+                <DeviceInfo
+                  device_id="-"
+                  device_type="-"
+                  brand="-"
+                  model="-"
+                  serial_number="-"
+                  status="-"
+                  change_date="-"
+                />
+              )}
+            </>
           )}
         </Suspense>
       </Navbar>

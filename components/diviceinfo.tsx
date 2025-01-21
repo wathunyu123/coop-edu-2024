@@ -28,34 +28,6 @@ const DeviceInfo: React.FC<DeviceInfoProps> = ({
   return (
     <div className="grid md:grid-cols-12 gap-4 min-h-screen">
       <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12">
-        <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
-          <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
-            <div className="w-full flex justify-center">
-              <Link
-                href="/changeEM"
-                className={`px-6 py-1 ${
-                  pathname === "/changeEM"
-                    ? "bg-white text-black"
-                    : "hover:bg-white hover:text-black"
-                } rounded-xl`}
-              >
-                {Thai.MemberNo || "Member No"}
-              </Link>
-            </div>
-            <div className="w-full flex justify-center">
-              <Link
-                href="/numberEM"
-                className={`px-6 py-1 ${
-                  pathname === "/numberEM"
-                    ? "bg-white text-black"
-                    : "hover:bg-white hover:text-black"
-                } rounded-xl`}
-              >
-                {Thai.NumberEM || "Number EM"}
-              </Link>
-            </div>
-          </div>
-        </div>
         <div className="bg-gray-200 rounded-2xl p-6">
           <div className="flex flex-col space-y-4 mx-10 py-5">
             <div className="flex justify-between">

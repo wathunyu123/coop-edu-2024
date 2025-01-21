@@ -8,6 +8,8 @@ import Menubar from "@/components/menubar";
 import DeviceInfo from "@/components/diviceinfo";
 import IsLoading from "@/components/isloading";
 import ErrorPage from "@/components/404popup";
+import Link from "next/link";
+import Thai from "@/dictionary/thai";
 
 const fetchDeviceData = async (memberNo: string) => {
   try {
@@ -59,7 +61,7 @@ export default function ChangeEmPage() {
           });
       }, 2000);
 
-      return () => clearTimeout(fetchDataWithDelay); // เคลียร์ timeout เมื่อ `memberNo` เปลี่ยน
+      return () => clearTimeout(fetchDataWithDelay);
     }
   }, [memberNo]);
 
@@ -74,30 +76,87 @@ export default function ChangeEmPage() {
     localStorage.setItem("memberNo", newMemberNo);
     setMemberNo(newMemberNo);
   };
+  useEffect(() => {
+    if (memberNo) {
+      setDeviceData(null); // รีเซ็ตข้อมูลโปรไฟล์ก่อนค้นหาครั้งใหม่
+    }
+  }, [memberNo]);
 
   if (fetchError) {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
+
+  const deviceInfo = deviceData || {};
+  const {
+    device_id = "-",
+    device_type = "-",
+    brand = "-",
+    model = "-",
+    serial_number = "-",
+    status = "-",
+    change_date = "-",
+  } = deviceInfo;
 
   return (
     <div>
       <Navbar>
         <Searchbar setMemberNo={handleSearch} />
         <Menubar />
-
+        <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
+          <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
+            <div className="w-full flex justify-center">
+              <Link
+                href="/changeEM"
+                className={`px-6 py-1 ${
+                  pathname === "/changeEM"
+                    ? "bg-white text-black"
+                    : "hover:bg-white hover:text-black"
+                } rounded-xl`}
+              >
+                {Thai.MemberNo || "Member No"}
+              </Link>
+            </div>
+            <div className="w-full flex justify-center">
+              <Link
+                href="/numberEM"
+                className={`px-6 py-1 ${
+                  pathname === "/numberEM"
+                    ? "bg-white text-black"
+                    : "hover:bg-white hover:text-black"
+                } rounded-xl`}
+              >
+                {Thai.NumberEM || "Number EM"}
+              </Link>
+            </div>
+          </div>
+        </div>
         <Suspense fallback={<IsLoading />}>
-          {loading || !deviceData ? (
+          {loading ? (
             <IsLoading />
           ) : (
-            <DeviceInfo
-              device_id={deviceData.device_id || "Not Provided"}
-              device_type={deviceData.device_type || "Not Provided"}
-              brand={deviceData.brand || "Not Provided"}
-              model={deviceData.model || "Not Provided"}
-              serial_number={deviceData.serial_number || "Not Provided"}
-              status={deviceData.status || "Not Provided"}
-              change_date={deviceData.change_date || "Not Provided"}
-            />
+            <>
+              {deviceData ? (
+                <DeviceInfo
+                  device_id={deviceData.device_id ?? "-"}
+                  device_type={deviceData.device_type ?? "-"}
+                  brand={deviceData.brand ?? "-"}
+                  model={deviceData.model ?? "-"}
+                  serial_number={deviceData.serial_number ?? "-"}
+                  status={deviceData.status ?? "-"}
+                  change_date={deviceData.change_date ?? "-"}
+                />
+              ) : (
+                <DeviceInfo
+                  device_id="-"
+                  device_type="-"
+                  brand="-"
+                  model="-"
+                  serial_number="-"
+                  status="-"
+                  change_date="-"
+                />
+              )}
+            </>
           )}
         </Suspense>
       </Navbar>
