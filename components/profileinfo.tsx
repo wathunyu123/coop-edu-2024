@@ -126,44 +126,46 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
       <div className="flex flex-col col-start-1 col-span-12 min-h-screen">
         <div className="flex-1">
           <div className="bg-gray-200 rounded-3xl ">
-            <div className="flex flex-col md:flex-row min-w-full min-h-1/2  my-10  p-6 items-center justify-between slide-in">
+            <div className="flex flex-col md:flex-row min-w-full min-h-1/2  my-10  p-6 items-center  slide-in">
               <div className="flex w-full items-center justify-center">
                 <div className="w-[200px] h-full p-6">
                   {renderProfileImage()}
                 </div>
               </div>
 
-              <div className="flex flex-col w-full bg-white p-6 rounded-lg divide-y divide-gray-300">
-                {currentData.map((item, index) => (
-                  <div key={index} className="flex justify-between py-4">
-                    <span className="text-gray-500 font-medium">
-                      {item.title}
-                    </span>
-                    <span className="text-gray-800 font-semibold">
-                      {item.value || "-"}
-                    </span>
-                  </div>
-                ))}
+              <div className="flex flex-col w-full rounded-lg ">
+                <div className="flex flex-col w-full p-6 rounded-lg divide-y divide-gray-300 bg-white">
+                  {currentData.map((item, index) => (
+                    <div key={index} className="flex justify-between py-4  ">
+                      <span className="text-gray-500 font-medium">
+                        {item.title}
+                      </span>
+                      <span className="text-gray-800 font-semibold">
+                        {item.value || "-"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-center items-center gap-6 my-3 py-2 bg-white rounded-xl">
+                  <button
+                    onClick={handlePrev}
+                    disabled={currentPage === 1}
+                    className="bg-gray-300 p-2 rounded-lg disabled:opacity-50"
+                  >
+                    {Thai.Prev}
+                  </button>
+                  <span>
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button
+                    onClick={handleNext}
+                    disabled={currentPage === totalPages}
+                    className="bg-gray-300 p-2 rounded-lg disabled:opacity-50"
+                  >
+                    {Thai.Next}
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="flex justify-center items-center gap-6 py-4">
-              <button
-                onClick={handlePrev}
-                disabled={currentPage === 1}
-                className="bg-gray-300 p-2 rounded-lg disabled:opacity-50"
-              >
-                {Thai.Prev}
-              </button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={handleNext}
-                disabled={currentPage === totalPages}
-                className="bg-gray-300 p-2 rounded-lg disabled:opacity-50"
-              >
-                {Thai.Next}
-              </button>
             </div>
           </div>
         </div>
