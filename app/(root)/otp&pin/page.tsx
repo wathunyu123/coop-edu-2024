@@ -67,10 +67,9 @@ export default function OtpPage() {
         setStatus(data.pinStatus);
         setPinAttempts(data.pinAttempts);
 
-        // เพิ่มการหน่วงเวลา (delay) ก่อนที่จะปิดสถานะการโหลด
         setTimeout(() => {
           setLoading(false);
-        }, 1000); // หน่วงเวลา 1 วินาที
+        }, 1000);
       } catch (error) {
         setFetchError(
           error instanceof Error ? error : new Error("Unknown error")
@@ -81,13 +80,11 @@ export default function OtpPage() {
     fetchUserData();
   }, [memberNo]);
 
-  // Reset pin attempts and store in localStorage
   const resetPinAttempts = () => {
     setPinAttempts(0);
     localStorage.setItem("pinAttempts", "0");
   };
 
-  // Determine status message and style
   const getStatusMessage = (status: string) => {
     const statusMessages: Record<
       string,
@@ -124,15 +121,15 @@ export default function OtpPage() {
     );
   };
 
-  // Handle popup close
+ 
   const handleClosePopup = () => setIsPopupOpen(false);
 
-  // Error handling
+ 
   if (fetchError) {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
 
-  // Get status and style
+  
   const { message, bgColorClass, textColor } = getStatusMessage(status);
 
   return (
@@ -160,7 +157,6 @@ export default function OtpPage() {
           </div>
         </div>
 
-        {/* Backdrop (Blurred background) */}
         {isPopupOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
         )}

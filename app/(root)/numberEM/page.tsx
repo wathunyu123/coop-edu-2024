@@ -78,7 +78,7 @@ export default function ChangeEmPage() {
   };
   useEffect(() => {
     if (memberNo) {
-      setDeviceData(null); // รีเซ็ตข้อมูลโปรไฟล์ก่อนค้นหาครั้งใหม่
+      setDeviceData(null); 
     }
   }, [memberNo]);
 

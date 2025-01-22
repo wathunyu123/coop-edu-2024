@@ -9,68 +9,85 @@ import ProfileInfo from "@/components/profileinfo";
 import IsLoading from "@/components/isloading";
 
 interface ProfileData {
-  name: string;
-  phoneNumber: string;
-  idNumber: string;
-  lastname: string;
-  email: string;
-  address: string;
-  profileImage: string;
   memberNo: string;
+  memberName: string;
+  memberNameEng: string;
+  department: string;
+  unit: string;
+  jobPosition: string;
+  salary: string;
+  positionAllowance: string;
+  otherIncome: string;
+  cardId: string;
+  birthDate: string;
+  age: string;
+  permanentAddress: string;
+  presentAddress: string;
+  mastTel: string;
+  mastMobile: string;
+  telephone: string;
+  email: string;
+  memberDate: string;
+  memberType: string;
+  memberPeriod: string;
+  memberStatus: string;
+  resignDate: string;
+  share: string;
+  cumulativeInt: string;
+  shareMonthlyAmount: string;
+  monthlyBillingType: string;
+  dividendPaidType: string;
+  profileImage?: string;
 }
 
 export default function ProfilePage() {
-  const pathname = usePathname();
   const { setName, setPhoneNumber } = useUserContext();
   const [fetchError, setFetchError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [memberNo, setMemberNo] = useState<string>("");
 
-  // ดึงข้อมูล memberNo จาก localStorage เมื่อเริ่มต้น
+  // ฟังก์ชันเพื่อดึงข้อมูล memberNo จาก localStorage เมื่อเริ่มต้น
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("memberNo");
-    if (storedMemberNo) {
-      setMemberNo(storedMemberNo);
-    }
+    if (storedMemberNo) setMemberNo(storedMemberNo);
   }, []);
 
   // ฟังก์ชันดึงข้อมูลผู้ใช้จาก API
   const fetchUserData = async (memberNo: string): Promise<ProfileData> => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/users?id=${memberNo}`
+        `http://localhost:3000/api/users?memberNo=${memberNo}`
       );
       if (!response.ok) throw new Error("Users Not Found");
       const data = await response.json();
-      setProfileData(data); // เก็บข้อมูลที่ได้รับ
+      setProfileData(data);
       return data;
     } catch (error) {
-      setProfileData(null); // ถ้าไม่พบข้อมูลให้เป็น null
-      throw error instanceof Error ? error : new Error("Unknown error");
+      setFetchError(
+        error instanceof Error ? error : new Error("Unknown error")
+      );
+      return Promise.reject(error);
     } finally {
       setLoading(false);
     }
   };
 
-  // ฟังก์ชันอัปเดตข้อมูลใน Context และ localStorage
   const updateProfileData = useCallback(
     (data: ProfileData) => {
       setProfileData(data);
-      setName(data.name);
-      setPhoneNumber(data.phoneNumber);
+      setName(data.memberName);
+      setPhoneNumber(data.mastMobile);
 
-      localStorage.setItem("memberNo", data.memberNo);
-      localStorage.setItem("name", data.name);
-      localStorage.setItem("phoneNumber", data.phoneNumber);
-      localStorage.setItem("email", data.email);
-      localStorage.setItem("address", data.address);
-      localStorage.setItem("profileImage", data.profileImage || "");
+      (Object.keys(data) as (keyof ProfileData)[]).forEach((key) => {
+        if (data[key] !== undefined) {
+          localStorage.setItem(key, data[key] as string);
+        }
+      });
     },
     [setName, setPhoneNumber]
   );
 
-  // useEffect สำหรับการดึงข้อมูลผู้ใช้
   useEffect(() => {
     if (memberNo) {
       setLoading(true);
@@ -85,13 +102,13 @@ export default function ProfilePage() {
         } finally {
           setLoading(false);
         }
-      }, 2000); // หน่วงเวลา 2 วินาที
+      }, 2000);
     }
   }, [memberNo, updateProfileData]);
 
   useEffect(() => {
     if (memberNo) {
-      setProfileData(null); // รีเซ็ตข้อมูลโปรไฟล์ก่อนค้นหาครั้งใหม่
+      setProfileData(null);
     }
   }, [memberNo]);
 
@@ -99,51 +116,48 @@ export default function ProfilePage() {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
 
-  const {
-    name,
-    lastname,
-    email,
-    phoneNumber,
-    idNumber,
-    address,
-
-    profileImage,
-  } = profileData || {};
+  const profileContent = profileData ? (
+    <ProfileInfo {...profileData} />
+  ) : (
+    <ProfileInfo
+      memberNo="-"
+      memberName="-"
+      memberNameEng="-"
+      department="-"
+      unit="-"
+      jobPosition="-"
+      salary="-"
+      positionAllowance="-"
+      otherIncome="-"
+      cardId="-"
+      birthDate="-"
+      age="-"
+      permanentAddress="-"
+      presentAddress="-"
+      mastTel="-"
+      mastMobile="-"
+      telephone="-"
+      email="-"
+      memberDate="-"
+      memberType="-"
+      memberPeriod="-"
+      memberStatus="-"
+      resignDate="-"
+      share="-"
+      cumulativeInt="-"
+      shareMonthlyAmount="-"
+      monthlyBillingType="-"
+      dividendPaidType="-"
+      profileImage=""
+    />
+  );
 
   return (
     <div>
       <Navbar>
         <Searchbar setMemberNo={setMemberNo} />
         <Suspense fallback={<IsLoading />}>
-          {loading ? (
-            <IsLoading />
-          ) : (
-            <>
-              {profileData ? (
-                <ProfileInfo
-                  name={profileData.name ?? "-"}
-                  lastname={profileData.lastname ?? "-"}
-                  email={profileData.email ?? "-"}
-                  phoneNumber={profileData.phoneNumber ?? "-"}
-                  idNumber={profileData.idNumber ?? "-"}
-                  address={profileData.address ?? "-"}
-                  memberNo={profileData.memberNo ?? "-"}
-                  profileImage={profileData.profileImage ?? ""}
-                />
-              ) : (
-                <ProfileInfo
-                  name="-"
-                  lastname="-"
-                  email="-"
-                  phoneNumber="-"
-                  idNumber="-"
-                  address="-"
-                  memberNo="-"
-                  profileImage=""
-                />
-              )}
-            </>
-          )}
+          {loading ? <IsLoading /> : profileContent}
         </Suspense>
       </Navbar>
     </div>

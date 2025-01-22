@@ -34,3 +34,15 @@
 .fade-out {
   animation: fadeOut 1s ease-in-out;
 }
+
+/* styles.css */
+.accordion-content {
+  transition: max-height 0.3s ease-out;
+  overflow: hidden;
+  max-height: 0;
+}
+
+.accordion-content.open {
+  max-height: 500px;
+  /* Adjust as per your content */
+}
