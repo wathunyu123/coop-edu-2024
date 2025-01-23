@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect, useCallback, Suspense } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
-import { usePathname } from "next/navigation";
 import { useUserContext } from "@/contexts/UserContext";
 import ErrorPage from "@/components/404popup";
 import Searchbar from "@/components/searchbar";
+
 import ProfileInfo from "@/components/profileinfo";
 import IsLoading from "@/components/isloading";
 
@@ -61,6 +61,16 @@ export default function ProfilePage() {
       );
       if (!response.ok) throw new Error("Users Not Found");
       const data = await response.json();
+
+      // เพิ่มการดึงข้อมูล Base64 รูปโปรไฟล์จาก API หรือแหล่งอื่น
+      const profileImageResponse = await fetch(
+        `/api/profile-image?memberNo=${memberNo}`
+      );
+      if (profileImageResponse.ok) {
+        const profileImageData = await profileImageResponse.json();
+        data.profileImage = profileImageData.data.base64; // ใส่ข้อมูล Base64 ของรูปโปรไฟล์
+      }
+
       setProfileData(data);
       return data;
     } catch (error) {
@@ -79,6 +89,7 @@ export default function ProfilePage() {
       setName(data.memberName);
       setPhoneNumber(data.mastMobile);
 
+      // เก็บข้อมูลใน localStorage
       (Object.keys(data) as (keyof ProfileData)[]).forEach((key) => {
         if (data[key] !== undefined) {
           localStorage.setItem(key, data[key] as string);
@@ -156,9 +167,7 @@ export default function ProfilePage() {
     <div>
       <Navbar>
         <Searchbar setMemberNo={setMemberNo} />
-        <Suspense fallback={<IsLoading />}>
-          {loading ? <IsLoading /> : profileContent}
-        </Suspense>
+        {loading ? <IsLoading /> : profileContent}
       </Navbar>
     </div>
   );

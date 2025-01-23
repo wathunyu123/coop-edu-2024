@@ -129,7 +129,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
             <div className="flex flex-col md:flex-row min-w-full min-h-1/2  my-10  p-6 items-center  slide-in">
               <div className="flex w-full items-center justify-center">
                 <div className="w-[200px] h-full p-6">
-                  {renderProfileImage()}
+                  {renderProfileImage(profileImage)}
                 </div>
               </div>
 
@@ -174,7 +174,22 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
   );
 };
 
-const renderProfileImage = () => {
+const renderProfileImage = (profileImage: string | undefined) => {
+  // ตรวจสอบว่า profileImage มีค่า Base64 หรือ URL หรือไม่
+  if (
+    profileImage &&
+    (profileImage.startsWith("data:image") || profileImage.startsWith("http"))
+  ) {
+    return (
+      <img
+        src={profileImage}
+        alt="Profile"
+        className="w-[150px] h-[150px] rounded-full object-cover"
+      />
+    );
+  }
+
+  // ถ้าไม่มี profileImage หรือไม่ได้เป็น Base64/URL ที่ถูกต้อง
   return (
     <svg
       viewBox="0 0 1024 1024"
@@ -206,5 +221,6 @@ const renderProfileImage = () => {
     </svg>
   );
 };
+
 
 export default ProfileInfo;
