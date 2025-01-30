@@ -64,6 +64,21 @@ enum Thai {
   ShareMonthlyAmount = "จำนวนหุ้นเดือน",
   MonthlyBillingType = "ประเภทการเรียกเก็บเงิน",
   DividendPaidType = "ประเภทการจ่ายเงินปันผล",
+  DevcUniqyeUid = "รหัสอุปกรณ์",
+  DevcPlatForm = "ระบบปฏิบัติการ",
+  DevcPlatFormVersion = "เวอร์ชั่นระบบปฏิบัติการ",
+  DevcModel = "รุ่นอุปกรณ์",
+  DevcManufacturer = "ผู้ผลิตอุปกรณ์",
+  DevcSerialNo = "หมายเลขอุปกรณ์",
+  DevcIsVirtual = "เป็นอุปกรณ์เสมือน",
+  DevcFcmId = "รหัส FCM",
+  DevcRegDate = "วันที่ลงทะเบียน",
+  DevcLastUsed = "ใช้ล่าสุด",
+  DevcCountUsed = "จำนวนการใช้งาน",
+  DevcUsageStatus = "สถานะการใช้งาน",
+  DevcPriority = "ลำดับความสำคัญ",
+  DevcPubKey = "คีย์สาธารณะ",
+  SevrPvtKey = "คีย์ส่วนตัว",
 }
 
 export default Thai;

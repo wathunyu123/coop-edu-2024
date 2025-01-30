@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState, useMemo } from "react";
+import Image from "next/image"; // ใช้ Image จาก next/image
 import Thai from "@/dictionary/thai";
 
 interface ProfileInfoProps {
@@ -66,35 +66,66 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
   profileImage,
 }) => {
   // Data for pagination (only showing part of it here)
-  const profileData = [
-    { title: Thai.Name, value: memberName },
-    { title: Thai.NameEng, value: memberNameEng },
-    { title: Thai.Department, value: department },
-    { title: Thai.Unit, value: unit },
-    { title: Thai.JobPosition, value: jobPosition },
-    { title: Thai.Salary, value: salary },
-    { title: Thai.PositionAllowance, value: positionAllowance },
-    { title: Thai.OtherIncome, value: otherIncome },
-    { title: Thai.CardId, value: cardId },
-    { title: Thai.BirthDate, value: birthDate },
-    { title: Thai.Age, value: age },
-    { title: Thai.PermanentAddress, value: permanentAddress },
-    { title: Thai.PresentAddress, value: presentAddress },
-    { title: Thai.MastTel, value: mastTel },
-    { title: Thai.MastMobile, value: mastMobile },
-    { title: Thai.Telephone, value: telephone },
-    { title: Thai.Email, value: email },
-    { title: Thai.MemberDate, value: memberDate },
-    { title: Thai.MemberType, value: memberType },
-    { title: Thai.MemberPeriod, value: memberPeriod },
-    { title: Thai.MemberStatus, value: memberStatus },
-    { title: Thai.ResignDate, value: resignDate },
-    { title: Thai.Share, value: share },
-    { title: Thai.CumulativeInt, value: cumulativeInt },
-    { title: Thai.ShareMonthlyAmount, value: shareMonthlyAmount },
-    { title: Thai.MonthlyBillingType, value: monthlyBillingType },
-    { title: Thai.DividendPaidType, value: dividendPaidType },
-  ];
+  const profileData = useMemo(
+    () => [
+      { title: Thai.Name, value: memberName },
+      { title: Thai.NameEng, value: memberNameEng },
+      { title: Thai.Department, value: department },
+      { title: Thai.Unit, value: unit },
+      { title: Thai.JobPosition, value: jobPosition },
+      { title: Thai.Salary, value: salary },
+      { title: Thai.PositionAllowance, value: positionAllowance },
+      { title: Thai.OtherIncome, value: otherIncome },
+      { title: Thai.CardId, value: cardId },
+      { title: Thai.BirthDate, value: birthDate },
+      { title: Thai.Age, value: age },
+      { title: Thai.PermanentAddress, value: permanentAddress },
+      { title: Thai.PresentAddress, value: presentAddress },
+      { title: Thai.MastTel, value: mastTel },
+      { title: Thai.MastMobile, value: mastMobile },
+      { title: Thai.Telephone, value: telephone },
+      { title: Thai.Email, value: email },
+      { title: Thai.MemberDate, value: memberDate },
+      { title: Thai.MemberType, value: memberType },
+      { title: Thai.MemberPeriod, value: memberPeriod },
+      { title: Thai.MemberStatus, value: memberStatus },
+      { title: Thai.ResignDate, value: resignDate },
+      { title: Thai.Share, value: share },
+      { title: Thai.CumulativeInt, value: cumulativeInt },
+      { title: Thai.ShareMonthlyAmount, value: shareMonthlyAmount },
+      { title: Thai.MonthlyBillingType, value: monthlyBillingType },
+      { title: Thai.DividendPaidType, value: dividendPaidType },
+    ],
+    [
+      memberName,
+      memberNameEng,
+      department,
+      unit,
+      jobPosition,
+      salary,
+      positionAllowance,
+      otherIncome,
+      cardId,
+      birthDate,
+      age,
+      permanentAddress,
+      presentAddress,
+      mastTel,
+      mastMobile,
+      telephone,
+      email,
+      memberDate,
+      memberType,
+      memberPeriod,
+      memberStatus,
+      resignDate,
+      share,
+      cumulativeInt,
+      shareMonthlyAmount,
+      monthlyBillingType,
+      dividendPaidType,
+    ]
+  );
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -126,17 +157,17 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
       <div className="flex flex-col col-start-1 col-span-12 min-h-screen">
         <div className="flex-1">
           <div className="bg-gray-200 rounded-3xl ">
-            <div className="flex flex-col md:flex-row min-w-full min-h-1/2  my-10  p-6 items-center  slide-in">
+            <div className="flex flex-col md:flex-row min-w-full min-h-1/2 my-10 p-6 items-center slide-in">
               <div className="flex w-full items-center justify-center">
                 <div className="w-[200px] h-full p-6">
                   {renderProfileImage(profileImage)}
                 </div>
               </div>
 
-              <div className="flex flex-col w-full rounded-lg ">
+              <div className="flex flex-col w-full rounded-lg">
                 <div className="flex flex-col w-full p-6 rounded-lg divide-y divide-gray-300 bg-white">
                   {currentData.map((item, index) => (
-                    <div key={index} className="flex justify-between py-4  ">
+                    <div key={index} className="flex justify-between py-4">
                       <span className="text-gray-500 font-medium">
                         {item.title}
                       </span>
@@ -146,6 +177,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
                     </div>
                   ))}
                 </div>
+
                 <div className="flex justify-center items-center gap-6 my-3 py-2 bg-white rounded-xl">
                   <button
                     onClick={handlePrev}
@@ -174,22 +206,34 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
   );
 };
 
-const renderProfileImage = (profileImage: string | undefined) => {
-  // ตรวจสอบว่า profileImage มีค่า Base64 หรือ URL หรือไม่
-  if (
-    profileImage &&
-    (profileImage.startsWith("data:image") || profileImage.startsWith("http"))
-  ) {
-    return (
-      <img
-        src={profileImage}
-        alt="Profile"
-        className="w-[150px] h-[150px] rounded-full object-cover"
-      />
-    );
+const renderProfileImage = (profileImage?: string) => {
+  if (profileImage) {
+    if (profileImage.startsWith("data:image")) {
+      // ถ้าเป็น Base64
+      return (
+        <img
+          src={profileImage}
+          alt="Profile"
+          className="object-cover"
+          width={200}
+          height={200}
+        />
+      );
+    } else {
+      // ถ้าเป็น URL ของภาพ
+      return (
+        <Image
+          src={profileImage}
+          alt="Profile"
+          width={200}
+          height={200}
+          className="object-cover"
+        />
+      );
+    }
   }
 
-  // ถ้าไม่มี profileImage หรือไม่ได้เป็น Base64/URL ที่ถูกต้อง
+  // ถ้าไม่มีภาพให้แสดงเป็น SVG
   return (
     <svg
       viewBox="0 0 1024 1024"
@@ -221,6 +265,5 @@ const renderProfileImage = (profileImage: string | undefined) => {
     </svg>
   );
 };
-
 
 export default ProfileInfo;

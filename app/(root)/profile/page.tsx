@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import { useUserContext } from "@/contexts/UserContext";
 import ErrorPage from "@/components/404popup";
 import Searchbar from "@/components/searchbar";
-
 import ProfileInfo from "@/components/profileinfo";
 import IsLoading from "@/components/isloading";
 
@@ -37,7 +36,7 @@ interface ProfileData {
   shareMonthlyAmount: string;
   monthlyBillingType: string;
   dividendPaidType: string;
-  profileImage?: string;
+  profileImage?: string | null;
 }
 
 export default function ProfilePage() {
@@ -47,13 +46,13 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [memberNo, setMemberNo] = useState<string>("");
 
-  // ฟังก์ชันเพื่อดึงข้อมูล memberNo จาก localStorage เมื่อเริ่มต้น
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("memberNo");
-    if (storedMemberNo) setMemberNo(storedMemberNo);
+    if (storedMemberNo && storedMemberNo.trim() !== "") {
+      setMemberNo(storedMemberNo);
+    }
   }, []);
 
-  // ฟังก์ชันดึงข้อมูลผู้ใช้จาก API
   const fetchUserData = async (memberNo: string): Promise<ProfileData> => {
     try {
       const response = await fetch(
@@ -61,14 +60,26 @@ export default function ProfilePage() {
       );
       if (!response.ok) throw new Error("Users Not Found");
       const data = await response.json();
+      console.log("User Data:", data);
 
-      // เพิ่มการดึงข้อมูล Base64 รูปโปรไฟล์จาก API หรือแหล่งอื่น
+      // ดึงข้อมูลภาพโปรไฟล์
       const profileImageResponse = await fetch(
-        `/api/profile-image?memberNo=${memberNo}`
+        `http://localhost:3000/api/profileImg?memberNo=${memberNo}`
       );
       if (profileImageResponse.ok) {
         const profileImageData = await profileImageResponse.json();
-        data.profileImage = profileImageData.data.base64; // ใส่ข้อมูล Base64 ของรูปโปรไฟล์
+        console.log("Profile Image Data:", profileImageData);
+
+        if (profileImageData?.photo) {
+          data.profileImage = profileImageData.photo;
+          console.log("Base64 Image:", profileImageData.photo);
+        } else {
+          console.warn("No base64 image found for memberNo:", memberNo);
+          data.profileImage = null;
+        }
+      } else {
+        console.error("Failed to fetch profile image");
+        data.profileImage = null;
       }
 
       setProfileData(data);
@@ -89,7 +100,6 @@ export default function ProfilePage() {
       setName(data.memberName);
       setPhoneNumber(data.mastMobile);
 
-      // เก็บข้อมูลใน localStorage
       (Object.keys(data) as (keyof ProfileData)[]).forEach((key) => {
         if (data[key] !== undefined) {
           localStorage.setItem(key, data[key] as string);
@@ -102,33 +112,29 @@ export default function ProfilePage() {
   useEffect(() => {
     if (memberNo) {
       setLoading(true);
-      setTimeout(async () => {
-        try {
-          const data = await fetchUserData(memberNo);
+      setFetchError(null);
+      setProfileData(null);
+      fetchUserData(memberNo)
+        .then((data) => {
           updateProfileData(data);
-        } catch (error) {
+        })
+        .catch((error) => {
           setFetchError(
             error instanceof Error ? error : new Error("Unknown error")
           );
-        } finally {
-          setLoading(false);
-        }
-      }, 2000);
+        });
     }
   }, [memberNo, updateProfileData]);
-
-  useEffect(() => {
-    if (memberNo) {
-      setProfileData(null);
-    }
-  }, [memberNo]);
 
   if (fetchError) {
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
 
+  const profileImage = profileData?.profileImage;
+  console.log("Profile Image in Page:", profileImage);
+
   const profileContent = profileData ? (
-    <ProfileInfo {...profileData} />
+    <ProfileInfo {...profileData} profileImage={profileImage ?? undefined} />
   ) : (
     <ProfileInfo
       memberNo="-"
