@@ -159,7 +159,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
           <div className="bg-gray-200 rounded-3xl ">
             <div className="flex flex-col md:flex-row min-w-full min-h-1/2 my-10 p-6 items-center slide-in">
               <div className="flex w-full items-center justify-center">
-                <div className="w-[200px] h-full p-6">
+                <div className="w-full h-full p-3 flex items-center justify-center">
                   {renderProfileImage(profileImage)}
                 </div>
               </div>
@@ -209,25 +209,23 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
 const renderProfileImage = (profileImage?: string) => {
   if (profileImage) {
     if (profileImage.startsWith("data:image")) {
-      // ถ้าเป็น Base64
       return (
         <img
           src={profileImage}
           alt="Profile"
-          className="object-cover"
-          width={200}
-          height={200}
+          className="object-cover w-1/2 h-1/2"
+          width="50%"
+          height="50%"
         />
       );
     } else {
-      // ถ้าเป็น URL ของภาพ
       return (
         <Image
           src={profileImage}
           alt="Profile"
           width={200}
           height={200}
-          className="object-cover"
+          className="object-cover w-1/2 h-1/2"
         />
       );
     }

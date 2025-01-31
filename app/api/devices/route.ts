@@ -3,8 +3,8 @@ import fs from "fs";
 import path from "path";
 
 type Device = {
-  appMemberNo: string;
-  appCoopDode: string;
+  appMembNo: string;
+  appCoopCode: string;
   devcUniqueUid: string;
   devcPlatform: string;
   devcPlatformVer: string;
@@ -24,16 +24,22 @@ type Device = {
 
 const readDataFromFile = async (): Promise<any> => {
   try {
-    const filePath = path.resolve("data/loing_devices.json");
+    const filePath = path.resolve("data/login_devices.json");
 
     const data = await fs.promises.readFile(filePath, "utf8");
-
     const parsedData = JSON.parse(data);
 
-    if (!parsedData.data || !parsedData.data.device) {
-      throw new Error("Invalid data format: Missing profile information.");
+    if (
+      !parsedData.data ||
+      !parsedData.data.devices ||
+      !parsedData.data.devices.byMembNo
+    ) {
+      throw new Error("Invalid data format: Missing devices or byMembNo.");
     }
-    return parsedData.data.device;
+
+    console.log("Devices data:", parsedData.data.devices.byMembNo);
+
+    return parsedData.data.devices;
   } catch (error: unknown) {
     console.error("Error reading data:", error);
     throw new Error("Failed to read data");
@@ -44,6 +50,8 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const appMemberNo = searchParams.get("appMemberNo");
 
+  console.log("appMemberNo from query string:", appMemberNo);
+
   if (!appMemberNo) {
     return NextResponse.json(
       { error: "appMemberNo is required" },
@@ -52,9 +60,13 @@ export async function GET(request: Request) {
   }
 
   try {
-    const device = await readDataFromFile();
+    const devices = await readDataFromFile();
 
-    if (device.appMemberNo !== appMemberNo) {
+    const device = devices.byMembNo.find(
+      (d: Device) => d.appMembNo === appMemberNo
+    );
+
+    if (!device) {
       return NextResponse.json({ error: "Device not found" }, { status: 404 });
     }
 

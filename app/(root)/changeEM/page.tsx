@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Searchbar from "@/components/searchbar";
@@ -11,18 +11,21 @@ import ErrorPage from "@/components/404popup";
 import Link from "next/link";
 import Thai from "@/dictionary/thai";
 
-const fetchDeviceData = async (memberNo: string) => {
+// ฟังก์ชั่นดึงข้อมูลจาก API
+const fetchDeviceData = async (appMembNo: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/device?id=${memberNo}`
+      `http://localhost:3000/api/devices?appMemberNo=${appMembNo}`
     );
-
+    console.log("API response status:", response.status);
     if (!response.ok) {
       throw new Error("Device Not Found");
     }
-
-    return await response.json();
+    const data = await response.json();
+    console.log("API response data:", data);
+    return data;
   } catch (error) {
+    console.error("API fetch error:", error);
     throw error;
   }
 };
@@ -34,68 +37,77 @@ export default function ChangeEmPage() {
   const [deviceData, setDeviceData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [fetchError, setFetchError] = useState<Error | null>(null);
-  const [memberNo, setMemberNo] = useState<string | null>(null);
+  const [appMembNo, setAppMembNo] = useState<string | null>(null);
 
+  // ดึง appMembNo จาก localStorage หรือ query params
   useEffect(() => {
-    const storedMemberNo = localStorage.getItem("memberNo");
+    const storedMemberNo = localStorage.getItem("appMembNo");
+    console.log("Stored memberNo from localStorage:", storedMemberNo);
+
     if (storedMemberNo) {
-      setMemberNo(storedMemberNo);
+      setAppMembNo(storedMemberNo);
     }
   }, []);
 
-  useEffect(() => {
-    if (memberNo) {
-      setLoading(true);
-      const fetchDataWithDelay = setTimeout(() => {
-        fetchDeviceData(memberNo)
-          .then((data) => {
-            setDeviceData(data);
-          })
-          .catch((error) => {
-            setFetchError(
-              error instanceof Error ? error : new Error("Unknown error")
-            );
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }, 2000);
-
-      return () => clearTimeout(fetchDataWithDelay);
-    }
-  }, [memberNo]);
-
+  // ดึง appMembNo จาก query params (ถ้ามี)
   useEffect(() => {
     const memberNoFromURL = searchParams.get("id");
+    console.log("memberNo from URL:", memberNoFromURL);
+
     if (memberNoFromURL) {
-      setMemberNo(memberNoFromURL);
+      setAppMembNo(memberNoFromURL);
     }
   }, [searchParams]);
 
-  const handleSearch = (newMemberNo: string) => {
-    localStorage.setItem("memberNo", newMemberNo);
-    setMemberNo(newMemberNo);
-  };
   useEffect(() => {
-    if (memberNo) {
-      setDeviceData(null); // รีเซ็ตข้อมูลโปรไฟล์ก่อนค้นหาครั้งใหม่
+    if (!appMembNo) {
+      return;
     }
-  }, [memberNo]);
+
+    console.log("Fetching device data for appMembNo:", appMembNo);
+
+    setLoading(true);
+    setFetchError(null);
+    setDeviceData(null);
+
+    fetchDeviceData(appMembNo)
+      .then((data) => {
+        const formattedData = {
+          ...data,
+          devcRegDate:
+            data.devcRegDate && Object.keys(data.devcRegDate).length > 0
+              ? data.devcRegDate
+              : "Not available",
+          devcLastUsed: data.devcLastUsed || "Never Used",
+          devcCountUsed: data.devcCountUsed
+            ? data.devcCountUsed.toString()
+            : "0",
+        };
+        setDeviceData(formattedData);
+      })
+      .catch((error) => {
+        setFetchError(
+          error instanceof Error ? error : new Error("Unknown error")
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [appMembNo]);
+
+  const handleSearch = (newAppMembNo: string) => {
+    console.log("handleSearch called with newAppMembNo:", newAppMembNo);
+
+    if (newAppMembNo !== appMembNo) {
+      localStorage.setItem("appMembNo", newAppMembNo);
+      setAppMembNo(newAppMembNo);
+    }
+  };
 
   if (fetchError) {
+    console.error("Fetch error:", fetchError);
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
   }
-
-  const deviceInfo = deviceData || {};
-  const {
-    device_id = "-",
-    device_type = "-",
-    brand = "-",
-    model = "-",
-    serial_number = "-",
-    status = "-",
-    change_date = "-",
-  } = deviceInfo;
 
   return (
     <div>
@@ -130,35 +142,53 @@ export default function ChangeEmPage() {
             </div>
           </div>
         </div>
-        <Suspense fallback={<IsLoading />}>
-          {loading ? (
-            <IsLoading />
-          ) : (
-            <>
-              {deviceData ? (
-                <DeviceInfo
-                  device_id={deviceData.device_id ?? "-"}
-                  device_type={deviceData.device_type ?? "-"}
-                  brand={deviceData.brand ?? "-"}
-                  model={deviceData.model ?? "-"}
-                  serial_number={deviceData.serial_number ?? "-"}
-                  status={deviceData.status ?? "-"}
-                  change_date={deviceData.change_date ?? "-"}
-                />
-              ) : (
-                <DeviceInfo
-                  device_id="-"
-                  device_type="-"
-                  brand="-"
-                  model="-"
-                  serial_number="-"
-                  status="-"
-                  change_date="-"
-                />
-              )}
-            </>
-          )}
-        </Suspense>
+        {loading ? (
+          <IsLoading />
+        ) : (
+          <>
+            {deviceData ? (
+              <DeviceInfo
+                appMembNo={deviceData.appMembNo}
+                appCoopCode={deviceData.appCoopCode}
+                devcUniqueUid={deviceData.devcUniqueUid}
+                devcPlatform={deviceData.devcPlatform}
+                devcPlatformVer={deviceData.devcPlatformVer}
+                devcModel={deviceData.devcModel}
+                devcManufacturer={deviceData.devcManufacturer}
+                devcSerialNo={deviceData.devcSerialNo}
+                devcIsVirtual={deviceData.devcIsVirtual}
+                devcFcmId={deviceData.devcFcmId}
+                devcRegDate={JSON.stringify(deviceData.devcRegDate)}
+                devcLastUsed={deviceData.devcLastUsed}
+                devcCountUsed={deviceData.devcCountUsed}
+                devcUsageStatus={deviceData.devcUsageStatus}
+                devcPriority={deviceData.devcPriority}
+                devcPubKey={deviceData.devcPubKey}
+                sevrPvtKey={deviceData.sevrPvtKey}
+              />
+            ) : (
+              <DeviceInfo
+                appMembNo=""
+                appCoopCode=""
+                devcUniqueUid=""
+                devcPlatform=""
+                devcPlatformVer=""
+                devcModel=""
+                devcManufacturer=""
+                devcSerialNo=""
+                devcIsVirtual=""
+                devcFcmId=""
+                devcRegDate=""
+                devcLastUsed=""
+                devcCountUsed=""
+                devcUsageStatus=""
+                devcPriority=""
+                devcPubKey=""
+                sevrPvtKey=""
+              />
+            )}
+          </>
+        )}
       </Navbar>
     </div>
   );
