@@ -84,14 +84,15 @@ export default function ChangeEmPage() {
             : "0",
         };
         setDeviceData(formattedData);
+
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500); // คุณสามารถเปลี่ยนเวลา (ในที่นี้เป็น 1500ms) ตามที่ต้องการ
       })
       .catch((error) => {
         setFetchError(
           error instanceof Error ? error : new Error("Unknown error")
         );
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }, [appMembNo]);
 
@@ -104,6 +105,11 @@ export default function ChangeEmPage() {
     }
   };
 
+  const setMemberNo = (newMemberNo: string) => {
+    console.log("setMemberNo called with newMemberNo:", newMemberNo);
+    // Add your logic here if needed
+  };
+
   if (fetchError) {
     console.error("Fetch error:", fetchError);
     return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
@@ -112,7 +118,7 @@ export default function ChangeEmPage() {
   return (
     <div>
       <Navbar>
-        <Searchbar setMemberNo={handleSearch} />
+        <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
         <Menubar />
         <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
           <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
@@ -142,6 +148,8 @@ export default function ChangeEmPage() {
             </div>
           </div>
         </div>
+
+        {/* แสดงสถานะการโหลด */}
         {loading ? (
           <IsLoading />
         ) : (

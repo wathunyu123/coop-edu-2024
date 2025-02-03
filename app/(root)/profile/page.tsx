@@ -82,15 +82,17 @@ export default function ProfilePage() {
         data.profileImage = null;
       }
 
-      setProfileData(data);
-      return data;
+      // เพิ่ม setTimeout เพื่อจำลองการโหลด
+      return new Promise<ProfileData>((resolve) => {
+        setTimeout(() => {
+          resolve(data); // จะ resolve ข้อมูลหลังจาก 1.5 วินาที
+        }, 1500); // 1500ms หรือ 1.5 วินาที
+      });
     } catch (error) {
       setFetchError(
         error instanceof Error ? error : new Error("Unknown error")
       );
       return Promise.reject(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -122,6 +124,9 @@ export default function ProfilePage() {
           setFetchError(
             error instanceof Error ? error : new Error("Unknown error")
           );
+        })
+        .finally(() => {
+          setLoading(false); // ตั้งค่า loading เป็น false หลังจากดึงข้อมูลเสร็จ
         });
     }
   }, [memberNo, updateProfileData]);
@@ -169,10 +174,17 @@ export default function ProfilePage() {
     />
   );
 
+  const handleSetAppMembNo = (memberNo: string) => {
+    setMemberNo(memberNo);
+  };
+
   return (
     <div>
       <Navbar>
-        <Searchbar setMemberNo={setMemberNo} />
+        <Searchbar
+          setMemberNo={setMemberNo}
+          setAppMembNo={handleSetAppMembNo}
+        />
         {loading ? <IsLoading /> : profileContent}
       </Navbar>
     </div>

@@ -6,21 +6,32 @@ import { IoHome, IoSearchSharp } from "react-icons/io5";
 
 interface SearchbarProps {
   setMemberNo: (memberNo: string) => void;
+  setAppMembNo: (appMembNo: string) => void; // ฟังก์ชันใหม่สำหรับ appMembNo
 }
 
-export default function Searchbar({ setMemberNo }: SearchbarProps) {
+export default function Searchbar({
+  setMemberNo,
+  setAppMembNo,
+}: SearchbarProps) {
   const pathname = usePathname();
   const [localMemberNo, setLocalMemberNo] = useState<string>("");
 
-  // ดึงค่า memberNo จาก localStorage หากมี
+  // ดึงค่า memberNo และ appMembNo จาก localStorage เมื่อเริ่มต้น
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("memberNo");
+    const storedAppMembNo = localStorage.getItem("appMembNo");
+
     if (storedMemberNo) {
       setLocalMemberNo(storedMemberNo); // หากมีค่าที่เก็บไว้ใน localStorage ให้ตั้งค่า
     }
-  }, []);
 
-  // เมื่อมีการค้นหา ให้เก็บค่า memberNo ใน localStorage
+    // ถ้ามี appMembNo ใน localStorage ก็ควรตั้งค่า appMembNo ด้วย
+    if (storedAppMembNo) {
+      setAppMembNo(storedAppMembNo);
+    }
+  }, [setAppMembNo]);
+
+  // เมื่อมีการค้นหา ให้เก็บค่า memberNo และ appMembNo ใน localStorage
   const handleSearch = () => {
     if (localMemberNo.trim() === "") {
       alert("Please enter a member number");
@@ -29,7 +40,9 @@ export default function Searchbar({ setMemberNo }: SearchbarProps) {
 
     // เก็บค่าลง localStorage
     localStorage.setItem("memberNo", localMemberNo);
-    setMemberNo(localMemberNo); // ส่งค่าไปยัง parent component
+    localStorage.setItem("appMembNo", localMemberNo); // เก็บค่าของ appMembNo ด้วย
+    setMemberNo(localMemberNo); // ส่งค่า memberNo ไปยัง parent component
+    setAppMembNo(localMemberNo); // ส่งค่า appMembNo ไปยัง parent component
   };
 
   const isActive = (path: string) => {
@@ -42,15 +55,15 @@ export default function Searchbar({ setMemberNo }: SearchbarProps) {
         <div className="bg-gray-200 shadow-xl max-h-8 w-full md:w-full rounded-xl flex justify-between items-center px-2 py-2">
           <input
             type="text"
-            value={localMemberNo || ""} // ใช้ค่าจาก state สำหรับการแสดงผล
-            onChange={(e) => setLocalMemberNo(e.target.value)} // อัพเดตค่าของ input
+            value={localMemberNo || ""}
+            onChange={(e) => setLocalMemberNo(e.target.value)}
             placeholder="รหัสสมาชิก"
             className="w-full outline-none bg-gray-200 px-6"
           />
           <button
             onClick={handleSearch}
             className="flex items-center justify-center"
-            disabled={!localMemberNo.trim()} // ปิดปุ่มถ้าไม่มีข้อมูลใน input
+            disabled={!localMemberNo.trim()}
           >
             <IoSearchSharp />
           </button>

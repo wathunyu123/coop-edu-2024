@@ -13,9 +13,9 @@ type Device = {
   devcSerialNo: string;
   devcIsVirtual: string;
   devcFcmId: string;
-  devcRegDate: string;
-  devcLastUsed: string;
-  devcCountUsed: string;
+  devcRegDate: string | object;
+  devcLastUsed: string | null;
+  devcCountUsed: number;
   devcUsageStatus: string;
   devcPriority: string;
   devcPubKey: string;
@@ -32,12 +32,11 @@ const readDataFromFile = async (): Promise<any> => {
     if (
       !parsedData.data ||
       !parsedData.data.devices ||
-      !parsedData.data.devices.byMembNo
+      !parsedData.data.devices.byMembNo ||
+      !parsedData.data.devices.byId
     ) {
       throw new Error("Invalid data format: Missing devices or byMembNo.");
     }
-
-    console.log("Devices data:", parsedData.data.devices.byMembNo);
 
     return parsedData.data.devices;
   } catch (error: unknown) {
@@ -50,11 +49,9 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const appMemberNo = searchParams.get("appMemberNo");
 
-  console.log("appMemberNo from query string:", appMemberNo);
-
   if (!appMemberNo) {
     return NextResponse.json(
-      { error: "appMemberNo is required" },
+      { error: "appMembNo is required" },
       { status: 400 }
     );
   }
