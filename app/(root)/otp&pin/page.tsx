@@ -6,33 +6,14 @@ import Searchbar from "@/components/searchbar";
 import Menubar from "@/components/menubar";
 import Popup from "@/components/popup";
 import IsLoading from "@/components/isloading";
-import ErrorPage from "@/components/404popup";
+import ErrorPage from "@/components/404popup"; // ใช้ ErrorPage เพื่อแสดงข้อผิดพลาด
 import PinInfo from "@/components/pininfo";
 import { usePathname } from "next/navigation";
-import React from "react";
-
-type PopupProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  type:
-    | "editStatus"
-    | "otp"
-    | "pin"
-    | "timer"
-    | "document"
-    | "Device lock"
-    | "Account lock"
-    | "Forgot your password"
-    | "displaymonitor"
-    | "sms";
-  phoneNumber: string;
-  name?: string;
-};
 
 export default function OtpPage() {
   const pathname = usePathname();
   const [loading, setLoading] = useState<boolean>(false);
-  const [fetchError, setFetchError] = useState<Error | null>(null);
+  const [fetchError, setFetchError] = useState<Error | null>(null); // ข้อผิดพลาดจากการดึงข้อมูล
   const [status, setStatus] = useState<string>("normal");
   const [pinAttempts, setPinAttempts] = useState<number>(0);
   const [memberNo, setMemberNo] = useState<string | null>(null);
@@ -41,7 +22,6 @@ export default function OtpPage() {
     "otp"
   );
 
-  // Handle memberNo from localStorage
   useEffect(() => {
     const savedMemberNo = localStorage.getItem("memberNo");
     if (savedMemberNo) {
@@ -49,16 +29,17 @@ export default function OtpPage() {
     }
   }, []);
 
-  // Fetch user data when memberNo is set
   useEffect(() => {
-    if (memberNo) return;
+    if (!memberNo) return;
 
     const fetchUserData = async () => {
-      setLoading(true); // เริ่มการโหลด
+      setLoading(true);
       setFetchError(null);
 
       try {
-        const response = await fetch(`/api/otp&pin?id=${memberNo}`);
+        const response = await fetch(
+          `http://localhost:3000/api/otp&pin?memberNo=${memberNo}`
+        );
         if (!response.ok) throw new Error("Device Not Found");
 
         const data = await response.json();
@@ -69,7 +50,7 @@ export default function OtpPage() {
 
         setTimeout(() => {
           setLoading(false);
-        }, 1000);
+        }, 1500);
       } catch (error) {
         setFetchError(
           error instanceof Error ? error : new Error("Unknown error")
@@ -83,6 +64,10 @@ export default function OtpPage() {
   const resetPinAttempts = () => {
     setPinAttempts(0);
     localStorage.setItem("pinAttempts", "0");
+  };
+
+  const handleSetAppMembNo = (memberNo: string) => {
+    setMemberNo(memberNo);
   };
 
   const getStatusMessage = (status: string) => {
@@ -121,21 +106,37 @@ export default function OtpPage() {
     );
   };
 
- 
   const handleClosePopup = () => setIsPopupOpen(false);
 
- 
+  // การแสดง ErrorPage ถ้าเกิดข้อผิดพลาด
   if (fetchError) {
-    return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
+    return (
+      <div className="min-h-screen">
+        <Navbar>
+          <Searchbar
+            setMemberNo={setMemberNo}
+            setAppMembNo={handleSetAppMembNo}
+          />
+          <Menubar />
+          <div className="grid grid-cols-12 gap-4 min-h-screen">
+            <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+              <ErrorPage error={fetchError} reset={() => setFetchError(null)} />
+            </div>
+          </div>
+        </Navbar>
+      </div>
+    );
   }
 
-  
   const { message, bgColorClass, textColor } = getStatusMessage(status);
 
   return (
     <div>
       <Navbar>
-        <Searchbar setMemberNo={setMemberNo} />
+        <Searchbar
+          setMemberNo={setMemberNo}
+          setAppMembNo={handleSetAppMembNo}
+        />
         <Menubar />
         <div className="grid grid-cols-12 gap-4 min-h-screen">
           <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">

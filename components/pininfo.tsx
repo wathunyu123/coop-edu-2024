@@ -56,39 +56,50 @@ const PinInfo: React.FC<PinInfoProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-300 p-6 my-10 mx-auto rounded-3xl">
-      <div className="w-full md:w-64 h-80 p-3 m-2 bg-white rounded-xl shadow-xl">
-        <div className="flex flex-col items-center">
-          <h1 className="text-lg py-6 my-5">{Thai.Status}</h1>
-          <p
-            className={`flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 rounded-xl ${bgColorClass} ${textColor}`}
-          >
-            {message}
-          </p>
+    <div className="flex flex-wrap justify-between items-center w-full h-auto p-6 my-10 mx-auto rounded-3xl">
+      <div className="flex flex-wrap justify-between items-center w-full  h-auto bg-gray-200 p-6 my-10 mx-auto shadow-xl rounded-3xl">
+        {/*   <!-- Card 1: Status --> */}
+        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
+          <div className="flex flex-col items-center">
+            <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
+              {Thai.Status}
+            </h1>
+            <p
+              className={`flex justify-center py-2 px-3 h-10 w-full drop-shadow-lg my-5 rounded-xl ${bgColorClass} ${textColor}`}
+            >
+              {message}
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* OTP Request */}
-      <div className="w-full md:w-64 h-80 p-3 m-2 bg-white rounded-xl shadow-xl ">
-        <div className="flex flex-col items-center">
-          <h1 className="text-lg py-6 my-5">{Thai.request_otp}</h1>
-          <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
-            {Thai.Notify_status}
-          </p>
-          <button
-            className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-            onClick={() => handleBoxClick("otp")}
-          >
-            {Thai.Detail}
-          </button>
+        {/*   <!-- Card 2: OTP Request --> */}
+        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl  shadow-xl transition-transform transform hover:scale-105">
+          <div className="flex flex-col items-center">
+            <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
+              {Thai.request_otp}
+            </h1>
+            <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-lg my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
+              {Thai.Notify_status}
+            </p>
+            <button
+              className="text-white py-2 px-4 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl transition-all transform hover:scale-105"
+              onClick={() => handleBoxClick("otp")}
+            >
+              {Thai.Detail}
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* OTP Wrong PIN */}
-      <div className="w-full md:w-64 h-80 p-3 m-2 bg-white rounded-xl shadow-xl">
-        <div className="flex flex-col items-center">
-          <h1 className="text-lg py-6 my-5">{Thai.Entered_wrong_PIN}</h1>
-          <p className="py-2 mt-4">จำนวนที่ใส่ PIN ผิด: {pinAttempts} ครั้ง</p>
+        {/*   <!-- Card 3: PIN Attempts --> */}
+        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
+          <div className="flex flex-col items-center">
+            <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
+              {Thai.Entered_wrong_PIN}
+            </h1>
+            <p className="py-2 mt-4 text-xl text-gray-600">
+              จำนวนที่ใส่ PIN ผิด: {pinAttempts} ครั้ง
+            </p>
+          </div>
         </div>
       </div>
 

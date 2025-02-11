@@ -1,148 +1,92 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import Container from "@/components/container";
-import IDbox from "@/components/idnumberbox";
-import Thai from "@/dictionary/thai";
-import Popup from "@/components/popup";
-import { FaUnlockKeyhole } from "react-icons/fa6";
-import { LuSmartphoneCharging } from "react-icons/lu";
-import { RxLapTimer } from "react-icons/rx";
-import { IoIosDocument } from "react-icons/io";
-import { GiVibratingSmartphone } from "react-icons/gi";
+import { useState, useEffect, Suspense } from "react";
 import Navbar from "@/components/Navbar";
-import { IoHome, IoNotifications, IoSearchSharp } from "react-icons/io5";
-import Link from "next/link";
-import { FaUserCircle } from "react-icons/fa";
-import { usePathname } from "next/navigation";
 import Searchbar from "@/components/searchbar";
 import Menubar from "@/components/menubar";
+import UnlockInfo from "@/components/unlockinfo"; // นำเข้า UnlockInfo
+import IsLoading from "@/components/isloading";
+import Popup from "@/components/popup";
+import ErrorPage from "@/components/404popup";
 
-// กำหนดประเภทของ PopupType
-type PopupType =
-  | "editStatus"
-  | "otp"
-  | "timer"
-  | "document"
-  | "Device lock"
-  | "Account lock"
-  | "Forgot your password"
-  | "displaymonitor"
-  | "sms";
-
-interface PopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-  type:
-    | "editStatus"
-    | "otp"
-    | "pin"
-    | "timer"
-    | "document"
-    | "Device lock"
-    | "Account lock"
-    | "Forgot your password"
-    | "displaymonitor"
-    | "sms";
-  name: string; // Add this line
-}
-
-export default function Unlock() {
-  const [isFadingOut, setIsFadingOut] = useState(false);
-  const pathname = usePathname();
-
-  const isActive = (linkPath: string) => pathname === linkPath;
-
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [popupType, setPopupType] = useState<PopupType>("editStatus");
-
+export default function UnlockPage() {
   const [memberNo, setMemberNo] = useState<string | null>(null);
+  const [deviceStatus, setDeviceStatus] = useState<string>("normal");
+  const [accountStatus, setAccountStatus] = useState<string>("normal");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    setMemberNo(localStorage.getItem("memberNo"));
+    const savedMemberNo = localStorage.getItem("memberNo");
+    if (savedMemberNo) {
+      setMemberNo(savedMemberNo);
+    }
   }, []);
 
-  // ปรับประเภทให้เป็น PopupType แทน string
-  const handleBoxClick = (type: PopupType) => {
-    setPopupType(type);
-    setIsPopupOpen(true);
-  };
+  useEffect(() => {
+    if (!memberNo) return;
 
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-  };
+    const fetchDeviceData = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/unlock?memberNo=${memberNo}`
+        );
+
+        if (!response.ok) throw new Error("Device Not Found");
+
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+
+        // ใช้ setTimeout เพื่อหน่วงเวลาการอัปเดตสถานะ
+        setTimeout(() => {
+          setDeviceStatus(data.device); // อัปเดตสถานะอุปกรณ์
+          setAccountStatus(data.account); // อัปเดตสถานะบัญชี
+        }, 2000); // หน่วงเวลา 2 วินาที
+      } catch (err) {
+        setError(
+          err instanceof Error ? err : new Error("Failed to fetch data")
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDeviceData();
+  }, [memberNo]);
+
+  const handleClosePopup = () => setIsPopupOpen(false);
 
   return (
-    <div
-    /* className={`transition-container ${isFadingOut ? "fade-out" : "fade-in"}`} */
-    >
+    <div>
       <Navbar>
-        <Searchbar setMemberNo={setMemberNo} />
+        <Searchbar setMemberNo={setMemberNo} setAppMembNo={setMemberNo} />
         <Menubar />
-        <div className="grid grid-cols-12 gap-4 min-h-screen">
-          <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
-            <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-300 p-6 my-10 mx-auto rounded-3xl">
-              {/* Device is locked */}
-              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white shadow-xl rounded-xl">
-                <div className="flex flex-col items-center">
-                  <h1 className="text-lg py-6 my-5">{Thai.Device_is_lock}</h1>
-                  <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
-                    {Thai.Notify_status}
-                  </p>
-                  <button
-                    className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-                    onClick={() => handleBoxClick("Device lock")}
-                  >
-                    {Thai.Detail}
-                  </button>
-                </div>
-              </div>
 
-              {/* Account is locked */}
-              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white shadow-xl rounded-xl">
-                <div className="flex flex-col items-center">
-                  <h1 className="text-lg py-6 my-5">{Thai.Account_is_lock}</h1>
-                  <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
-                    {Thai.Notify_status}
-                  </p>
-                  <button
-                    className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-                    onClick={() => handleBoxClick("Account lock")}
-                  >
-                    {Thai.Detail}
-                  </button>
-                </div>
-              </div>
+        <div>
+          {isLoading && <IsLoading />}
+          {error && <ErrorPage error={error} reset={() => setError(null)} />}
 
-              {/* Forgot your password */}
-              <div className="w-full lg:w-64 h-80 p-3 m-2 bg-white shadow-xl rounded-xl">
-                <div className="flex flex-col items-center">
-                  <h1 className="text-lg py-6 my-5">
-                    {Thai.Forgot_your_password}
-                  </h1>
-                  <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
-                    {Thai.Notify_status}
-                  </p>
-                  <button
-                    className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
-                    onClick={() => handleBoxClick("Forgot your password")}
-                  >
-                    {Thai.Detail}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Popup Rendering */}
-            {isPopupOpen && (
-              <Popup
-                isOpen={isPopupOpen}
-                type={popupType}
-                onClose={handleClosePopup}
-                name={memberNo || ""}
+          {/* เมื่อไม่มีข้อผิดพลาดและไม่ได้โหลดข้อมูล */}
+          {!isLoading && !error && memberNo && (
+            <Suspense fallback={<IsLoading />}>
+              <UnlockInfo
+                memberNo={memberNo || ""}
+                device={deviceStatus}
+                account={accountStatus}
               />
-            )}
-          </div>
+            </Suspense>
+          )}
+
+          {/* แสดง Popup */}
+          <Popup
+            isOpen={isPopupOpen}
+            onClose={handleClosePopup}
+            type="Forgot your password"
+            phoneNumber={memberNo || ""}
+          />
         </div>
       </Navbar>
     </div>

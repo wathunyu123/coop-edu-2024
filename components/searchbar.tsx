@@ -45,6 +45,14 @@ export default function Searchbar({
     setAppMembNo(localMemberNo); // ส่งค่า appMembNo ไปยัง parent component
   };
 
+  // ฟังก์ชันตรวจสอบการกดปุ่ม Enter
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    console.log("Key pressed:", e.key); // ดูว่ามีการกดปุ่มอะไร
+    if (e.key === "Enter") {
+      handleSearch(); // เรียกฟังก์ชัน handleSearch เมื่อกด Enter
+    }
+  };
+
   const isActive = (path: string) => {
     return pathname === path;
   };
@@ -57,6 +65,7 @@ export default function Searchbar({
             type="text"
             value={localMemberNo || ""}
             onChange={(e) => setLocalMemberNo(e.target.value)}
+            onKeyDown={handleKeyDown} // เพิ่มการจับเหตุการณ์เมื่อกด Enter
             placeholder="รหัสสมาชิก"
             className="w-full outline-none bg-gray-200 px-6"
           />

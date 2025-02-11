@@ -2,33 +2,32 @@ import fs from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
 
-type Pin = {
-  memberNo: string;
-  pinAttempts: number;
-  pinStatus: string;
+type Unlock = {
+  memberNo: String;
+  device: string;
+  account: string;
 };
 
-const readDataFromFile = async (): Promise<Pin | null> => {
+const readDataFromFile = async (): Promise<Unlock | null> => {
   try {
-    const filePath = path.resolve("data/pin_data.json");
+    const filePath = path.resolve("data/unlock.json");
     const data = await fs.promises.readFile(filePath, "utf-8");
     const parsedData = JSON.parse(data);
 
-    // ตรวจสอบว่า parsedData มี property data ที่เป็น Object
     if (!parsedData || !parsedData.data) {
       throw new Error("Invalid data format: Missing profile information.");
     }
-
-    return parsedData.data; // return ข้อมูลที่อยู่ใน data ซึ่งเป็น Object
+    return parsedData.data;
   } catch (error: unknown) {
-    console.error("Error reading data:", error);
+    console.error("Error reading data", error);
     if (error instanceof SyntaxError) {
-      throw new Error("Invalid JSON format in pin_data.json");
+      throw new Error("Error Invalid JSON format in unlock.json");
     }
     throw new Error("Failed to read data");
   }
 };
 
+// ฟังก์ชัน GET ที่ใช้ใน API Route
 export async function GET(response: Response) {
   const { searchParams } = new URL(response.url);
   const memberNo = searchParams.get("memberNo")?.trim();
@@ -41,15 +40,16 @@ export async function GET(response: Response) {
   }
 
   try {
-    const pinData = await readDataFromFile();
+    const unlockData = await readDataFromFile();
 
-    // ตรวจสอบว่า memberNo ที่ได้จาก query parameter ตรงกับข้อมูลใน parsedData
-    if (pinData?.memberNo !== memberNo) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    if (unlockData?.memberNo !== memberNo) {
+      return NextResponse.json({ message: "Data Not Found" }, { status: 404 });
     }
 
-    return NextResponse.json(pinData);
+    // ส่งข้อมูลกลับเมื่อพบข้อมูล
+    return NextResponse.json(unlockData);
   } catch (error: unknown) {
+    // หากเกิดข้อผิดพลาด
     return NextResponse.json(
       {
         message:

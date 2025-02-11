@@ -2,10 +2,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import { useUserContext } from "@/contexts/UserContext";
-import ErrorPage from "@/components/404popup";
 import Searchbar from "@/components/searchbar";
 import ProfileInfo from "@/components/profileinfo";
 import IsLoading from "@/components/isloading";
+import Thai from "@/dictionary/thai";
+import Popup from "@/components/popup";
+import ErrorPage from "@/components/404popup";
+import Menubar from "@/components/menubar";
 
 interface ProfileData {
   memberNo: string;
@@ -46,6 +49,8 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [memberNo, setMemberNo] = useState<string>("");
 
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("memberNo");
     if (storedMemberNo && storedMemberNo.trim() !== "") {
@@ -60,33 +65,22 @@ export default function ProfilePage() {
       );
       if (!response.ok) throw new Error("Users Not Found");
       const data = await response.json();
-      console.log("User Data:", data);
 
-      // ดึงข้อมูลภาพโปรไฟล์
       const profileImageResponse = await fetch(
         `http://localhost:3000/api/profileImg?memberNo=${memberNo}`
       );
       if (profileImageResponse.ok) {
         const profileImageData = await profileImageResponse.json();
-        console.log("Profile Image Data:", profileImageData);
-
         if (profileImageData?.photo) {
           data.profileImage = profileImageData.photo;
-          console.log("Base64 Image:", profileImageData.photo);
         } else {
-          console.warn("No base64 image found for memberNo:", memberNo);
           data.profileImage = null;
         }
-      } else {
-        console.error("Failed to fetch profile image");
-        data.profileImage = null;
       }
-
-      // เพิ่ม setTimeout เพื่อจำลองการโหลด
       return new Promise<ProfileData>((resolve) => {
         setTimeout(() => {
-          resolve(data); // จะ resolve ข้อมูลหลังจาก 1.5 วินาที
-        }, 1500); // 1500ms หรือ 1.5 วินาที
+          resolve(data);
+        }, 1500);
       });
     } catch (error) {
       setFetchError(
@@ -126,17 +120,37 @@ export default function ProfilePage() {
           );
         })
         .finally(() => {
-          setLoading(false); // ตั้งค่า loading เป็น false หลังจากดึงข้อมูลเสร็จ
+          setLoading(false);
         });
     }
   }, [memberNo, updateProfileData]);
 
+  const handleClosePopup = () => setIsPopupOpen(false);
+
+  const handleSetAppMembNo = (memberNo: string) => {
+    setMemberNo(memberNo);
+  };
+
   if (fetchError) {
-    return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
+    console.error("Fetch error:", fetchError);
+    return (
+      <div className="min-h-screen">
+        <Navbar>
+          <Searchbar
+            setMemberNo={setMemberNo}
+            setAppMembNo={handleSetAppMembNo}
+          />
+          <div className="grid grid-cols-12 gap-4 min-h-screen">
+            <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+              <ErrorPage error={fetchError} reset={() => setFetchError(null)} />
+            </div>
+          </div>
+        </Navbar>
+      </div>
+    );
   }
 
   const profileImage = profileData?.profileImage;
-  console.log("Profile Image in Page:", profileImage);
 
   const profileContent = profileData ? (
     <ProfileInfo {...profileData} profileImage={profileImage ?? undefined} />
@@ -174,10 +188,6 @@ export default function ProfilePage() {
     />
   );
 
-  const handleSetAppMembNo = (memberNo: string) => {
-    setMemberNo(memberNo);
-  };
-
   return (
     <div>
       <Navbar>
@@ -187,6 +197,13 @@ export default function ProfilePage() {
         />
         {loading ? <IsLoading /> : profileContent}
       </Navbar>
+
+      <Popup
+        isOpen={isPopupOpen}
+        onClose={handleClosePopup}
+        type="Forgot your password"
+        phoneNumber={memberNo || ""}
+      />
     </div>
   );
 }

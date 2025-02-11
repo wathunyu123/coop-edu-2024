@@ -7,7 +7,7 @@ import Searchbar from "@/components/searchbar";
 import Menubar from "@/components/menubar";
 import DeviceInfo from "@/components/diviceinfo";
 import IsLoading from "@/components/isloading";
-import ErrorPage from "@/components/404popup";
+import ErrorPage from "@/components/404popup"; // ใช้ ErrorPage ในกรณีมีข้อผิดพลาด
 import Link from "next/link";
 import Thai from "@/dictionary/thai";
 
@@ -110,9 +110,22 @@ export default function ChangeEmPage() {
     // Add your logic here if needed
   };
 
+  // แสดง ErrorPage ถ้ามีข้อผิดพลาด
   if (fetchError) {
     console.error("Fetch error:", fetchError);
-    return <ErrorPage error={fetchError} reset={() => setFetchError(null)} />;
+    return (
+      <div className="min-h-screen">
+        <Navbar>
+          <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
+          <Menubar />
+          <div className="grid grid-cols-12 gap-4 min-h-screen">
+            <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+              <ErrorPage error={fetchError} reset={() => setFetchError(null)} />
+            </div>
+          </div>
+        </Navbar>
+      </div>
+    );
   }
 
   return (

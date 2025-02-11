@@ -45,8 +45,8 @@ const DeviceInfo: React.FC<DeviceInfoProps> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen max-w-full px-4">
       <div className="text-center col-span-1 md:col-span-12 lg:col-span-12">
-        <div className="bg-gray-200 rounded-2xl mb-6 p-6 w-full">
-          <div className="flex flex-col space-y-4 mx-7 py-5">
+        <div className="bg-gray-200 rounded-2xl mb-6 p-8 w-full shadow-xl">
+          <div className="flex flex-col space-y-6 mx-7 py-5 ">
             {[
               { label: Thai.Device_Id, value: appMembNo },
               { label: Thai.Device_Type, value: appCoopCode },
@@ -70,13 +70,13 @@ const DeviceInfo: React.FC<DeviceInfoProps> = ({
                 key={index}
                 className="flex flex-wrap justify-between items-center space-y-4"
               >
-                <div className="w-full md:w-1/2 flex justify-start ">
-                  <span className="font-bold text-start">
+                <div className="w-full md:w-1/2 flex justify-start">
+                  <span className="font-semibold text-lg text-gray-800 divide divide-x-2">
                     {label || "Label"}:
                   </span>
                 </div>
-                <div className="w-full md:w-1/2 flex justify-start md:justify-end ">
-                  <span className="w-full md:text-end line-clamp-4 text-start">
+                <div className="w-full md:w-1/2 flex justify-start md:justify-end">
+                  <span className="w-full md:text-end text-gray-600 line-clamp-4 text-start">
                     {value || "-"}
                   </span>
                 </div>

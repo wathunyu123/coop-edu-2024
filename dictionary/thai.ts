@@ -79,6 +79,7 @@ enum Thai {
   DevcPriority = "ลำดับความสำคัญ",
   DevcPubKey = "คีย์สาธารณะ",
   SevrPvtKey = "คีย์ส่วนตัว",
+  Nomal = "สถานะปกติ",
 }
 
 export default Thai;
