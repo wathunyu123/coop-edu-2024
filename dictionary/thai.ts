@@ -80,6 +80,7 @@ enum Thai {
   DevcPubKey = "คีย์สาธารณะ",
   SevrPvtKey = "คีย์ส่วนตัว",
   Nomal = "สถานะปกติ",
+  Password = "รหัสผ่าน",
 }
 
 export default Thai;

@@ -3,34 +3,36 @@ import jwt from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
 
-// ฟังก์ชันสำหรับดึงข้อมูลจากไฟล์ profile.json
+// ฟังก์ชันที่ใช้ดึงข้อมูลโปรไฟล์จากไฟล์ JSON
 const getProfileFromFile = async () => {
-  const filePath = path.join(process.cwd(), "data", "profile.json"); // ใช้ path ที่สัมพันธ์กับ root ของโปรเจกต์
-  const data = await fs.promises.readFile(filePath, "utf-8"); // อ่านไฟล์ profile.json
-  const parsedData = JSON.parse(data); // แปลงข้อมูลจาก JSON เป็นอ็อบเจกต์
-  return parsedData.data.profile; // คืนค่าข้อมูลโปรไฟล์
+  const filePath = path.join(process.cwd(), "data", "profile.json");
+  const data = await fs.promises.readFile(filePath, "utf-8");
+  const parsedData = JSON.parse(data);
+  return parsedData.data.profile;
 };
 
 export async function POST(req: Request) {
   try {
-    const { memberName, memberNo } = await req.json(); // รับข้อมูลจาก request
-    console.log("Request data:", memberName, memberNo); // แสดงข้อมูลที่ได้รับจากผู้ใช้
+    // รับข้อมูลจากผู้ใช้
+    const { memberNo, password } = await req.json();
+    console.log("Request data:", memberNo, password);
 
-    // ตรวจสอบว่าได้รับข้อมูลครบถ้วนหรือไม่
-    if (!memberName || !memberNo) {
+    if (!memberNo || !password) {
       return NextResponse.json(
         { message: "กรุณากรอกชื่อผู้ใช้และเลขสมาชิก" },
         { status: 400 }
       );
     }
 
-    // ดึงข้อมูลผู้ใช้จากไฟล์ JSON
+    // ดึงข้อมูลโปรไฟล์จากไฟล์ JSON
     const profile = await getProfileFromFile();
-    console.log("Profile loaded from file:", profile); // แสดงข้อมูลที่ดึงมา
+    console.log("Profile loaded from file:", profile);
 
-    // ตรวจสอบการจับคู่ชื่อและเลขสมาชิก
-    if (profile.memberName === memberName && profile.memberNo === memberNo) {
-      // ตรวจสอบว่า JWT_SECRET_KEY ถูกกำหนดหรือไม่
+    // กำหนดรหัสผ่านที่ต้องการ (ไม่ต้องเปลี่ยนใน profile.json)
+    const correctPassword = "1234"; // กำหนดรหัสผ่านที่ต้องการตรงนี้
+
+    // เปรียบเทียบเลขสมาชิกและรหัสผ่าน
+    if (profile.memberNo === memberNo && password === correctPassword) {
       const secretKey = process.env.JWT_SECRET_KEY;
       console.log("Secret Key:", secretKey); // แสดงค่า JWT_SECRET_KEY
       if (!secretKey) {
@@ -53,7 +55,7 @@ export async function POST(req: Request) {
         { status: 200 }
       );
     } else {
-      // ถ้าผู้ใช้ไม่พบ
+      // ถ้าผู้ใช้ไม่พบ หรือรหัสผ่านไม่ถูกต้อง
       return NextResponse.json(
         { message: "ชื่อผู้ใช้หรือเลขสมาชิกไม่ถูกต้อง" },
         { status: 401 }

@@ -10,6 +10,7 @@ import IsLoading from "@/components/isloading";
 import ErrorPage from "@/components/404popup"; // ใช้ ErrorPage ในกรณีมีข้อผิดพลาด
 import Link from "next/link";
 import Thai from "@/dictionary/thai";
+import Delete from "@/components/delete";
 
 // ฟังก์ชั่นดึงข้อมูลจาก API
 const fetchDeviceData = async (appMembNo: string) => {
@@ -132,7 +133,9 @@ export default function ChangeEmPage() {
     <div>
       <Navbar>
         <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
+
         <Menubar />
+        <Delete />
         <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
           <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
             <div className="w-full flex justify-center">

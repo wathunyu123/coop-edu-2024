@@ -1,12 +1,13 @@
 'use client';
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Thai from "@/dictionary/thai";
 
 export default function MyForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    username: "", // memberName
-    memberNo: "", // ใช้ memberNo แทน password
+    memberNo: "", // memberName
+    password: "", // ใช้ memberNo แทน password
   });
 
   // State สำหรับข้อความเตือนหรือข้อผิดพลาด
@@ -25,7 +26,7 @@ export default function MyForm() {
     e.preventDefault();
 
     // ตรวจสอบว่า user หรือ memberNo ไม่มีค่าว่าง
-    if (!formData.username || !formData.memberNo) {
+    if (!formData.memberNo || !formData.password) {
       setErrorMessage("กรุณากรอกชื่อผู้ใช้และเลขสมาชิก");
       return; // ถ้าไม่กรอกข้อมูลครบก็หยุด
     }
@@ -38,15 +39,15 @@ export default function MyForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          memberName: formData.username, // ส่ง memberName แทน username
-          memberNo: formData.memberNo,
+          memberNo: formData.memberNo, // ส่ง memberName แทน username
+          password: formData.password,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("username", formData.username);
+        localStorage.setItem("memberNo", formData.memberNo);
         localStorage.setItem("token", data.token); // สมมุติว่า API ส่ง token กลับมา
         router.push("/profile");
       } else {
@@ -91,18 +92,18 @@ export default function MyForm() {
             <div className="w-full space-y-4">
               <input
                 type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                placeholder="ชื่อผู้ใช้"
-                className="border border-white rounded-md text-center p-2 w-full text-black bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-              <input
-                type="text" // เปลี่ยนเป็น text แทน password
                 name="memberNo"
                 value={formData.memberNo}
                 onChange={handleChange}
-                placeholder="เลขสมาชิก"
+                placeholder={Thai.MemberNo}
+                className="border border-white rounded-md text-center p-2 w-full text-black bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+              <input
+                type="password" // เปลี่ยนเป็น text แทน password
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder={Thai.Password}
                 className="border border-white rounded-md text-center p-2 w-full text-black bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
