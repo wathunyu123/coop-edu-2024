@@ -1,7 +1,7 @@
-import Thai from "@/dictionary/thai";
-import { motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { createPortal } from "react-dom";
+import Thai from "@/dictionary/thai"; // Path to your translation dictionary
 
 interface PopupProps {
   isOpen: boolean;
@@ -31,17 +31,17 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
   const memberNo = localStorage.getItem("memberNo") || "ไม่พบรหัสสมาชิก";
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
 
-  const [isloading, setIsLoading] = useState<boolean>(false);
-  const [iserror, setIsError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<string | null>(null);
   const [forgotpasswordData, setForgotpasswordData] = useState<any | null>(
     null
   );
 
+  // Fetch forgot password information from API
   useEffect(() => {
     if (type === "Forgot your password") {
       const fetchForgotPasswordInfo = async () => {
         setIsLoading(true);
-
         try {
           const response = await fetch(
             `http://localhost:3000/api/unlock?memberNo=${memberNo}`,
@@ -53,16 +53,14 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
             }
           );
           const data = await response.json();
-
           console.log(data); // ตรวจสอบข้อมูลที่ได้จาก API
-
           if (data.status.code === 0) {
             setForgotpasswordData(data.data.forgotPassword);
           } else {
             setIsError("ไม่สามารถดึงข้อมูลได้");
           }
         } catch (err) {
-          setIsError("เกิดข้อผิดพลาดในการเชื่อมต่อ API ");
+          setIsError("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
         } finally {
           setIsLoading(false);
         }
@@ -71,6 +69,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
     }
   }, [memberNo, type]);
 
+  // Handle OTP countdown
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
     if (countdownActive && countdown > 0) {
@@ -92,10 +91,9 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
   };
 
   const handleForgotPasswordClick = async (method: string) => {
-    console.log("คลิกที่ปุ่ม", method); // ตรวจสอบการคลิก
     try {
       const response = await fetch(
-        `http://localhost:3000/api/unlock?memberNo=${memberNo}&deliveryMethod=${method}`,
+        `http://localhost:3000/api/forgotpassword?memberNo=${memberNo}&preferred_method=${method}`,
         {
           method: "GET",
           headers: {
@@ -109,20 +107,26 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
       }
 
       const data = await response.json();
-      console.log(data); // ตรวจสอบข้อมูลที่ได้จาก API
 
       if (data.status.code === 0) {
+        // API ตอบกลับว่าโอเค
         if (method === "sms") {
           alert("รหัสผ่านใหม่ถูกส่งไปยังเบอร์โทรศัพท์ของคุณ");
         } else {
           alert("กรุณาตรวจสอบหน้าจอเพื่อดูรหัสใหม่");
         }
       } else {
+        // หาก API ส่งข้อมูลที่มี error
+        setIsError(
+          "ไม่สามารถขอรหัสผ่านใหม่ได้: " +
+            (data?.status?.message || "เกิดข้อผิดพลาด")
+        );
         alert("ไม่สามารถขอรหัสผ่านใหม่ได้");
       }
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการขอรหัสผ่านใหม่", error);
-      alert("เกิดข้อผิดพลาดในการขอรหัสผ่านใหม่");
+      setIsError("เกิดข้อผิดพลาดในการเชื่อมต่อ API หรือการขอรหัสผ่านใหม่");
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API หรือการขอรหัสผ่านใหม่");
     }
   };
 
@@ -162,11 +166,19 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
             <h2 className="text-lg font-semibold text-black bg-gradient-to-r from-white to-blue-100 p-4 rounded-lg w-full text-center shadow-md">
               ลืมรหัสผ่าน
             </h2>
-            <p className="mt-4 text-lg text-center text-gray-500">
-              {forgotpasswordData
-                ? forgotpasswordData.message
-                : "กำลังโหลดข้อมูล..."}
-            </p>
+            {isLoading ? (
+              <p className="mt-4 text-lg text-center text-gray-500">
+                กำลังโหลดข้อมูล...
+              </p>
+            ) : isError ? (
+              <p className="mt-4 text-lg text-center text-red-600">{isError}</p>
+            ) : (
+              <p className="mt-4 text-lg text-center text-gray-500">
+                {forgotpasswordData
+                  ? forgotpasswordData.message
+                  : "ไม่มีข้อมูล"}
+              </p>
+            )}
           </div>
         );
       default:

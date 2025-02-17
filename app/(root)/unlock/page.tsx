@@ -16,6 +16,7 @@ export default function UnlockPage() {
   const [error, setError] = useState<Error | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
+  // ตรวจสอบ memberNo และโหลดข้อมูล
   useEffect(() => {
     const savedMemberNo = localStorage.getItem("memberNo");
     if (savedMemberNo) {
@@ -40,11 +41,8 @@ export default function UnlockPage() {
         const data = await response.json();
         if (!data) throw new Error("No data received");
 
-        // ใช้ setTimeout เพื่อหน่วงเวลาการอัปเดตสถานะ
-        setTimeout(() => {
-          setDeviceStatus(data.device); // อัปเดตสถานะอุปกรณ์
-          setAccountStatus(data.account); // อัปเดตสถานะบัญชี
-        }, 2000); // หน่วงเวลา 2 วินาที
+        setDeviceStatus(data.device);
+        setAccountStatus(data.account);
       } catch (err) {
         setError(
           err instanceof Error ? err : new Error("Failed to fetch data")
@@ -80,7 +78,6 @@ export default function UnlockPage() {
             </Suspense>
           )}
 
-          {/* แสดง Popup */}
           <Popup
             isOpen={isPopupOpen}
             onClose={handleClosePopup}
