@@ -81,6 +81,7 @@ enum Thai {
   SevrPvtKey = "คีย์ส่วนตัว",
   Nomal = "สถานะปกติ",
   Password = "รหัสผ่าน",
+  Delete = "ลบข้อมูล",
 }
 
 export default Thai;

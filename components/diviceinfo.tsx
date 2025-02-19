@@ -45,7 +45,7 @@ const DeviceInfo: React.FC<DeviceInfoProps> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen max-w-full px-4">
       <div className="text-center col-span-1 md:col-span-12 lg:col-span-12">
-        <div className="bg-gray-200 rounded-2xl mb-6 p-8 w-full shadow-xl">
+        <div className="bg-gray-200 rounded-2xl mb-6 p-8 w-full shadow-xl mt-10">
           <div className="flex flex-col space-y-6 mx-7 py-5 ">
             {[
               { label: Thai.Device_Id, value: appMembNo },

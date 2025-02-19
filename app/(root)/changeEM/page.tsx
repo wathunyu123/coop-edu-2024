@@ -7,12 +7,11 @@ import Searchbar from "@/components/searchbar";
 import Menubar from "@/components/menubar";
 import DeviceInfo from "@/components/diviceinfo";
 import IsLoading from "@/components/isloading";
-import ErrorPage from "@/components/404popup"; // ใช้ ErrorPage ในกรณีมีข้อผิดพลาด
-import Link from "next/link";
-import Thai from "@/dictionary/thai";
+import ErrorPage from "@/components/404popup";
+import Menucheng from "@/components/menucheng";
 import Delete from "@/components/delete";
 
-// ฟังก์ชั่นดึงข้อมูลจาก API
+// ฟังก์ชันดึงข้อมูลจาก API
 const fetchDeviceData = async (appMembNo: string) => {
   try {
     const response = await fetch(
@@ -40,7 +39,6 @@ export default function ChangeEmPage() {
   const [fetchError, setFetchError] = useState<Error | null>(null);
   const [appMembNo, setAppMembNo] = useState<string | null>(null);
 
-  // ดึง appMembNo จาก localStorage หรือ query params
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("appMembNo");
     console.log("Stored memberNo from localStorage:", storedMemberNo);
@@ -50,7 +48,6 @@ export default function ChangeEmPage() {
     }
   }, []);
 
-  // ดึง appMembNo จาก query params (ถ้ามี)
   useEffect(() => {
     const memberNoFromURL = searchParams.get("id");
     console.log("memberNo from URL:", memberNoFromURL);
@@ -60,6 +57,7 @@ export default function ChangeEmPage() {
     }
   }, [searchParams]);
 
+  // ดึงข้อมูลจาก API เมื่อ appMembNo เปลี่ยน
   useEffect(() => {
     if (!appMembNo) {
       return;
@@ -88,12 +86,13 @@ export default function ChangeEmPage() {
 
         setTimeout(() => {
           setLoading(false);
-        }, 1500); // คุณสามารถเปลี่ยนเวลา (ในที่นี้เป็น 1500ms) ตามที่ต้องการ
+        }, 1500); // ปรับเวลาได้ตามต้องการ
       })
       .catch((error) => {
         setFetchError(
           error instanceof Error ? error : new Error("Unknown error")
         );
+        setLoading(false);
       });
   }, [appMembNo]);
 
@@ -108,10 +107,35 @@ export default function ChangeEmPage() {
 
   const setMemberNo = (newMemberNo: string) => {
     console.log("setMemberNo called with newMemberNo:", newMemberNo);
-    // Add your logic here if needed
+    // เพิ่มตรรกะถ้าจำเป็น
   };
 
-  // แสดง ErrorPage ถ้ามีข้อผิดพลาด
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/delete-device?appMemberNo=${appMembNo}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        console.log("Device deleted successfully");
+
+        // รีเซ็ตข้อมูลหลังจากการลบ
+        setDeviceData(null); // ล้างข้อมูลใน state
+        setLoading(true); // ตั้งสถานะโหลดใหม่
+        setTimeout(() => {
+          setLoading(false); // หยุดสถานะการโหลดหลังจากเวลา
+        }, 1500); // ปรับเวลาได้ตามต้องการ
+      } else {
+        console.error("Failed to delete device");
+      }
+    } catch (error) {
+      console.error("Error during delete:", error);
+    }
+  };
+
   if (fetchError) {
     console.error("Fetch error:", fetchError);
     return (
@@ -119,8 +143,9 @@ export default function ChangeEmPage() {
         <Navbar>
           <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
           <Menubar />
+          <Menucheng />
           <div className="grid grid-cols-12 gap-4 min-h-screen">
-            <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+            <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12">
               <ErrorPage error={fetchError} reset={() => setFetchError(null)} />
             </div>
           </div>
@@ -133,39 +158,8 @@ export default function ChangeEmPage() {
     <div>
       <Navbar>
         <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
-
         <Menubar />
-        <Delete />
-        <div className="text-white flex flex-col md:flex-row w-full h-auto md:h-12 bg-sky-700 my-10 p-6 items-center justify-between rounded-3xl">
-          <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4 md:gap-0">
-            <div className="w-full flex justify-center">
-              <Link
-                href="/changeEM"
-                className={`px-6 py-1 ${
-                  pathname === "/changeEM"
-                    ? "bg-white text-black"
-                    : "hover:bg-white hover:text-black"
-                } rounded-xl`}
-              >
-                {Thai.MemberNo || "Member No"}
-              </Link>
-            </div>
-            <div className="w-full flex justify-center">
-              <Link
-                href="/numberEM"
-                className={`px-6 py-1 ${
-                  pathname === "/numberEM"
-                    ? "bg-white text-black"
-                    : "hover:bg-white hover:text-black"
-                } rounded-xl`}
-              >
-                {Thai.NumberEM || "Number EM"}
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* แสดงสถานะการโหลด */}
+        <Delete />{" "}
         {loading ? (
           <IsLoading />
         ) : (
@@ -192,23 +186,23 @@ export default function ChangeEmPage() {
               />
             ) : (
               <DeviceInfo
-                appMembNo=""
-                appCoopCode=""
-                devcUniqueUid=""
-                devcPlatform=""
-                devcPlatformVer=""
-                devcModel=""
-                devcManufacturer=""
-                devcSerialNo=""
-                devcIsVirtual=""
-                devcFcmId=""
-                devcRegDate=""
-                devcLastUsed=""
-                devcCountUsed=""
-                devcUsageStatus=""
-                devcPriority=""
-                devcPubKey=""
-                sevrPvtKey=""
+                appMembNo="-"
+                appCoopCode="-"
+                devcUniqueUid="-"
+                devcPlatform="-"
+                devcPlatformVer="-"
+                devcModel="-"
+                devcManufacturer="-"
+                devcSerialNo="-"
+                devcIsVirtual="-"
+                devcFcmId="-"
+                devcRegDate="-"
+                devcLastUsed="-"
+                devcCountUsed="-"
+                devcUsageStatus="-"
+                devcPriority="-"
+                devcPubKey="-"
+                sevrPvtKey="-"
               />
             )}
           </>
