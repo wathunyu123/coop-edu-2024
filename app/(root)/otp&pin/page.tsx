@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 
 export default function OtpPage() {
   const pathname = usePathname();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false); // สถานะการโหลด
   const [fetchError, setFetchError] = useState<Error | null>(null); // ข้อผิดพลาดจากการดึงข้อมูล
   const [status, setStatus] = useState<string>("normal");
   const [pinAttempts, setPinAttempts] = useState<number>(0);
@@ -33,7 +33,7 @@ export default function OtpPage() {
     if (!memberNo) return;
 
     const fetchUserData = async () => {
-      setLoading(true);
+      setLoading(true); // เริ่มโหลด
       setFetchError(null);
 
       try {
@@ -49,12 +49,13 @@ export default function OtpPage() {
         setPinAttempts(data.pinAttempts);
 
         setTimeout(() => {
-          setLoading(false);
-        }, 1500);
+          setLoading(false); // เสร็จสิ้นการโหลด
+        }, 1500); // ปรับเวลาได้ตามต้องการ
       } catch (error) {
         setFetchError(
           error instanceof Error ? error : new Error("Unknown error")
         );
+        setLoading(false); // เสร็จสิ้นการโหลดเมื่อมีข้อผิดพลาด
       }
     };
 
@@ -140,13 +141,18 @@ export default function OtpPage() {
         <Menubar />
         <div className="grid grid-cols-12 gap-4 min-h-screen">
           <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
-            <Suspense fallback={<IsLoading />}>
-              <PinInfo
-                pinAttempts={pinAttempts}
-                status={status}
-                resetPinAttempts={resetPinAttempts}
-              />
-            </Suspense>
+            {/* แสดง IsLoading ขณะโหลดข้อมูล */}
+            {loading ? (
+              <IsLoading />
+            ) : (
+              <Suspense fallback={<IsLoading />}>
+                <PinInfo
+                  pinAttempts={pinAttempts}
+                  status={status}
+                  resetPinAttempts={resetPinAttempts}
+                />
+              </Suspense>
+            )}
 
             {/* Popup Component */}
             <Popup

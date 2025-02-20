@@ -159,7 +159,7 @@ export default function ChangeEmPage() {
       <Navbar>
         <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
         <Menubar />
-        <Delete />{" "}
+        <Delete />
         {loading ? (
           <IsLoading />
         ) : (

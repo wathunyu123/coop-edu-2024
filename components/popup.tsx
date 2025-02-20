@@ -38,38 +38,54 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
   );
 
   // Fetch forgot password information from API
-  useEffect(() => {
-    if (type === "Forgot your password") {
-      const fetchForgotPasswordInfo = async () => {
-        setIsLoading(true);
-        try {
-          const response = await fetch(
-            `http://localhost:3000/api/unlock?memberNo=${memberNo}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const data = await response.json();
-          console.log(data); // ตรวจสอบข้อมูลที่ได้จาก API
-          if (data.status.code === 0) {
-            setForgotpasswordData(data.data.forgotPassword);
-          } else {
-            setIsError("ไม่สามารถดึงข้อมูลได้");
-          }
-        } catch (err) {
-          setIsError("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchForgotPasswordInfo();
-    }
-  }, [memberNo, type]);
+  const fetchForgotPasswordData = async (method: "sms" | "screen") => {
+    setIsLoading(true); // Set loading state to true
+    const memberNo = localStorage.getItem("memberNo");
 
-  // Handle OTP countdown
+    // ตรวจสอบว่ามี memberNo หรือไม่ ถ้าไม่แสดง error
+    if (!memberNo) {
+      setIsError("ไม่พบรหัสสมาชิก");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/api/forgotpassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          memberNo: memberNo,
+          preferredMethod: method,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("API Response:", data); // ดูข้อมูลที่ตอบกลับ
+
+      if (data.status === "success") {
+        setForgotpasswordData(data);
+        setIsError(null); // รีเซ็ตข้อความ error
+      } else {
+        setIsError("ไม่สามารถขอรหัสผ่านใหม่ได้");
+      }
+    } catch (err) {
+      setIsError("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
+      console.error("Error fetching data:", err);
+    } finally {
+      setIsLoading(false); // รีเซ็ตสถานะการโหลด
+    }
+  };
+
+  useEffect(() => {
+    console.log("Forgot Password Data:", forgotpasswordData); // เพิ่มการตรวจสอบข้อมูลหลังจากได้รับจาก API
+  }, [forgotpasswordData]);
+
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
     if (countdownActive && countdown > 0) {
@@ -90,48 +106,16 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
     setButtonDisabled(true);
   };
 
-  const handleForgotPasswordClick = async (method: string) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/forgotpassword?memberNo=${memberNo}&preferred_method=${method}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-
-      if (data.status.code === 0) {
-        // API ตอบกลับว่าโอเค
-        if (method === "sms") {
-          alert("รหัสผ่านใหม่ถูกส่งไปยังเบอร์โทรศัพท์ของคุณ");
-        } else {
-          alert("กรุณาตรวจสอบหน้าจอเพื่อดูรหัสใหม่");
-        }
-      } else {
-        // หาก API ส่งข้อมูลที่มี error
-        setIsError(
-          "ไม่สามารถขอรหัสผ่านใหม่ได้: " +
-            (data?.status?.message || "เกิดข้อผิดพลาด")
-        );
-        alert("ไม่สามารถขอรหัสผ่านใหม่ได้");
-      }
-    } catch (error) {
-      console.error("เกิดข้อผิดพลาดในการขอรหัสผ่านใหม่", error);
-      setIsError("เกิดข้อผิดพลาดในการเชื่อมต่อ API หรือการขอรหัสผ่านใหม่");
-      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API หรือการขอรหัสผ่านใหม่");
-    }
+  const handleForgotPasswordClick = (method: "sms" | "screen") => {
+    setIsLoading(true);
+    fetchForgotPasswordData(method); // เรียก API เมื่อผู้ใช้เลือกแล้ว
   };
 
   const renderContent = () => {
-    console.log(forgotpasswordData); // ตรวจสอบค่า forgotpasswordData
+    console.log(
+      "Rendering Content... forgotpasswordData: ",
+      forgotpasswordData
+    ); // ตรวจสอบค่าของ forgotpasswordData ก่อนการแสดงผล
     switch (type) {
       case "otp":
         return (
@@ -173,11 +157,17 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
             ) : isError ? (
               <p className="mt-4 text-lg text-center text-red-600">{isError}</p>
             ) : (
-              <p className="mt-4 text-lg text-center text-gray-500">
-                {forgotpasswordData
-                  ? forgotpasswordData.message
-                  : "ไม่มีข้อมูล"}
-              </p>
+              <div>
+                {forgotpasswordData ? (
+                  <p className="mt-4 text-lg text-center text-white">
+                    {forgotpasswordData.message}
+                  </p>
+                ) : (
+                  <p className="mt-4 text-lg text-center text-gray-500">
+                    กรุณากดปุ่มเพื่อขอรหัสผ่านใหม่
+                  </p>
+                )}
+              </div>
             )}
           </div>
         );
@@ -225,7 +215,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
               <>
                 <button
                   className="px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all duration-300 transform hover:scale-105"
-                  onClick={() => handleForgotPasswordClick("displaymonitor")}
+                  onClick={() => handleForgotPasswordClick("screen")}
                 >
                   {Thai.Displaymonitor}
                 </button>

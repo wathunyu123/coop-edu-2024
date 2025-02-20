@@ -104,7 +104,7 @@ const UnlockInfo: React.FC<UnlockInfoProps> = ({
           </div>
         </div>
         {/* Crad 3 */}
-        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
+        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105 ${accountTextColor} ${accountBgColor}">
           <div className="flex flex-col items-center">
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
               {Thai.Forgot_your_password}
