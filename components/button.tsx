@@ -1,4 +1,3 @@
-// components/Button.js
 import { MouseEventHandler, ReactNode } from "react";
 
 interface ButtonProps {
@@ -31,9 +30,14 @@ const Button = ({
     large: "py-3 px-6 text-lg",
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) onClick(e); // รัน onClick ถ้ามี
+    window.location.reload(); // รีโหลดหน้าเว็บ
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       type={type}
       className={`${baseStyle} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
     >

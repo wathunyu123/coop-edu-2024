@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Searchbar from "@/components/searchbar";
@@ -97,6 +97,26 @@ export default function ChangeEmPage() {
         setFetchError(
           error instanceof Error ? error : new Error("Unknown error")
         );
+        setDeviceData({
+          appMembNo: "-",
+          appCoopCode: "-",
+          devcUniqueUid: "-",
+          devcPlatform: "-",
+          devcPlatformVer: "-",
+          devcModel: "-",
+          devcManufacturer: "-",
+          devcSerialNo: "-",
+          devcIsVirtual: "-",
+          devcFcmId: "-",
+          devcRegDate: "-",
+          devcLastUsed: "-",
+          devcCountUsed: "-",
+          devcUsageStatus: "-",
+          devcPriority: "-",
+          devcPubKey: "-",
+          sevrPvtKey: "-",
+        }); // เมื่อเกิดข้อผิดพลาดให้ตั้งค่าเป็น "-" ทันที
+        setLoading(false);
       });
   }, [appMembNo]);
 
@@ -131,6 +151,11 @@ export default function ChangeEmPage() {
     );
   }
 
+  // สร้างฟังก์ชันที่เช็คข้อมูล ถ้าไม่มีข้อมูลให้แสดง "-"
+  const getSafeValue = (value: any) => {
+    return value ? value : "-";
+  };
+
   return (
     <AccordionProvider>
       <div>
@@ -145,23 +170,25 @@ export default function ChangeEmPage() {
                 <>
                   {deviceData ? (
                     <DeviceInfo
-                      appMembNo={deviceData.appMembNo}
-                      appCoopCode={deviceData.appCoopCode}
-                      devcUniqueUid={deviceData.devcUniqueUid}
-                      devcPlatform={deviceData.devcPlatform}
-                      devcPlatformVer={deviceData.devcPlatformVer}
-                      devcModel={deviceData.devcModel}
-                      devcManufacturer={deviceData.devcManufacturer}
-                      devcSerialNo={deviceData.devcSerialNo}
-                      devcIsVirtual={deviceData.devcIsVirtual}
-                      devcFcmId={deviceData.devcFcmId}
-                      devcRegDate={JSON.stringify(deviceData.devcRegDate)}
-                      devcLastUsed={deviceData.devcLastUsed}
-                      devcCountUsed={deviceData.devcCountUsed}
-                      devcUsageStatus={deviceData.devcUsageStatus}
-                      devcPriority={deviceData.devcPriority}
-                      devcPubKey={deviceData.devcPubKey}
-                      sevrPvtKey={deviceData.sevrPvtKey}
+                      appMembNo={getSafeValue(deviceData.appMembNo)}
+                      appCoopCode={getSafeValue(deviceData.appCoopCode)}
+                      devcUniqueUid={getSafeValue(deviceData.devcUniqueUid)}
+                      devcPlatform={getSafeValue(deviceData.devcPlatform)}
+                      devcPlatformVer={getSafeValue(deviceData.devcPlatformVer)}
+                      devcModel={getSafeValue(deviceData.devcModel)}
+                      devcManufacturer={getSafeValue(
+                        deviceData.devcManufacturer
+                      )}
+                      devcSerialNo={getSafeValue(deviceData.devcSerialNo)}
+                      devcIsVirtual={getSafeValue(deviceData.devcIsVirtual)}
+                      devcFcmId={getSafeValue(deviceData.devcFcmId)}
+                      devcRegDate={getSafeValue(deviceData.devcRegDate)}
+                      devcLastUsed={getSafeValue(deviceData.devcLastUsed)}
+                      devcCountUsed={getSafeValue(deviceData.devcCountUsed)}
+                      devcUsageStatus={getSafeValue(deviceData.devcUsageStatus)}
+                      devcPriority={getSafeValue(deviceData.devcPriority)}
+                      devcPubKey={getSafeValue(deviceData.devcPubKey)}
+                      sevrPvtKey={getSafeValue(deviceData.sevrPvtKey)}
                     />
                   ) : (
                     <DeviceInfo
