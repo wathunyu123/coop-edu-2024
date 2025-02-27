@@ -40,7 +40,6 @@ const PinInfo: React.FC<PinInfoProps> = ({
     textColor = "text-white";
   }
 
-  // การจัดการ Popup
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupType, setPopupType] = useState<"otp" | "pin" | "editStatus">(
     "otp"
@@ -78,8 +77,10 @@ const PinInfo: React.FC<PinInfoProps> = ({
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
               {Thai.request_otp}
             </h1>
-            <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-lg my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
-              {Thai.Notify_status}
+            <p
+              className={`flex justify-center py-2 px-3 h-10 w-full drop-shadow-lg my-5 rounded-xl ${bgColorClass} ${textColor}`}
+            >
+              {message}
             </p>
             <button
               className="text-white py-2 px-4 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl transition-all transform hover:scale-105"
