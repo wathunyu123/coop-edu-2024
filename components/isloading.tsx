@@ -32,7 +32,7 @@ function IsLoading({ message = "กำลังโหลด" }: IsLoadingProps) 
   }
 
   return (
-    <div className="flex min-h-[600px] min-w-full items-center justify-center space-x-4 bg-gray-100 my-10">
+    <div className="flex min-h-[600px] min-w-full items-center justify-center space-x-4">
       <div className="flex flex-col items-center justify-center space-y-4 h-2/3">
         <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
         <div className="text-lg text-gray-600">

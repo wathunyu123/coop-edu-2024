@@ -109,9 +109,7 @@ const UnlockInfo: React.FC<UnlockInfoProps> = ({
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
               {Thai.Forgot_your_password}
             </h1>
-            <p className="flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 outline outline-offset-2 outline-sky-500 rounded-xl">
-              {Thai.Notify_status}
-            </p>
+
             <button
               className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
               onClick={() => handleBoxClick("Forgot your password")}

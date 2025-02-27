@@ -82,6 +82,7 @@ enum Thai {
   Nomal = "สถานะปกติ",
   Password = "รหัสผ่าน",
   Delete = "ลบข้อมูล",
+  More = "เพิ่มเติม",
 }
 
 export default Thai;

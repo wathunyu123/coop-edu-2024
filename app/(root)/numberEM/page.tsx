@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
@@ -8,10 +7,16 @@ import Menubar from "@/components/menubar";
 import DeviceInfo from "@/components/diviceinfo";
 import IsLoading from "@/components/isloading";
 import ErrorPage from "@/components/404popup";
+import Link from "next/link";
+import Thai from "@/dictionary/thai";
+import { Accordion, AccordionItem } from "@/components/accordion"; // Import accordion ที่มีการจัดการสถานะ
 import Menucheng from "@/components/menucheng";
+import { AccordionProvider } from "@/contexts/accordioncontext";
 import Delete from "@/components/delete";
+import IsAccordion from "@/components/delete";
+import Button from "@/components/button";
 
-// ฟังก์ชันดึงข้อมูลจาก API
+// ฟังก์ชั่นดึงข้อมูลจาก API
 const fetchDeviceData = async (appMembNo: string) => {
   try {
     const response = await fetch(
@@ -30,7 +35,7 @@ const fetchDeviceData = async (appMembNo: string) => {
   }
 };
 
-export default function ChangeEmPage() {
+export default function NumberEmPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -39,6 +44,7 @@ export default function ChangeEmPage() {
   const [fetchError, setFetchError] = useState<Error | null>(null);
   const [appMembNo, setAppMembNo] = useState<string | null>(null);
 
+  // ดึง appMembNo จาก localStorage หรือ query params
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("appMembNo");
     console.log("Stored memberNo from localStorage:", storedMemberNo);
@@ -48,6 +54,7 @@ export default function ChangeEmPage() {
     }
   }, []);
 
+  // ดึง appMembNo จาก query params (ถ้ามี)
   useEffect(() => {
     const memberNoFromURL = searchParams.get("id");
     console.log("memberNo from URL:", memberNoFromURL);
@@ -57,7 +64,6 @@ export default function ChangeEmPage() {
     }
   }, [searchParams]);
 
-  // ดึงข้อมูลจาก API เมื่อ appMembNo เปลี่ยน
   useEffect(() => {
     if (!appMembNo) {
       return;
@@ -86,13 +92,12 @@ export default function ChangeEmPage() {
 
         setTimeout(() => {
           setLoading(false);
-        }, 1500); // ปรับเวลาได้ตามต้องการ
+        }, 1500); // คุณสามารถเปลี่ยนเวลา (ในที่นี้เป็น 1500ms) ตามที่ต้องการ
       })
       .catch((error) => {
         setFetchError(
           error instanceof Error ? error : new Error("Unknown error")
         );
-        setLoading(false);
       });
   }, [appMembNo]);
 
@@ -107,33 +112,7 @@ export default function ChangeEmPage() {
 
   const setMemberNo = (newMemberNo: string) => {
     console.log("setMemberNo called with newMemberNo:", newMemberNo);
-    // เพิ่มตรรกะถ้าจำเป็น
-  };
-
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/delete-device?appMemberNo=${appMembNo}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (response.ok) {
-        console.log("Device deleted successfully");
-
-        // รีเซ็ตข้อมูลหลังจากการลบ
-        setDeviceData(null); // ล้างข้อมูลใน state
-        setLoading(true); // ตั้งสถานะโหลดใหม่
-        setTimeout(() => {
-          setLoading(false); // หยุดสถานะการโหลดหลังจากเวลา
-        }, 1500); // ปรับเวลาได้ตามต้องการ
-      } else {
-        console.error("Failed to delete device");
-      }
-    } catch (error) {
-      console.error("Error during delete:", error);
-    }
+    // Add your logic here if needed
   };
 
   if (fetchError) {
@@ -143,9 +122,8 @@ export default function ChangeEmPage() {
         <Navbar>
           <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
           <Menubar />
-          <Menucheng />
           <div className="grid grid-cols-12 gap-4 min-h-screen">
-            <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12">
+            <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
               <ErrorPage error={fetchError} reset={() => setFetchError(null)} />
             </div>
           </div>
@@ -155,59 +133,64 @@ export default function ChangeEmPage() {
   }
 
   return (
-    <div>
-      <Navbar>
-        <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
-        <Menubar />
-        <Delete />{" "}
-        {loading ? (
-          <IsLoading />
-        ) : (
-          <>
-            {deviceData ? (
-              <DeviceInfo
-                appMembNo={deviceData.appMembNo}
-                appCoopCode={deviceData.appCoopCode}
-                devcUniqueUid={deviceData.devcUniqueUid}
-                devcPlatform={deviceData.devcPlatform}
-                devcPlatformVer={deviceData.devcPlatformVer}
-                devcModel={deviceData.devcModel}
-                devcManufacturer={deviceData.devcManufacturer}
-                devcSerialNo={deviceData.devcSerialNo}
-                devcIsVirtual={deviceData.devcIsVirtual}
-                devcFcmId={deviceData.devcFcmId}
-                devcRegDate={JSON.stringify(deviceData.devcRegDate)}
-                devcLastUsed={deviceData.devcLastUsed}
-                devcCountUsed={deviceData.devcCountUsed}
-                devcUsageStatus={deviceData.devcUsageStatus}
-                devcPriority={deviceData.devcPriority}
-                devcPubKey={deviceData.devcPubKey}
-                sevrPvtKey={deviceData.sevrPvtKey}
-              />
-            ) : (
-              <DeviceInfo
-                appMembNo="-"
-                appCoopCode="-"
-                devcUniqueUid="-"
-                devcPlatform="-"
-                devcPlatformVer="-"
-                devcModel="-"
-                devcManufacturer="-"
-                devcSerialNo="-"
-                devcIsVirtual="-"
-                devcFcmId="-"
-                devcRegDate="-"
-                devcLastUsed="-"
-                devcCountUsed="-"
-                devcUsageStatus="-"
-                devcPriority="-"
-                devcPubKey="-"
-                sevrPvtKey="-"
-              />
-            )}
-          </>
-        )}
-      </Navbar>
-    </div>
+    <AccordionProvider>
+      <div>
+        <Navbar>
+          <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
+          <Menubar />
+          <div className="bg-gray-300 p-6 my-5 rounded-2xl">
+            <IsAccordion>
+              {loading ? (
+                <IsLoading />
+              ) : (
+                <>
+                  {deviceData ? (
+                    <DeviceInfo
+                      appMembNo={deviceData.appMembNo}
+                      appCoopCode={deviceData.appCoopCode}
+                      devcUniqueUid={deviceData.devcUniqueUid}
+                      devcPlatform={deviceData.devcPlatform}
+                      devcPlatformVer={deviceData.devcPlatformVer}
+                      devcModel={deviceData.devcModel}
+                      devcManufacturer={deviceData.devcManufacturer}
+                      devcSerialNo={deviceData.devcSerialNo}
+                      devcIsVirtual={deviceData.devcIsVirtual}
+                      devcFcmId={deviceData.devcFcmId}
+                      devcRegDate={JSON.stringify(deviceData.devcRegDate)}
+                      devcLastUsed={deviceData.devcLastUsed}
+                      devcCountUsed={deviceData.devcCountUsed}
+                      devcUsageStatus={deviceData.devcUsageStatus}
+                      devcPriority={deviceData.devcPriority}
+                      devcPubKey={deviceData.devcPubKey}
+                      sevrPvtKey={deviceData.sevrPvtKey}
+                    />
+                  ) : (
+                    <DeviceInfo
+                      appMembNo="-"
+                      appCoopCode="-"
+                      devcUniqueUid="-"
+                      devcPlatform="-"
+                      devcPlatformVer="-"
+                      devcModel="-"
+                      devcManufacturer="-"
+                      devcSerialNo="-"
+                      devcIsVirtual="-"
+                      devcFcmId="-"
+                      devcRegDate="-"
+                      devcLastUsed="-"
+                      devcCountUsed="-"
+                      devcUsageStatus="-"
+                      devcPriority="-"
+                      devcPubKey="-"
+                      sevrPvtKey="-"
+                    />
+                  )}
+                </>
+              )}
+            </IsAccordion>
+          </div>
+        </Navbar>
+      </div>
+    </AccordionProvider>
   );
 }
