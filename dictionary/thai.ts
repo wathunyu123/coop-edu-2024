@@ -23,7 +23,7 @@ enum Thai {
   Notify_status_error = "สถานะบัญชีผิดปกติ",
   Edit_status = "แก้ไขสถานะ",
   Otp = "รหัส OTP",
-  unlock = "ปลดล็อค",
+  unlock = "ปลดล็อคอุปกรณ์",
   Displaymonitor = "แสดงบนหน้าจอ",
   Sms = "ส่งทาง sms",
   request_otp = "ขอ OTP",
@@ -36,8 +36,8 @@ enum Thai {
   Notfound = "ไม่พบข้อมูลสมาชิก",
   Nodata = "ไม่พบข้อมูล",
   Loading = "กำลังโหลด...",
-  Device_Status = "สถานะการเชื่อมต่อ",
-  Device_Id = "Id ของอุปกรณ์",
+  Device_Status = "สถานะการอุปกรณ์",
+  DeviceId = "Id ของอุปกรณ์",
   Device_Type = "ประเภทของอุปกรณ์",
   Detail = "เพิ่มเติม",
   Manage_transaction = "จัดการธุรกรรม",
@@ -83,6 +83,13 @@ enum Thai {
   Password = "รหัสผ่าน",
   Delete = "ลบข้อมูล",
   More = "เพิ่มเติม",
+  Data = "ข้อมูล",
+  ProfileImage = "รูปโปรไฟล์",
+  Req_password = "ขอรหัสผ่านใหม่",
+  Req_OTP = "ขอรหัส OTP",
+  Req_Status = "ดูสถานะ",
+  MobileApp = "ธุรกรรม Mobile App",
+  Account_status = "สถานะบัญชี",
 }
 
 export default Thai;

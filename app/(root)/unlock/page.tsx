@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Searchbar from "@/components/searchbar";
@@ -60,6 +59,7 @@ export default function UnlockPage() {
 
     // ดึงข้อมูลจาก Forgot Password API
     const handleForgotPasswordClick = async (method: string) => {
+      setIsLoading(true); // เริ่มการโหลดข้อมูล
       try {
         const response = await fetch(
           "http://localhost:3000/api/forgotpassword",
@@ -84,6 +84,12 @@ export default function UnlockPage() {
         // Handle the success response
       } catch (error) {
         console.error("Error during request:", error);
+        setError(error instanceof Error ? error : new Error("Unknown error"));
+      } finally {
+        // ใช้ setTimeout เพื่อหน่วงการตั้งค่า setIsLoading
+        setTimeout(() => {
+          setIsLoading(false); // เสร็จสิ้นการโหลด
+        }, 1500); // หน่วงเวลา 1.5 วินาที
       }
     };
 
@@ -93,53 +99,45 @@ export default function UnlockPage() {
     }
   }, [memberNo, forgotPasswordMethod]); // เมื่อ memberNo หรือ forgotPasswordMethod เปลี่ยนให้โหลดข้อมูลใหม่
 
-  // ฟังก์ชันปิด Popup
   const handleClosePopup = () => setIsPopupOpen(false);
 
   return (
     <div>
-      <Navbar>
-        <Searchbar setMemberNo={setMemberNo} setAppMembNo={setMemberNo} />
-        <Menubar />
+      <div>
+        {isLoading && <IsLoading />}
 
-        <div>
-          {/* แสดง IsLoading ขณะโหลดข้อมูล */}
-          {isLoading && <IsLoading />}
+        {error && <ErrorPage error={error} reset={() => setError(null)} />}
 
-          {/* แสดงข้อผิดพลาดถ้ามี */}
-          {error && <ErrorPage error={error} reset={() => setError(null)} />}
+        {!isLoading && !error && memberNo && (
+          <Suspense fallback={<IsLoading />}>
+            <UnlockInfo
+              memberNo={memberNo || ""}
+              device={deviceStatus}
+              account={accountStatus}
+            />
+          </Suspense>
+        )}
 
-          {/* แสดงข้อมูลเมื่อไม่มีข้อผิดพลาดและไม่ได้โหลดข้อมูล */}
-          {!isLoading && !error && memberNo && (
-            <Suspense fallback={<IsLoading />}>
-              <UnlockInfo
-                memberNo={memberNo || ""}
-                device={deviceStatus}
-                account={accountStatus}
-              />
-            </Suspense>
-          )}
+        {forgotPasswordMethod && (
+          <div>
+            {forgotPasswordMethod === "sms" ? (
+              <p>Password reset link has been sent to your phone via SMS.</p>
+            ) : (
+              <p>Password reset link has been sent to your email.</p>
+            )}
+          </div>
+        )}
 
-          {/* แสดงการเลือกวิธีการขอรหัสผ่าน */}
-          {forgotPasswordMethod && (
-            <div>
-              {forgotPasswordMethod === "sms" ? (
-                <p>Password reset link has been sent to your phone via SMS.</p>
-              ) : (
-                <p>Password reset link has been sent to your email.</p>
-              )}
-            </div>
-          )}
-
-          {/* แสดง Popup */}
-          <Popup
-            isOpen={isPopupOpen}
-            onClose={handleClosePopup}
-            type="Forgot your password"
-            phoneNumber={memberNo || ""}
-          />
-        </div>
-      </Navbar>
+        <Popup
+          isOpen={isPopupOpen}
+          onClose={handleClosePopup}
+          type="Forgot your password"
+          phoneNumber={memberNo || ""}
+          deviceStatus={deviceStatus} // ส่งสถานะอุปกรณ์
+          accountStatus={accountStatus} // ส่งสถานะบัญชี
+          status={deviceStatus} // หรือค่าอื่นๆที่คุณต้องการใช้ในที่นี้
+        />
+      </div>
     </div>
   );
 }

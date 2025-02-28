@@ -163,7 +163,7 @@ export default function ChangeEmPage() {
           <Searchbar setMemberNo={setMemberNo} setAppMembNo={handleSearch} />
           <Menubar />
           <div className="bg-gray-300 p-6 my-5 rounded-2xl">
-            <IsAccordion>
+            <IsAccordion memberNo={appMembNo || "-"}>
               {loading ? (
                 <IsLoading />
               ) : (

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 import { motion } from "framer-motion";
 import { useAccordionContext } from "@/contexts/accordioncontext";
 
@@ -7,7 +6,7 @@ interface AccordionItemProps {
   title: string;
   children: React.ReactNode;
   id: string;
-  type: "slide" | "fade";
+  type: "slide" | "fade" | "close";
 }
 
 export const AccordionItem: React.FC<AccordionItemProps> = ({
@@ -17,14 +16,12 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
   type,
 }) => {
   const { openAccordionId, setOpenAccordionId } = useAccordionContext(); // ใช้ context
-  const isOpen = openAccordionId === id; // ตรวจสอบว่า Accordion นี้เปิดอยู่หรือไม่
-
-  // toggleAccordion ใช้ setOpenAccordionId เพื่อกำหนดว่า Accordion นี้จะเปิดหรือปิด
+  const isOpen = openAccordionId === id; // เช็คสถานะเปิด
   const toggleAccordion = () => {
     if (isOpen) {
-      setOpenAccordionId(null); // ปิด Accordion ถ้าเปิดอยู่
+      setOpenAccordionId(null);
     } else {
-      setOpenAccordionId(id); // เปิด Accordion
+      setOpenAccordionId(id);
     }
   };
 
@@ -39,7 +36,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
   };
 
   return (
-    <div className="w-full h-auto brounded-2xl">
+    <div className="w-full h-auto rounded-2xl">
       <div className="cursor-pointer p-4 bg-gray-100 hover:bg-gray-200 rounded-xl my-2 flex justify-between">
         <h3 className="text-lg flex items-center font-semibold">{title}</h3>
         <div className="cursor-pointer" onClick={toggleAccordion}>
@@ -63,27 +60,39 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
         </div>
       </div>
 
-      {isOpen && (
-        <motion.div
-          className="flex py-4 my-8 bg-gray-50 outline outline-none rounded-xl"
-          initial={
-            type === "fade"
-              ? { opacity: 0, maxHeight: 0 }
-              : { opacity: 0, translateY: -20 }
-          }
-          animate={
-            isOpen
-              ? type === "slide"
-                ? { opacity: 1, translateY: 0 }
-                : { opacity: 1, maxHeight: "1500px" }
-              : { opacity: 0 }
-          }
-          transition={type === "slide" ? slideTransition : fadeTransition}
-          style={{ overflow: "hidden" }}
-        >
-          {children}
-        </motion.div>
-      )}
+      <motion.div
+        className="flex bg-gray-50 outline outline-none rounded-xl"
+        initial={{
+          opacity: 0,
+          translateY: -20,
+          maxHeight: 0,
+        }}
+        animate={
+          isOpen
+            ? {
+                opacity: 1,
+                translateY: 0,
+                maxHeight: "1500px",
+                visibility: "visible",
+              }
+            : {
+                opacity: 0,
+                translateY: 20,
+                maxHeight: 0,
+                visibility: "hidden",
+              }
+        }
+        exit={{
+          opacity: 0,
+          translateY: 20,
+          maxHeight: 0,
+          visibility: "hidden",
+        }}
+        transition={type === "slide" ? slideTransition : fadeTransition}
+        key={id}
+      >
+        {children}
+      </motion.div>
     </div>
   );
 };

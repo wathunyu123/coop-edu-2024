@@ -9,6 +9,10 @@ import IsLoading from "@/components/isloading";
 import ErrorPage from "@/components/404popup"; // ใช้ ErrorPage เพื่อแสดงข้อผิดพลาด
 import PinInfo from "@/components/pininfo";
 import { usePathname } from "next/navigation";
+import { Accordion, AccordionItem } from "@/components/accordion";
+import { AccordionProvider } from "@/contexts/accordioncontext";
+import Thai from "@/dictionary/thai";
+import UnlockPage from "../unlock/page";
 
 export default function OtpPage() {
   const pathname = usePathname();
@@ -132,42 +136,59 @@ export default function OtpPage() {
   const { message, bgColorClass, textColor } = getStatusMessage(status);
 
   return (
-    <div>
+    <AccordionProvider>
       <Navbar>
         <Searchbar
           setMemberNo={setMemberNo}
           setAppMembNo={handleSetAppMembNo}
         />
         <Menubar />
-        <div className="grid grid-cols-12 gap-4 min-h-screen">
-          <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
-            {/* แสดง IsLoading ขณะโหลดข้อมูล */}
-            {loading ? (
-              <IsLoading />
-            ) : (
-              <Suspense fallback={<IsLoading />}>
-                <PinInfo
-                  pinAttempts={pinAttempts}
-                  status={status}
-                  resetPinAttempts={resetPinAttempts}
-                />
-              </Suspense>
-            )}
 
-            {/* Popup Component */}
-            <Popup
-              isOpen={isPopupOpen}
-              onClose={handleClosePopup}
-              type={popupType}
-              phoneNumber={memberNo || ""}
-            />
-          </div>
+        <div className="bg-gray-300 p-6 my-5 rounded-2xl w-full">
+          <Accordion>
+            <AccordionItem title={Thai.MobileApp} id="3" type="fade">
+              <div className="w-full">
+                <div className="grid grid-cols-12 gap-4 h-auto">
+                  <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+                    {loading ? (
+                      <IsLoading />
+                    ) : (
+                      <Suspense fallback={<IsLoading />}>
+                        <PinInfo
+                          pinAttempts={pinAttempts}
+                          status={status}
+                          resetPinAttempts={resetPinAttempts}
+                        />
+                      </Suspense>
+                    )}
+
+                    {/* Popup Component */}
+                    <Popup
+                      isOpen={isPopupOpen}
+                      onClose={handleClosePopup}
+                      type={popupType}
+                      status={status} // ส่งค่า status ไปยัง Popup
+                      phoneNumber="" // ส่งหมายเลขโทรศัพท์หรือตามที่ต้องการ
+                      deviceStatus="someDeviceStatus" // Add appropriate value for deviceStatus
+                      accountStatus="someAccountStatus" // Add appropriate value for accountStatus
+                    />
+                  </div>
+                </div>
+
+                {isPopupOpen && (
+                  <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
+                )}
+              </div>
+            </AccordionItem>
+
+            <AccordionItem title={Thai.unlock} id="4" type="fade">
+              <div className="w-full">
+                <UnlockPage />
+              </div>
+            </AccordionItem>
+          </Accordion>
         </div>
-
-        {isPopupOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
-        )}
       </Navbar>
-    </div>
+    </AccordionProvider>
   );
 }

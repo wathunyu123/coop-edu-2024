@@ -202,7 +202,10 @@ export default function ProfilePage() {
         isOpen={isPopupOpen}
         onClose={handleClosePopup}
         type="Forgot your password"
+        status="default" // Add a suitable status value
         phoneNumber={memberNo || ""}
+        deviceStatus="unknown" // Add a suitable deviceStatus value
+        accountStatus="unknown" // Add a suitable accountStatus value
       />
     </div>
   );

@@ -59,11 +59,20 @@ const UnlockInfo: React.FC<UnlockInfoProps> = ({
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupType, setPopupType] = useState<
-    "Device lock" | "Account lock" | "Forgot your password"
+    | "Device lock"
+    | "Account lock"
+    | "Forgot your password"
+    | "unlockdevice"
+    | "unlockaccount"
   >("Forgot your password");
 
   const handleBoxClick = (
-    type: "Device lock" | "Account lock" | "Forgot your password"
+    type:
+      | "Device lock"
+      | "Account lock"
+      | "Forgot your password"
+      | "unlockdevice"
+      | "unlockaccount"
   ) => {
     setPopupType(type);
     setIsPopupOpen(true);
@@ -75,46 +84,50 @@ const UnlockInfo: React.FC<UnlockInfoProps> = ({
 
   return (
     <div className="flex flex-wrap justify-between items-center w-full h-auto p-6 my-10 mx-auto rounded-3xl">
-      <div className="flex flex-wrap justify-between items-center w-full  h-auto bg-gray-200 p-6 my-10 mx-auto shadow-xl rounded-3xl">
+      <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-200 p-6 my-10 mx-auto shadow-xl rounded-3xl">
         {/* Card 1 */}
         <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
           <div className="flex flex-col items-center">
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
               {Thai.Device_is_lock}
             </h1>
-            <p
-              className={`flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 ${deviceTextColor} ${deviceBgColor} rounded-xl`}
+            <button
+              className="text-white py-2 px-3 my-5 bg-sky-500 w-full hover:bg-sky-700 rounded-xl"
+              onClick={() => handleBoxClick("unlockdevice")}
             >
-              {deviceMessage}
-            </p>
+              {Thai.Req_Status}
+            </button>
           </div>
         </div>
 
         {/* Card 2 */}
-        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl  shadow-xl transition-transform transform hover:scale-105">
+        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
           <div className="flex flex-col items-center">
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
               {Thai.Account_is_lock}
             </h1>
-            <p
-              className={`flex justify-center py-2 px-3 h-10 w-full drop-shadow-2xl my-5 ${accountTextColor} ${accountBgColor} rounded-xl`}
+            <button
+              className="text-white py-2 px-3 my-5 bg-sky-500 w-full hover:bg-sky-700 rounded-xl"
+              onClick={() => handleBoxClick("unlockaccount")}
             >
-              {accountMessage}
-            </p>
+              {Thai.Req_Status}
+            </button>
           </div>
         </div>
-        {/* Crad 3 */}
-        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105 ${accountTextColor} ${accountBgColor}">
+        {/* Card 3 */}
+        <div
+          className={`w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105 ${accountTextColor} ${accountBgColor}`}
+        >
           <div className="flex flex-col items-center">
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
               {Thai.Forgot_your_password}
             </h1>
 
             <button
-              className="text-white py-2 px-3 my-5 bg-sky-500 hover:bg-sky-700 rounded-xl"
+              className="text-white py-2 px-3 my-5 bg-sky-500 w-full hover:bg-sky-700 rounded-xl"
               onClick={() => handleBoxClick("Forgot your password")}
             >
-              {Thai.Detail}
+              {Thai.Req_password}
             </button>
           </div>
         </div>
@@ -124,7 +137,10 @@ const UnlockInfo: React.FC<UnlockInfoProps> = ({
             isOpen={isPopupOpen}
             onClose={handleClosePopup}
             type={popupType}
-            phoneNumber={memberNo}
+            deviceStatus={device}
+            accountStatus={account}
+            status={popupType === "unlockdevice" ? device : account} // ส่ง status ที่เหมาะสม
+            phoneNumber={memberNo} // Add phoneNumber property
           />
         )}
       </div>

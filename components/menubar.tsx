@@ -35,10 +35,10 @@ export default function Menubar() {
                 : "hover:bg-cyan-700 hover:text-white"
             } rounded-xl`}
           >
-            {Thai.OTP || "Number EM"}
+            Mobile App
           </Link>
         </div>
-        <div className="w-full flex justify-center">
+        {/*   <div className="w-full flex justify-center">
           <Link
             href="/unlock"
             className={`px-6 py-1 ${
@@ -49,7 +49,7 @@ export default function Menubar() {
           >
             {Thai.Unlock || "Number EM"}
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

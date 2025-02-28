@@ -7,22 +7,55 @@ interface PopupProps {
   isOpen: boolean;
   onClose: () => void;
   type:
-    | "editStatus"
     | "otp"
     | "pin"
-    | "timer"
-    | "document"
+    | "editStatus"
+    | "transaction"
+    | "Forgot your password"
     | "Device lock"
     | "Account lock"
-    | "Forgot your password"
-    | "displaymonitor"
-    | "sms";
-  onSave?: () => void;
-  name?: string;
-  phoneNumber?: string;
+    | "unlockdevice"
+    | "unlockaccount"; // รับ type จาก PinInfo
+  status: string; // รับ status จาก PinInfo
+  phoneNumber: string;
+  deviceStatus: string;
+  accountStatus: string;
 }
 
-const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
+const Popup: React.FC<PopupProps> = ({
+  isOpen,
+  onClose,
+  type,
+  status,
+
+  phoneNumber,
+}) => {
+  let message = "";
+  let bgColorClass = "";
+  let textColor = "";
+
+  if (status === "normal") {
+    message = "สถานะปกติ";
+    bgColorClass = "bg-green-500";
+    textColor = "text-white";
+  } else if (status === "locked") {
+    message = "บัญชีถูกล็อค";
+    bgColorClass = "bg-red-500";
+    textColor = "text-white";
+  } else if (status === "error") {
+    message = "สถานะผิดพลาด";
+    bgColorClass = "bg-red-500";
+    textColor = "text-white";
+  } else if (status === "pending") {
+    message = "สถานะรอดำเนินการ";
+    bgColorClass = "bg-yellow-500";
+    textColor = "text-white";
+  } else {
+    message = "สถานะไม่รู้จัก";
+    bgColorClass = "bg-gray-500";
+    textColor = "text-white";
+  }
+
   if (!isOpen) return null;
 
   const [countdown, setCountdown] = useState<number>(180);
@@ -115,7 +148,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
     console.log(
       "Rendering Content... forgotpasswordData: ",
       forgotpasswordData
-    ); // ตรวจสอบค่าของ forgotpasswordData ก่อนการแสดงผล
+    );
     switch (type) {
       case "otp":
         return (
@@ -146,7 +179,34 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
         );
       case "Forgot your password":
         return (
-          <div className="flex flex-col items-center w-full h-full">
+          <div className="flex flex-col items-center w-full h-full gap-4">
+            <div className="w-full flex justify-end">
+              <svg
+                fill="#ffffff"
+                viewBox="0 0 32 32"
+                version="1.1"
+                width={20}
+                height={20}
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="#ffffff"
+                onClick={(e) => {
+                  e.stopPropagation(); // หยุดการแพร่กระจายของเหตุการณ์
+                  onClose(); // เรียก onClose เมื่อคลิกที่ไอคอน
+                }}
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <title>cancel</title>
+                  <path d="M10.771 8.518c-1.144 0.215-2.83 2.171-2.086 2.915l4.573 4.571-4.573 4.571c-0.915 0.915 1.829 3.656 2.744 2.742l4.573-4.571 4.573 4.571c0.915 0.915 3.658-1.829 2.744-2.742l-4.573-4.571 4.573-4.571c0.915-0.915-1.829-3.656-2.744-2.742l-4.573 4.571-4.573-4.571c-0.173-0.171-0.394-0.223-0.657-0.173v0zM16 1c-8.285 0-15 6.716-15 15s6.715 15 15 15 15-6.716 15-15-6.715-15-15-15zM16 4.75c6.213 0 11.25 5.037 11.25 11.25s-5.037 11.25-11.25 11.25-11.25-5.037-11.25-11.25c0.001-6.213 5.037-11.25 11.25-11.25z"></path>
+                </g>
+              </svg>
+            </div>
+
             <h2 className="text-lg font-semibold text-black bg-gradient-to-r from-white to-blue-100 p-4 rounded-lg w-full text-center shadow-md">
               ลืมรหัสผ่าน
             </h2>
@@ -176,12 +236,162 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
     }
   };
 
+  const renderContentOtp_Pin = () => {
+    switch (type) {
+      case "transaction":
+        return (
+          <div className="flex flex-col items-center w-full h-auto gap-4">
+            <div className="w-full flex justify-end">
+              <svg
+                fill="#ffffff"
+                viewBox="0 0 32 32"
+                version="1.1"
+                width={20}
+                height={20}
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="#ffffff"
+                onClick={(e) => {
+                  e.stopPropagation(); // หยุดการแพร่กระจายของเหตุการณ์
+                  onClose(); // เรียก onClose เมื่อคลิกที่ไอคอน
+                }}
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <title>cancel</title>
+                  <path d="M10.771 8.518c-1.144 0.215-2.83 2.171-2.086 2.915l4.573 4.571-4.573 4.571c-0.915 0.915 1.829 3.656 2.744 2.742l4.573-4.571 4.573 4.571c0.915 0.915 3.658-1.829 2.744-2.742l-4.573-4.571 4.573-4.571c0.915-0.915-1.829-3.656-2.744-2.742l-4.573 4.571-4.573-4.571c-0.173-0.171-0.394-0.223-0.657-0.173v0zM16 1c-8.285 0-15 6.716-15 15s6.715 15 15 15 15-6.716 15-15-6.715-15-15-15zM16 4.75c6.213 0 11.25 5.037 11.25 11.25s-5.037 11.25-11.25 11.25-11.25-5.037-11.25-11.25c0.001-6.213 5.037-11.25 11.25-11.25z"></path>
+                </g>
+              </svg>
+            </div>
+            <h2 className="ttext-lg font-semibold text-black bg-gradient-to-r from-white to-blue-100 p-4 rounded-lg w-full text-center shadow-md">
+              {Thai.Status}
+            </h2>
+
+            <p
+              className={`flex justify-center py-2 px-3 h-10 w-full drop-shadow-lg my-5 rounded-xl ${bgColorClass} ${textColor}`}
+            >
+              {message}
+            </p>
+          </div>
+        );
+    }
+  };
+
+  const renderUnlock = () => {
+    switch (type) {
+      case "unlockdevice":
+        // เช็คค่าของ status สำหรับ unlockdevice
+        const unlockDeviceMessage =
+          status === "normal" ? "สถานะปกติ" : "อุปกรณ์ถูกล็อค";
+        const unlockDeviceBgColor =
+          status === "normal" ? "bg-green-500" : "bg-red-500";
+        const unlockDeviceTextColor = "text-white";
+
+        return (
+          <div className="flex flex-col items-center w-full h-auto gap-4">
+            <div className="w-full flex justify-end">
+              <svg
+                fill="#ffffff"
+                viewBox="0 0 32 32"
+                version="1.1"
+                width={20}
+                height={20}
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="#ffffff"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <title>cancel</title>
+                  <path d="M10.771 8.518c-1.144 0.215-2.83 2.171-2.086 2.915l4.573 4.571-4.573 4.571c-0.915 0.915 1.829 3.656 2.744 2.742l4.573-4.571 4.573 4.571c0.915 0.915 3.658-1.829 2.744-2.742l-4.573-4.571 4.573-4.571c0.915-0.915-1.829-3.656-2.744-2.742l-4.573 4.571-4.573-4.571c-0.173-0.171-0.394-0.223-0.657-0.173v0zM16 1c-8.285 0-15 6.716-15 15s6.715 15 15 15 15-6.716 15-15-6.715-15-15-15zM16 4.75c6.213 0 11.25 5.037 11.25 11.25s-5.037 11.25-11.25 11.25-11.25-5.037-11.25-11.25c0.001-6.213 5.037-11.25 11.25-11.25z"></path>
+                </g>
+              </svg>
+            </div>
+            <h2 className="ttext-lg font-semibold text-black bg-gradient-to-r from-white to-blue-100 p-4 rounded-lg w-full text-center shadow-md">
+              {Thai.Device_Status}
+            </h2>
+
+            <p
+              className={`flex justify-center py-2 px-3 h-10 w-full drop-shadow-lg my-5 rounded-xl ${unlockDeviceBgColor} ${unlockDeviceTextColor}`}
+            >
+              {unlockDeviceMessage}
+            </p>
+          </div>
+        );
+
+      case "unlockaccount":
+        // เช็คค่าของ status สำหรับ unlockaccount
+        const unlockAccountMessage =
+          status === "normal" ? "สถานะปกติ" : "บัญชีถูกล็อค";
+        const unlockAccountBgColor =
+          status === "normal" ? "bg-green-500" : "bg-red-500";
+        const unlockAccountTextColor = "text-white";
+
+        return (
+          <div className="flex flex-col items-center w-full h-auto gap-4">
+            <div className="w-full flex justify-end">
+              <svg
+                fill="#ffffff"
+                viewBox="0 0 32 32"
+                version="1.1"
+                width={20}
+                height={20}
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="#ffffff"
+                onClick={(e) => {
+                  e.stopPropagation(); // หยุดการแพร่กระจายของเหตุการณ์
+                  onClose(); // เรียก onClose เมื่อคลิกที่ไอคอน
+                }}
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <title>cancel</title>
+                  <path d="M10.771 8.518c-1.144 0.215-2.83 2.171-2.086 2.915l4.573 4.571-4.573 4.571c-0.915 0.915 1.829 3.656 2.744 2.742l4.573-4.571 4.573 4.571c0.915 0.915 3.658-1.829 2.744-2.742l-4.573-4.571 4.573-4.571c0.915-0.915-1.829-3.656-2.744-2.742l-4.573 4.571-4.573-4.571c-0.173-0.171-0.394-0.223-0.657-0.173v0zM16 1c-8.285 0-15 6.716-15 15s6.715 15 15 15 15-6.716 15-15-6.715-15-15-15zM16 4.75c6.213 0 11.25 5.037 11.25 11.25s-5.037 11.25-11.25 11.25-11.25-5.037-11.25-11.25c0.001-6.213 5.037-11.25 11.25-11.25z"></path>
+                </g>
+              </svg>
+            </div>
+            <h2 className="ttext-lg font-semibold text-black bg-gradient-to-r from-white to-blue-100 p-4 rounded-lg w-full text-center shadow-md">
+              {Thai.Account_status}
+            </h2>
+
+            <p
+              className={`flex justify-center py-2 px-3 h-10 w-full drop-shadow-lg my-5 rounded-xl ${unlockAccountBgColor} ${unlockAccountTextColor}`}
+            >
+              {unlockAccountMessage}
+            </p>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
-      onClick={(e) =>
-        e.target === e.currentTarget && !countdownActive && onClose()
-      }
+      onClick={(e) => {
+        // ตรวจสอบว่า คลิกที่พื้นหลังที่เป็น div หรือไม่ (ที่ไม่ใช่ motion.div)
+        if (e.target === e.currentTarget && !countdownActive) {
+          onClose();
+        }
+      }}
     >
       <motion.div
         className="bg-gradient-to-r bg-gray-900 to-gray-700 text-white shadow-xl rounded-lg w-[380px] max-w-md p-6 transform transition-all ease-out duration-500"
@@ -191,6 +401,8 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, type }) => {
         transition={{ duration: 0.5 }}
       >
         {renderContent()}
+        {renderContentOtp_Pin()}
+        {renderUnlock()}
 
         {/* ปุ่มต่างๆ */}
         {!countdownActive && (

@@ -88,14 +88,14 @@ const DeviceInfo: React.FC<DeviceInfoProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen max-w-full px-4">
         <div className="text-center col-span-1 md:col-span-12 lg:col-span-12">
           <div className="rounded-2xl mb-6 p-8 w-full shadow-current ">
-            <div className="w-full flex justify-end  pb-5 px-6">
+            <div className="w-full flex justify-end  px-6">
               <Button onClick={handleClick} variant="danger" size="medium">
                 {Thai.Delete}
               </Button>
             </div>
             <div className="flex flex-col space-y-6 mx-7 py-5 ">
               {[
-                { label: Thai.Device_Id, value: appMembNo || "-" },
+                { label: Thai.DeviceId, value: appMembNo || "-" },
                 { label: Thai.Device_Type, value: appCoopCode || "-" },
                 { label: Thai.Brand, value: devcUniqueUid || "-" },
                 { label: Thai.DeviceModel, value: devcPlatform || "-" },
