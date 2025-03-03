@@ -75,8 +75,8 @@ export default function MyForm() {
         className="flex items-center justify-center col-start-1 col-end-13"
         onSubmit={handleSubmit}
       >
-        <div className="lg:flex justify-between items-center p-6 w-full h-[650px] lg:h-4/5 bg-gray-300 rounded-3xl shadow-xl ">
-          <div className="max-w-full max-h-[77%] p-4">
+        <div className="flex flex-col md:flex-row justify-between items-center p-6 w-full h-auto md:h-4/5 bg-gray-300 rounded-3xl shadow-xl ">
+          <div className="max-w-full max-h-[77%]">
             <img
               src="https://psucoop.psu.ac.th/home/tmp/dbd92aa88a980205c55c0d8ec2a92ffa.jpg"
               alt="page"
@@ -84,7 +84,7 @@ export default function MyForm() {
             />
           </div>
 
-          <div className="p-4 lg:flex w-1/2 flex-col items-center justify-center space-y-4">
+          <div className="p-4 flex w-full md:w-1/2 flex-col items-center justify-center space-y-4">
             <h2 className="text-slate-600 text-2xl font-semibold">
               เข้าสู่ระบบ
             </h2>

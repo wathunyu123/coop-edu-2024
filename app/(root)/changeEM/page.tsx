@@ -151,7 +151,6 @@ export default function ChangeEmPage() {
     );
   }
 
-  // สร้างฟังก์ชันที่เช็คข้อมูล ถ้าไม่มีข้อมูลให้แสดง "-"
   const getSafeValue = (value: any) => {
     return value ? value : "-";
   };

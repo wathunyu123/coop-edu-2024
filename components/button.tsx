@@ -22,7 +22,7 @@ const Button = ({
   const variantStyles = {
     primary: "bg-blue-500 text-white hover:bg-blue-600",
     secondary: "bg-gray-300 text-black hover:bg-gray-400",
-    danger: "bg-red-500 text-white hover:bg-red-600",
+    danger: "bg-red-500 text-white hover:bg-red-600 w-full ",
   };
   const sizeStyles = {
     small: "py-1 px-3 text-sm",

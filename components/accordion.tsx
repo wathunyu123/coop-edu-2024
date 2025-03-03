@@ -1,12 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { useAccordionContext } from "@/contexts/accordioncontext";
 
 interface AccordionItemProps {
   title: string;
   children: React.ReactNode;
   id: string;
+  isOpen: boolean;
   type: "slide" | "fade" | "close";
+  toggleAccordion: (id: string) => void; // เพิ่มฟังก์ชัน toggle สำหรับการเปิด/ปิด
 }
 
 export const AccordionItem: React.FC<AccordionItemProps> = ({
@@ -14,17 +15,9 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
   children,
   id,
   type,
+  isOpen,
+  toggleAccordion,
 }) => {
-  const { openAccordionId, setOpenAccordionId } = useAccordionContext(); // ใช้ context
-  const isOpen = openAccordionId === id; // เช็คสถานะเปิด
-  const toggleAccordion = () => {
-    if (isOpen) {
-      setOpenAccordionId(null);
-    } else {
-      setOpenAccordionId(id);
-    }
-  };
-
   const slideTransition = {
     opacity: { duration: 0.4, ease: "easeInOut" },
     translateY: { duration: 0.4, ease: "easeInOut" },
@@ -39,7 +32,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
     <div className="w-full h-auto rounded-2xl">
       <div className="cursor-pointer p-4 bg-gray-100 hover:bg-gray-200 rounded-xl my-2 flex justify-between">
         <h3 className="text-lg flex items-center font-semibold">{title}</h3>
-        <div className="cursor-pointer" onClick={toggleAccordion}>
+        <div className="cursor-pointer" onClick={() => toggleAccordion(id)}>
           <motion.svg
             width="35px"
             height="35px"
@@ -96,6 +89,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
     </div>
   );
 };
+
 
 export const Accordion = ({ children }: { children: React.ReactNode }) => {
   return <div>{children}</div>;

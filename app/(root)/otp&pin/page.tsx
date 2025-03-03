@@ -22,10 +22,31 @@ export default function OtpPage() {
   const [pinAttempts, setPinAttempts] = useState<number>(0);
   const [memberNo, setMemberNo] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [openItems, setOpenItems] = useState<Set<string>>(new Set());
+
   const [popupType, setPopupType] = useState<"otp" | "pin" | "editStatus">(
     "otp"
   );
 
+  /* useEffect(() => {
+    const savedState = localStorage.getItem("accordionState");
+    if (savedState) {
+      setOpenItems(new Set(JSON.parse(savedState)));
+    }
+  }, []);
+
+  // บันทึกสถานะของ openItems ใน localStorage เมื่อมีการเปลี่ยนแปลง
+  useEffect(() => {
+    if (openItems.size > 0) {
+      localStorage.setItem(
+        "accordionState",
+        JSON.stringify(Array.from(openItems))
+      );
+    } else {
+      localStorage.removeItem("accordionState"); // ลบข้อมูลเมื่อไม่มีการเปิด Accordion
+    }
+  }, [openItems]);
+ */
   useEffect(() => {
     const savedMemberNo = localStorage.getItem("memberNo");
     if (savedMemberNo) {
@@ -113,7 +134,36 @@ export default function OtpPage() {
 
   const handleClosePopup = () => setIsPopupOpen(false);
 
-  // การแสดง ErrorPage ถ้าเกิดข้อผิดพลาด
+  const toggleAccordion = (
+    id: string,
+    mode: "normal" | "special" = "normal"
+  ) => {
+    setOpenItems((prevOpenItems: Set<string>) => {
+      const newOpenItems = new Set(prevOpenItems);
+
+      if (mode === "normal") {
+        // ถ้ากดที่ item ที่ยังไม่เปิด จะเปิด และถ้าเปิดอันใหม่แล้วจะปิดอันเก่าด้วย
+        if (newOpenItems.has(id)) {
+          newOpenItems.delete(id); // ถ้ากดที่อันที่เปิดอยู่แล้วจะปิด
+        } else {
+          // ในกรณีนี้ เมื่อเปิด item ใหม่ จะทำการปิด item อื่น ๆ ที่เปิดอยู่แล้ว
+          // ลบอันอื่นออกจาก set แล้วเปิดอันใหม่
+          newOpenItems.clear(); // ลบอันที่เปิดอยู่ทั้งหมด
+          newOpenItems.add(id); // เปิดแค่ item ที่เลือก
+        }
+      } else if (mode === "special") {
+        // ในโหมด "special" ทำงานได้เหมือนกับโหมดปกติ หรือสามารถกำหนดพฤติกรรมเพิ่มเติมได้
+        if (newOpenItems.has(id)) {
+          newOpenItems.delete(id); // ถ้ากดที่อันที่เปิดอยู่แล้วจะปิด
+        } else {
+          newOpenItems.add(id); // ถ้ากดที่อันที่ปิดอยู่จะเปิด
+        }
+      }
+
+      return newOpenItems;
+    });
+  };
+
   if (fetchError) {
     return (
       <div className="min-h-screen">
@@ -146,7 +196,13 @@ export default function OtpPage() {
 
         <div className="bg-gray-300 p-6 my-5 rounded-2xl w-full">
           <Accordion>
-            <AccordionItem title={Thai.MobileApp} id="3" type="fade">
+            <AccordionItem
+              title={Thai.MobileApp}
+              id="3"
+              type="fade"
+              isOpen={openItems.has("3")}
+              toggleAccordion={() => toggleAccordion("3", "normal")}
+            >
               <div className="w-full">
                 <div className="grid grid-cols-12 gap-4 h-auto">
                   <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
@@ -167,10 +223,10 @@ export default function OtpPage() {
                       isOpen={isPopupOpen}
                       onClose={handleClosePopup}
                       type={popupType}
-                      status={status} // ส่งค่า status ไปยัง Popup
-                      phoneNumber="" // ส่งหมายเลขโทรศัพท์หรือตามที่ต้องการ
-                      deviceStatus="someDeviceStatus" // Add appropriate value for deviceStatus
-                      accountStatus="someAccountStatus" // Add appropriate value for accountStatus
+                      status={status}
+                      phoneNumber=""
+                      deviceStatus="someDeviceStatus"
+                      accountStatus="someAccountStatus"
                     />
                   </div>
                 </div>
@@ -180,9 +236,14 @@ export default function OtpPage() {
                 )}
               </div>
             </AccordionItem>
-
-            <AccordionItem title={Thai.unlock} id="4" type="fade">
-              <div className="w-full">
+            <AccordionItem
+              title={Thai.unlock}
+              id="4"
+              type="fade"
+              isOpen={openItems.has("4")}
+              toggleAccordion={() => toggleAccordion("4", "normal")}
+            >
+              <div>
                 <UnlockPage />
               </div>
             </AccordionItem>

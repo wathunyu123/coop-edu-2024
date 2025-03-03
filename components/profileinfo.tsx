@@ -168,10 +168,10 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
                 <div className="flex flex-col w-full p-6 rounded-lg divide-y divide-gray-300 bg-white">
                   {currentData.map((item, index) => (
                     <div key={index} className="flex justify-between py-4">
-                      <span className="text-gray-500 font-medium">
+                      <span className="text-gray-500 font-medium ">
                         {item.title}
                       </span>
-                      <span className="text-gray-800 font-semibold">
+                      <span className="text-gray-800 font-semibold line-clamp-2">
                         {item.value || "-"}
                       </span>
                     </div>
