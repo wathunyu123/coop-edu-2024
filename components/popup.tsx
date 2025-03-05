@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { createPortal } from "react-dom";
-import Thai from "@/dictionary/thai"; // Path to your translation dictionary
-
+import Thai from "@/dictionary/thai";
 interface PopupProps {
   isOpen: boolean;
   onClose: () => void;
@@ -15,8 +14,8 @@ interface PopupProps {
     | "Device lock"
     | "Account lock"
     | "unlockdevice"
-    | "unlockaccount"; // รับ type จาก PinInfo
-  status: string; // รับ status จาก PinInfo
+    | "unlockaccount";
+  status: string;
   phoneNumber: string;
   deviceStatus: string;
   accountStatus: string;
@@ -63,19 +62,16 @@ const Popup: React.FC<PopupProps> = ({
   const [otp, setOtp] = useState<string | null>(null);
   const memberNo = localStorage.getItem("memberNo") || "ไม่พบรหัสสมาชิก";
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<string | null>(null);
   const [forgotpasswordData, setForgotpasswordData] = useState<any | null>(
     null
   );
 
-  // Fetch forgot password information from API
   const fetchForgotPasswordData = async (method: "sms" | "screen") => {
-    setIsLoading(true); // Set loading state to true
+    setIsLoading(true);
     const memberNo = localStorage.getItem("memberNo");
 
-    // ตรวจสอบว่ามี memberNo หรือไม่ ถ้าไม่แสดง error
     if (!memberNo) {
       setIsError("ไม่พบรหัสสมาชิก");
       setIsLoading(false);
@@ -99,11 +95,11 @@ const Popup: React.FC<PopupProps> = ({
       }
 
       const data = await response.json();
-      console.log("API Response:", data); // ดูข้อมูลที่ตอบกลับ
+      console.log("API Response:", data);
 
       if (data.status === "success") {
         setForgotpasswordData(data);
-        setIsError(null); // รีเซ็ตข้อความ error
+        setIsError(null);
       } else {
         setIsError("ไม่สามารถขอรหัสผ่านใหม่ได้");
       }
@@ -111,12 +107,12 @@ const Popup: React.FC<PopupProps> = ({
       setIsError("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
       console.error("Error fetching data:", err);
     } finally {
-      setIsLoading(false); // รีเซ็ตสถานะการโหลด
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    console.log("Forgot Password Data:", forgotpasswordData); // เพิ่มการตรวจสอบข้อมูลหลังจากได้รับจาก API
+    console.log("Forgot Password Data:", forgotpasswordData);
   }, [forgotpasswordData]);
 
   useEffect(() => {
@@ -141,7 +137,7 @@ const Popup: React.FC<PopupProps> = ({
 
   const handleForgotPasswordClick = (method: "sms" | "screen") => {
     setIsLoading(true);
-    fetchForgotPasswordData(method); // เรียก API เมื่อผู้ใช้เลือกแล้ว
+    fetchForgotPasswordData(method);
   };
 
   const renderContent = () => {
@@ -190,8 +186,8 @@ const Popup: React.FC<PopupProps> = ({
                 xmlns="http://www.w3.org/2000/svg"
                 stroke="#ffffff"
                 onClick={(e) => {
-                  e.stopPropagation(); // หยุดการแพร่กระจายของเหตุการณ์
-                  onClose(); // เรียก onClose เมื่อคลิกที่ไอคอน
+                  e.stopPropagation(); // หยุดการ propagation ของการคลิก
+                  onClose(); // เรียกฟังก์ชันปิด popup
                 }}
               >
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -251,8 +247,8 @@ const Popup: React.FC<PopupProps> = ({
                 xmlns="http://www.w3.org/2000/svg"
                 stroke="#ffffff"
                 onClick={(e) => {
-                  e.stopPropagation(); // หยุดการแพร่กระจายของเหตุการณ์
-                  onClose(); // เรียก onClose เมื่อคลิกที่ไอคอน
+                  e.stopPropagation();
+                  onClose();
                 }}
               >
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -284,7 +280,6 @@ const Popup: React.FC<PopupProps> = ({
   const renderUnlock = () => {
     switch (type) {
       case "unlockdevice":
-        // เช็คค่าของ status สำหรับ unlockdevice
         const unlockDeviceMessage =
           status === "normal" ? "สถานะปกติ" : "อุปกรณ์ถูกล็อค";
         const unlockDeviceBgColor =
@@ -332,7 +327,6 @@ const Popup: React.FC<PopupProps> = ({
         );
 
       case "unlockaccount":
-        // เช็คค่าของ status สำหรับ unlockaccount
         const unlockAccountMessage =
           status === "normal" ? "สถานะปกติ" : "บัญชีถูกล็อค";
         const unlockAccountBgColor =
@@ -351,8 +345,8 @@ const Popup: React.FC<PopupProps> = ({
                 xmlns="http://www.w3.org/2000/svg"
                 stroke="#ffffff"
                 onClick={(e) => {
-                  e.stopPropagation(); // หยุดการแพร่กระจายของเหตุการณ์
-                  onClose(); // เรียก onClose เมื่อคลิกที่ไอคอน
+                  e.stopPropagation();
+                  onClose();
                 }}
               >
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -386,15 +380,11 @@ const Popup: React.FC<PopupProps> = ({
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
-      onClick={(e) => {
-        // ตรวจสอบว่า คลิกที่พื้นหลังที่เป็น div หรือไม่ (ที่ไม่ใช่ motion.div)
-        if (e.target === e.currentTarget && !countdownActive) {
-          onClose();
-        }
-      }}
+      onClick={(e) => e.stopPropagation()}
     >
       <motion.div
         className="bg-gradient-to-r bg-gray-900 to-gray-700 text-white shadow-xl rounded-lg w-[380px] max-w-md p-6 transform transition-all ease-out duration-500"
+        onClick={(e) => e.stopPropagation()}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
@@ -404,7 +394,6 @@ const Popup: React.FC<PopupProps> = ({
         {renderContentOtp_Pin()}
         {renderUnlock()}
 
-        {/* ปุ่มต่างๆ */}
         {!countdownActive && (
           <div className="flex w-full justify-between mt-6">
             {type === "otp" && (

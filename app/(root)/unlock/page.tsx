@@ -133,9 +133,9 @@ export default function UnlockPage() {
           onClose={handleClosePopup}
           type="Forgot your password"
           phoneNumber={memberNo || ""}
-          deviceStatus={deviceStatus} // ส่งสถานะอุปกรณ์
-          accountStatus={accountStatus} // ส่งสถานะบัญชี
-          status={deviceStatus} // หรือค่าอื่นๆที่คุณต้องการใช้ในที่นี้
+          deviceStatus={deviceStatus}
+          accountStatus={accountStatus}
+          status={deviceStatus}
         />
       </div>
     </div>
