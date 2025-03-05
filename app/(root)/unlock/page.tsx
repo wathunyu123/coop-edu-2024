@@ -102,41 +102,43 @@ export default function UnlockPage() {
   const handleClosePopup = () => setIsPopupOpen(false);
 
   return (
-    <div>
+    <div className="w-full">
       <div>
-        {isLoading && <IsLoading />}
+        <div>
+          {isLoading && <IsLoading />}
 
-        {error && <ErrorPage error={error} reset={() => setError(null)} />}
+          {error && <ErrorPage error={error} reset={() => setError(null)} />}
 
-        {!isLoading && !error && memberNo && (
-          <Suspense fallback={<IsLoading />}>
-            <UnlockInfo
-              memberNo={memberNo || ""}
-              device={deviceStatus}
-              account={accountStatus}
-            />
-          </Suspense>
-        )}
+          {!isLoading && !error && memberNo && (
+            <Suspense fallback={<IsLoading />}>
+              <UnlockInfo
+                memberNo={memberNo || ""}
+                device={deviceStatus}
+                account={accountStatus}
+              />
+            </Suspense>
+          )}
 
-        {forgotPasswordMethod && (
-          <div>
-            {forgotPasswordMethod === "sms" ? (
-              <p>Password reset link has been sent to your phone via SMS.</p>
-            ) : (
-              <p>Password reset link has been sent to your email.</p>
-            )}
-          </div>
-        )}
+          {forgotPasswordMethod && (
+            <div>
+              {forgotPasswordMethod === "sms" ? (
+                <p>Password reset link has been sent to your phone via SMS.</p>
+              ) : (
+                <p>Password reset link has been sent to your email.</p>
+              )}
+            </div>
+          )}
 
-        <Popup
-          isOpen={isPopupOpen}
-          onClose={handleClosePopup}
-          type="Forgot your password"
-          phoneNumber={memberNo || ""}
-          deviceStatus={deviceStatus}
-          accountStatus={accountStatus}
-          status={deviceStatus}
-        />
+          <Popup
+            isOpen={isPopupOpen}
+            onClose={handleClosePopup}
+            type="Forgot your password"
+            phoneNumber={memberNo || ""}
+            deviceStatus={deviceStatus}
+            accountStatus={accountStatus}
+            status={deviceStatus}
+          />
+        </div>
       </div>
     </div>
   );

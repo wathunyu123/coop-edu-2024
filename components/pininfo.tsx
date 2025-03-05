@@ -17,7 +17,6 @@ const PinInfo: React.FC<PinInfoProps> = ({
   let bgColorClass = "";
   let textColor = "";
 
-  // กำหนดค่าของข้อความ, สีพื้นหลัง และสีข้อความตามสถานะ
   if (status === "normal") {
     message = "สถานะปกติ";
     bgColorClass = "bg-green-500";
@@ -70,12 +69,12 @@ const PinInfo: React.FC<PinInfoProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap justify-between items-center w-full h-auto p-6 my-10 mx-auto rounded-3xl">
-      <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-200 p-6 my-10 mx-auto shadow-xl rounded-3xl">
+    <div className="flex flex-wrap justify-between items-center w-full h-auto p-2 my-10 mx-auto rounded-3xl">
+      <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-200 p-6 my-10 gap-4 mx-auto shadow-xl rounded-3xl">
         {/* Card 1: Status */}
-        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
+        <div className="w-full md:w-64 h-80 p-3 md:p-6 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
           <div className="flex flex-col items-center">
-            <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
+            <h1 className="text-xl text-center font-semibold text-gray-800 py-6 my-5">
               {Thai.Status}
             </h1>
             <button
@@ -88,9 +87,9 @@ const PinInfo: React.FC<PinInfoProps> = ({
         </div>
 
         {/* Card 2: OTP Request */}
-        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
+        <div className="w-full md:w-64 h-80 p-3 md:p-6  bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
           <div className="flex flex-col items-center">
-            <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
+            <h1 className="text-xl text-center font-semibold text-gray-800 py-6 my-5">
               {Thai.request_otp}
             </h1>
             <button
@@ -103,13 +102,13 @@ const PinInfo: React.FC<PinInfoProps> = ({
         </div>
 
         {/* Card 3: PIN Attempts */}
-        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
+        <div className="w-full md:w-64 h-80 p-3 md:p-6  bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
           <div className="flex flex-col items-center">
-            <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
+            <h1 className="text-xl text-center font-semibold text-gray-800 py-6 my-5">
               {Thai.Entered_wrong_PIN}
             </h1>
             <p className="p-2 mt-4 text-white bg-red-500 rounded-xl">
-              จำนวนที่ใส่ PIN ผิด: {pinAttempts} ครั้ง
+              จำนวนที่ใส่ PIN ผิด : {pinAttempts} ครั้ง
             </p>
           </div>
         </div>
@@ -121,10 +120,10 @@ const PinInfo: React.FC<PinInfoProps> = ({
           isOpen={isPopupOpen}
           onClose={handleClosePopup}
           type={popupType}
-          status={status} // ส่งค่า status ไปยัง Popup
-          phoneNumber="" // ส่งหมายเลขโทรศัพท์หรือตามที่ต้องการ
-          deviceStatus="" // เพิ่มค่า deviceStatus
-          accountStatus="" // เพิ่มค่า accountStatus
+          status={status}
+          phoneNumber=""
+          deviceStatus=""
+          accountStatus=""
         />
       )}
     </div>

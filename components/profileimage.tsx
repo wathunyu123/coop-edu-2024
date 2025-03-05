@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 interface ProfileImageProps {
-  memberNo: string; // รับ memberNo เพื่อดึงข้อมูล
+  memberNo: string;
 }
 
 const ProfileImage: React.FC<ProfileImageProps> = ({ memberNo }) => {
@@ -21,28 +21,28 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ memberNo }) => {
 
         const data = await response.json();
         if (data?.photo) {
-          setProfileImage(data.photo); // ถ้ามีรูป ให้เก็บ URL ของรูป
+          setProfileImage(data.photo);
         } else {
-          setProfileImage(null); // ถ้าไม่มีรูป
+          setProfileImage(null);
         }
       } catch (error) {
         setError(error instanceof Error ? error.message : "Unknown error");
       } finally {
-        setLoading(false); // เมื่อโหลดเสร็จให้เปลี่ยนสถานะเป็นไม่โหลดแล้ว
+        setLoading(false);
       }
     };
 
     if (memberNo) {
       fetchProfileImage();
     }
-  }, [memberNo]); // เมื่อ memberNo เปลี่ยน ให้ทำการดึงข้อมูลใหม่
+  }, [memberNo]);
 
   if (loading) {
-    return <div>Loading...</div>; // แสดงขณะกำลังโหลด
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>; // แสดงข้อผิดพลาด
+    return <div>Error: {error}</div>;
   }
 
   return (
@@ -54,7 +54,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ memberNo }) => {
           className="w-48 h-48 object-cover "
         />
       ) : (
-        <div>No Profile Image Available</div> // ถ้าไม่มีรูป
+        <div>No Profile Image Available</div>
       )}
     </div>
   );

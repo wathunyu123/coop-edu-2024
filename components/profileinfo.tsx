@@ -171,7 +171,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
                       <span className="text-gray-500 font-medium ">
                         {item.title}
                       </span>
-                      <span className="text-gray-800 font-semibold line-clamp-2">
+                      <span className="text-gray-800 text-end font-semibold line-clamp-2">
                         {item.value || "-"}
                       </span>
                     </div>
@@ -231,7 +231,6 @@ const renderProfileImage = (profileImage?: string) => {
     }
   }
 
-  // ถ้าไม่มีภาพให้แสดงเป็น SVG
   return (
     <svg
       viewBox="0 0 1024 1024"

@@ -27,15 +27,15 @@ export default function Navbar({ children }: NavbarProps) {
   };
 
   return (
-    <div className="flex pt-8 flex-col md:flex-row min-h-screen ">
+    <div className="flex pt-8 flex-col lg:flex-row min-h-screen ">
       <div
         className={`fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "-translate-x-4" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out bg-gray-200 shadow-xl py-6 gap-4 rounded-3xl w-[250px] max-h-[900px] z-50 md:relative md:translate-x-0`}
+        } transition-transform duration-300 ease-in-out bg-gray-200 shadow-xl py-6 gap-4 rounded-3xl w-[250px] max-h-[900px] z-50 lg:relative lg:translate-x-0`}
       >
         <div className="flex justify-between items-center py-5 px-10 mb-4">
           <IoClose
-            className="text-3xl cursor-pointer md:hidden"
+            className="text-3xl cursor-pointer lg:hidden"
             onClick={toggleSidebar}
           />
         </div>
@@ -67,7 +67,7 @@ export default function Navbar({ children }: NavbarProps) {
 
       {/* Main content */}
       <div className="flex-1 px-8">
-        <div className="md:hidden flex justify-between items-center mb-4 text-black">
+        <div className="lg:hidden flex justify-between items-center mb-4 text-black">
           <IoMenu className="text-3xl cursor-pointer" onClick={toggleSidebar} />
         </div>
         {children}

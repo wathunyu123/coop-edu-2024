@@ -28,228 +28,230 @@ export default function OtpPage() {
     "otp"
   );
 
-  /* useEffect(() => {
-    const savedState = localStorage.getItem("accordionState");
-    if (savedState) {
-      setOpenItems(new Set(JSON.parse(savedState)));
-    }
-  }, []);
+   useEffect(() => {
+     const savedState = localStorage.getItem("accordionState");
+     if (savedState) {
+       setOpenItems(new Set(JSON.parse(savedState)));
+     }
+   }, []);
 
-  // บันทึกสถานะของ openItems ใน localStorage เมื่อมีการเปลี่ยนแปลง
-  useEffect(() => {
-    if (openItems.size > 0) {
-      localStorage.setItem(
-        "accordionState",
-        JSON.stringify(Array.from(openItems))
-      );
-    } else {
-      localStorage.removeItem("accordionState"); // ลบข้อมูลเมื่อไม่มีการเปิด Accordion
-    }
-  }, [openItems]);
- */
-  useEffect(() => {
-    const savedMemberNo = localStorage.getItem("memberNo");
-    if (savedMemberNo) {
-      setMemberNo(savedMemberNo);
-    }
-  }, []);
+   useEffect(() => {
+     if (openItems.size > 0) {
+       localStorage.setItem(
+         "accordionState",
+         JSON.stringify(Array.from(openItems))
+       );
+     } else {
+       localStorage.removeItem("accordionState");
+     }
+   }, [openItems]);
 
-  useEffect(() => {
-    if (!memberNo) return;
+   useEffect(() => {
+     const savedMemberNo = localStorage.getItem("memberNo");
+     if (savedMemberNo) {
+       setMemberNo(savedMemberNo);
+     }
+   }, []);
 
-    const fetchUserData = async () => {
-      setLoading(true); // เริ่มโหลด
-      setFetchError(null);
+   useEffect(() => {
+     if (!memberNo) return;
 
-      try {
-        const response = await fetch(
-          `http://localhost:3000/api/otp&pin?memberNo=${memberNo}`
-        );
-        if (!response.ok) throw new Error("Device Not Found");
+     const fetchUserData = async () => {
+       setLoading(true);
+       setFetchError(null);
 
-        const data = await response.json();
-        if (!data) throw new Error("No data received");
+       try {
+         const response = await fetch(
+           `http://localhost:3000/api/otp&pin?memberNo=${memberNo}`
+         );
+         if (!response.ok) throw new Error("Device Not Found");
 
-        setStatus(data.pinStatus);
-        setPinAttempts(data.pinAttempts);
+         const data = await response.json();
+         if (!data) throw new Error("No data received");
 
-        setTimeout(() => {
-          setLoading(false); // เสร็จสิ้นการโหลด
-        }, 1500); // ปรับเวลาได้ตามต้องการ
-      } catch (error) {
-        setFetchError(
-          error instanceof Error ? error : new Error("Unknown error")
-        );
-        setLoading(false); // เสร็จสิ้นการโหลดเมื่อมีข้อผิดพลาด
-      }
-    };
+         setStatus(data.pinStatus);
+         setPinAttempts(data.pinAttempts);
 
-    fetchUserData();
-  }, [memberNo]);
+         setTimeout(() => {
+           setLoading(false);
+         }, 1000);
+       } catch (error) {
+         setFetchError(
+           error instanceof Error ? error : new Error("Unknown error")
+         );
+         setLoading(false);
+       }
+     };
 
-  const resetPinAttempts = () => {
-    setPinAttempts(0);
-    localStorage.setItem("pinAttempts", "0");
-  };
+     fetchUserData();
+   }, [memberNo]);
 
-  const handleSetAppMembNo = (memberNo: string) => {
-    setMemberNo(memberNo);
-  };
+   const resetPinAttempts = () => {
+     setPinAttempts(0);
+     localStorage.setItem("pinAttempts", "0");
+   };
 
-  const getStatusMessage = (status: string) => {
-    const statusMessages: Record<
-      string,
-      { message: string; bgColorClass: string; textColor: string }
-    > = {
-      normal: {
-        message: "สถานะปกติ",
-        bgColorClass: "bg-green-500",
-        textColor: "text-white",
-      },
-      locked: {
-        message: "บัญชีถูกล็อค",
-        bgColorClass: "bg-red-500",
-        textColor: "text-white",
-      },
-      error: {
-        message: "สถานะผิดพลาด",
-        bgColorClass: "bg-red-500",
-        textColor: "text-white",
-      },
-      pending: {
-        message: "สถานะรอดำเนินการ",
-        bgColorClass: "bg-yellow-500",
-        textColor: "text-white",
-      },
-    };
+   const handleSetAppMembNo = (memberNo: string) => {
+     setMemberNo(memberNo);
+   };
 
-    return (
-      statusMessages[status] || {
-        message: "สถานะไม่รู้จัก",
-        bgColorClass: "bg-gray-500",
-        textColor: "text-white",
-      }
-    );
-  };
+   const getStatusMessage = (status: string) => {
+     const statusMessages: Record<
+       string,
+       { message: string; bgColorClass: string; textColor: string }
+     > = {
+       normal: {
+         message: "สถานะปกติ",
+         bgColorClass: "bg-green-500",
+         textColor: "text-white",
+       },
+       locked: {
+         message: "บัญชีถูกล็อค",
+         bgColorClass: "bg-red-500",
+         textColor: "text-white",
+       },
+       error: {
+         message: "สถานะผิดพลาด",
+         bgColorClass: "bg-red-500",
+         textColor: "text-white",
+       },
+       pending: {
+         message: "สถานะรอดำเนินการ",
+         bgColorClass: "bg-yellow-500",
+         textColor: "text-white",
+       },
+     };
 
-  const handleClosePopup = () => setIsPopupOpen(false);
+     return (
+       statusMessages[status] || {
+         message: "สถานะไม่รู้จัก",
+         bgColorClass: "bg-gray-500",
+         textColor: "text-white",
+       }
+     );
+   };
 
-  const toggleAccordion = (
-    id: string,
-    mode: "normal" | "special" = "normal"
-  ) => {
-    setOpenItems((prevOpenItems: Set<string>) => {
-      const newOpenItems = new Set(prevOpenItems);
+   const handleClosePopup = () => setIsPopupOpen(false);
 
-      if (mode === "normal") {
-        // ถ้ากดที่ item ที่ยังไม่เปิด จะเปิด และถ้าเปิดอันใหม่แล้วจะปิดอันเก่าด้วย
-        if (newOpenItems.has(id)) {
-          newOpenItems.delete(id); // ถ้ากดที่อันที่เปิดอยู่แล้วจะปิด
-        } else {
-          // ในกรณีนี้ เมื่อเปิด item ใหม่ จะทำการปิด item อื่น ๆ ที่เปิดอยู่แล้ว
-          // ลบอันอื่นออกจาก set แล้วเปิดอันใหม่
-          newOpenItems.clear(); // ลบอันที่เปิดอยู่ทั้งหมด
-          newOpenItems.add(id); // เปิดแค่ item ที่เลือก
-        }
-      } else if (mode === "special") {
-        // ในโหมด "special" ทำงานได้เหมือนกับโหมดปกติ หรือสามารถกำหนดพฤติกรรมเพิ่มเติมได้
-        if (newOpenItems.has(id)) {
-          newOpenItems.delete(id); // ถ้ากดที่อันที่เปิดอยู่แล้วจะปิด
-        } else {
-          newOpenItems.add(id); // ถ้ากดที่อันที่ปิดอยู่จะเปิด
-        }
-      }
+   const toggleAccordion = (
+     id: string,
+     mode: "normal" | "special" = "normal"
+   ) => {
+     setOpenItems((prevOpenItems: Set<string>) => {
+       const newOpenItems = new Set(prevOpenItems);
 
-      return newOpenItems;
-    });
-  };
+       if (mode === "normal") {
+         if (newOpenItems.has(id)) {
+           newOpenItems.delete(id);
+         } else {
+           newOpenItems.clear();
+           newOpenItems.add(id);
+         }
+       } else if (mode === "special") {
+         if (newOpenItems.has(id)) {
+           newOpenItems.delete(id);
+         } else {
+           newOpenItems.add(id);
+         }
+       }
 
-  if (fetchError) {
-    return (
-      <div className="min-h-screen">
-        <Navbar>
-          <Searchbar
-            setMemberNo={setMemberNo}
-            setAppMembNo={handleSetAppMembNo}
-          />
-          <Menubar />
-          <div className="grid grid-cols-12 gap-4 min-h-screen">
-            <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
-              <ErrorPage error={fetchError} reset={() => setFetchError(null)} />
-            </div>
-          </div>
-        </Navbar>
-      </div>
-    );
-  }
+       return newOpenItems;
+     });
+   };
 
-  const { message, bgColorClass, textColor } = getStatusMessage(status);
+   if (fetchError) {
+     return (
+       <div className="min-h-screen">
+         <Navbar>
+           <Searchbar
+             setMemberNo={setMemberNo}
+             setAppMembNo={handleSetAppMembNo}
+           />
+           <Menubar />
+           <div className="grid grid-cols-12 gap-4 min-h-screen">
+             <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+               <ErrorPage
+                 error={fetchError}
+                 reset={() => setFetchError(null)}
+               />
+             </div>
+           </div>
+         </Navbar>
+       </div>
+     );
+   }
 
-  return (
-    <AccordionProvider>
-      <Navbar>
-        <Searchbar
-          setMemberNo={setMemberNo}
-          setAppMembNo={handleSetAppMembNo}
-        />
-        <Menubar />
+   const { message, bgColorClass, textColor } = getStatusMessage(status);
 
-        <div className="bg-gray-300 p-6 my-5 rounded-2xl w-full">
-          <Accordion>
-            <AccordionItem
-              title={Thai.MobileApp}
-              id="3"
-              type="fade"
-              isOpen={openItems.has("3")}
-              toggleAccordion={() => toggleAccordion("3", "normal")}
-            >
-              <div className="w-full">
-                <div className="grid grid-cols-12 gap-4 h-auto">
-                  <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
-                    {loading ? (
-                      <IsLoading />
-                    ) : (
-                      <Suspense fallback={<IsLoading />}>
-                        <PinInfo
-                          pinAttempts={pinAttempts}
-                          status={status}
-                          resetPinAttempts={resetPinAttempts}
-                        />
-                      </Suspense>
-                    )}
+   return (
+     <AccordionProvider>
+       <Navbar>
+         <Searchbar
+           setMemberNo={setMemberNo}
+           setAppMembNo={handleSetAppMembNo}
+         />
+         <Menubar />
 
-                    {/* Popup Component */}
-                    <Popup
-                      isOpen={isPopupOpen}
-                      onClose={handleClosePopup}
-                      type={popupType}
-                      status={status}
-                      phoneNumber=""
-                      deviceStatus="someDeviceStatus"
-                      accountStatus="someAccountStatus"
-                    />
-                  </div>
-                </div>
+         <div className="bg-gray-300 p-6 my-5 rounded-2xl w-full">
+           <Accordion>
+             <AccordionItem
+               title={Thai.MobileApp}
+               id="3"
+               type="fade"
+               isOpen={openItems.has("3")}
+               toggleAccordion={() => toggleAccordion("3", "normal")}
+             >
+               <div className="w-full">
+                 <div className="grid grid-cols-12 gap-4 h-auto">
+                   <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+                     {loading ? (
+                       <IsLoading />
+                     ) : (
+                       <Suspense fallback={<IsLoading />}>
+                         <PinInfo
+                           pinAttempts={pinAttempts}
+                           status={status}
+                           resetPinAttempts={resetPinAttempts}
+                         />
+                       </Suspense>
+                     )}
 
-                {isPopupOpen && (
-                  <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
-                )}
-              </div>
-            </AccordionItem>
-            <AccordionItem
-              title={Thai.unlock}
-              id="4"
-              type="fade"
-              isOpen={openItems.has("4")}
-              toggleAccordion={() => toggleAccordion("4", "normal")}
-            >
-              <div>
-                <UnlockPage />
-              </div>
-            </AccordionItem>
-          </Accordion>
-        </div>
-      </Navbar>
-    </AccordionProvider>
-  );
+                     {/* Popup Component */}
+                     <Popup
+                       isOpen={isPopupOpen}
+                       onClose={handleClosePopup}
+                       type={popupType}
+                       status={status}
+                       phoneNumber=""
+                       deviceStatus="someDeviceStatus"
+                       accountStatus="someAccountStatus"
+                     />
+                   </div>
+                 </div>
+
+                 {isPopupOpen && (
+                   <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"></div>
+                 )}
+               </div>
+             </AccordionItem>
+             <AccordionItem
+               title={Thai.unlock}
+               id="4"
+               type="fade"
+               isOpen={openItems.has("4")}
+               toggleAccordion={() => toggleAccordion("4", "normal")}
+             >
+               <div className="w-full">
+                 <div className="grid grid-cols-12 gap-4 h-auto">
+                   <div className="text-center col-start-1 col-span-12 lg:col-start-1 lg:col-span-12 ">
+                     <UnlockPage />
+                   </div>
+                 </div>
+               </div>
+             </AccordionItem>
+           </Accordion>
+         </div>
+       </Navbar>
+     </AccordionProvider>
+   );
 }

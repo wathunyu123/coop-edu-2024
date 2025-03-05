@@ -65,7 +65,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
             ? {
                 opacity: 1,
                 translateY: 0,
-                maxHeight: "1500px",
+                maxHeight: "1800px",
                 visibility: "visible",
               }
             : {

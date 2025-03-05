@@ -150,25 +150,26 @@ const Popup: React.FC<PopupProps> = ({
         return (
           <div className="flex flex-col items-center w-full h-full">
             <h2 className="text-lg font-semibold text-black bg-gradient-to-r from-white to-blue-100 p-4 rounded-lg w-full text-center shadow-md">
-              ขอ OTP
+              {Thai.Req_OTP}
             </h2>
             {otp ? (
               <p className="mt-4 text-xl font-bold text-center">
-                OTP ของคุณคือ: <strong>{otp}</strong>
+                {Thai.This_is_OTP} <strong>{otp}</strong>
               </p>
             ) : (
               <p className="mt-4 text-lg text-center text-gray-500">
-                กรุณากดปุ่ม "Action" เพื่อขอ OTP
+                {Thai.Click_Action}
               </p>
             )}
             {countdown > 0 ? (
               <p className="mt-4 text-lg font-semibold text-white">
-                เวลาเหลือ: {Math.floor(countdown / 60)}:
+                {Thai.Time_left}
+                {Math.floor(countdown / 60)}:
                 {(countdown % 60).toString().padStart(2, "0")}
               </p>
             ) : (
               <p className="mt-4 text-lg font-semibold text-red-600">
-                OTP หมดอายุแล้ว
+                {Thai.OTP_expired}
               </p>
             )}
           </div>
@@ -204,11 +205,11 @@ const Popup: React.FC<PopupProps> = ({
             </div>
 
             <h2 className="text-lg font-semibold text-black bg-gradient-to-r from-white to-blue-100 p-4 rounded-lg w-full text-center shadow-md">
-              ลืมรหัสผ่าน
+              {Thai.Forgot_your_password}
             </h2>
             {isLoading ? (
               <p className="mt-4 text-lg text-center text-gray-500">
-                กำลังโหลดข้อมูล...
+                {Thai.Loading}
               </p>
             ) : isError ? (
               <p className="mt-4 text-lg text-center text-red-600">{isError}</p>
@@ -220,7 +221,7 @@ const Popup: React.FC<PopupProps> = ({
                   </p>
                 ) : (
                   <p className="mt-4 text-lg text-center text-gray-500">
-                    กรุณากดปุ่มเพื่อขอรหัสผ่านใหม่
+                    {Thai.Request_new_password}
                   </p>
                 )}
               </div>
@@ -387,8 +388,13 @@ const Popup: React.FC<PopupProps> = ({
         onClick={(e) => e.stopPropagation()}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.5 }}
+        exit={{ opacity: 0, scale: 0.95, y: 50 }}
+        transition={{
+          opacity: { duration: 0.3 },
+          scale: { duration: 0.3 },
+          y: { duration: 0.4 },
+          ease: "easeInOut",
+        }}
       >
         {renderContent()}
         {renderContentOtp_Pin()}

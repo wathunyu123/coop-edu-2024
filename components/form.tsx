@@ -6,11 +6,10 @@ import Thai from "@/dictionary/thai";
 export default function MyForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    memberNo: "", // memberName
-    password: "", // ใช้ memberNo แทน password
+    memberNo: "",
+    password: "",
   });
 
-  // State สำหรับข้อความเตือนหรือข้อผิดพลาด
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,25 +20,22 @@ export default function MyForm() {
     }));
   };
 
-  // ฟังก์ชันการตรวจสอบข้อมูลและการทำการล็อกอิน
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // ตรวจสอบว่า user หรือ memberNo ไม่มีค่าว่าง
     if (!formData.memberNo || !formData.password) {
       setErrorMessage("กรุณากรอกชื่อผู้ใช้และเลขสมาชิก");
-      return; // ถ้าไม่กรอกข้อมูลครบก็หยุด
+      return;
     }
 
     try {
-      // ส่งคำขอ POST ไปยัง API login โดยใช้ memberNo แทน password
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          memberNo: formData.memberNo, // ส่ง memberName แทน username
+          memberNo: formData.memberNo,
           password: formData.password,
         }),
       });
@@ -48,10 +44,9 @@ export default function MyForm() {
 
       if (response.ok) {
         localStorage.setItem("memberNo", formData.memberNo);
-        localStorage.setItem("token", data.token); // สมมุติว่า API ส่ง token กลับมา
+        localStorage.setItem("token", data.token);
         router.push("/profile");
       } else {
-        // ถ้า API ตอบกลับ error
         if (response.status === 401) {
           setErrorMessage(
             "การเข้าสู่ระบบล้มเหลว: ข้อมูลผู้ใช้หรือรหัสไม่ถูกต้อง"
@@ -75,7 +70,7 @@ export default function MyForm() {
         className="flex items-center justify-center col-start-1 col-end-13"
         onSubmit={handleSubmit}
       >
-        <div className="flex flex-col md:flex-row justify-between items-center p-6 w-full h-auto md:h-4/5 bg-gray-300 rounded-3xl shadow-xl ">
+        <div className="flex flex-col lg:flex-row justify-between items-center p-6 w-full h-auto lg:h-4/5 bg-gray-300 rounded-3xl shadow-xl ">
           <div className="max-w-full max-h-[77%]">
             <img
               src="https://psucoop.psu.ac.th/home/tmp/dbd92aa88a980205c55c0d8ec2a92ffa.jpg"
@@ -84,9 +79,9 @@ export default function MyForm() {
             />
           </div>
 
-          <div className="p-4 flex w-full md:w-1/2 flex-col items-center justify-center space-y-4">
+          <div className="p-4 flex w-full lg:w-1/2 flex-col items-center justify-center space-y-4">
             <h2 className="text-slate-600 text-2xl font-semibold">
-              เข้าสู่ระบบ
+              {Thai.Submit}
             </h2>
 
             <div className="w-full space-y-4">
@@ -99,7 +94,7 @@ export default function MyForm() {
                 className="border border-white rounded-md text-center p-2 w-full text-black bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
               <input
-                type="password" // เปลี่ยนเป็น text แทน password
+                type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -116,7 +111,7 @@ export default function MyForm() {
               type="submit"
               className="bg-blue-600 text-white w-full p-2 mt-5 rounded-md hover:bg-blue-950 transition duration-300 transform hover:scale-105 shadow-md"
             >
-              เข้าสู่ระบบ
+              {Thai.Submit}
             </button>
           </div>
         </div>

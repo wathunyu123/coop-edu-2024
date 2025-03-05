@@ -16,40 +16,35 @@ export default function Searchbar({
   const pathname = usePathname();
   const [localMemberNo, setLocalMemberNo] = useState<string>("");
 
-  // ดึงค่า memberNo และ appMembNo จาก localStorage เมื่อเริ่มต้น
   useEffect(() => {
     const storedMemberNo = localStorage.getItem("memberNo");
     const storedAppMembNo = localStorage.getItem("appMembNo");
 
     if (storedMemberNo) {
-      setLocalMemberNo(storedMemberNo); // หากมีค่าที่เก็บไว้ใน localStorage ให้ตั้งค่า
+      setLocalMemberNo(storedMemberNo);
     }
 
-    // ถ้ามี appMembNo ใน localStorage ก็ควรตั้งค่า appMembNo ด้วย
     if (storedAppMembNo) {
       setAppMembNo(storedAppMembNo);
     }
   }, [setAppMembNo]);
 
-  // เมื่อมีการค้นหา ให้เก็บค่า memberNo และ appMembNo ใน localStorage
   const handleSearch = () => {
     if (localMemberNo.trim() === "") {
       alert("Please enter a member number");
       return;
     }
 
-    // เก็บค่าลง localStorage
     localStorage.setItem("memberNo", localMemberNo);
-    localStorage.setItem("appMembNo", localMemberNo); // เก็บค่าของ appMembNo ด้วย
-    setMemberNo(localMemberNo); // ส่งค่า memberNo ไปยัง parent component
-    setAppMembNo(localMemberNo); // ส่งค่า appMembNo ไปยัง parent component
+    localStorage.setItem("appMembNo", localMemberNo);
+    setMemberNo(localMemberNo);
+    setAppMembNo(localMemberNo);
   };
 
-  // ฟังก์ชันตรวจสอบการกดปุ่ม Enter
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    console.log("Key pressed:", e.key); // ดูว่ามีการกดปุ่มอะไร
+    console.log("Key pressed:", e.key);
     if (e.key === "Enter") {
-      handleSearch(); // เรียกฟังก์ชัน handleSearch เมื่อกด Enter
+      handleSearch();
     }
   };
 

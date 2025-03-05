@@ -91,7 +91,7 @@ export default function ChangeEmPage() {
 
         setTimeout(() => {
           setLoading(false);
-        }, 1500); // คุณสามารถเปลี่ยนเวลา (ในที่นี้เป็น 1500ms) ตามที่ต้องการ
+        }, 1000); // คุณสามารถเปลี่ยนเวลา (ในที่นี้เป็น 1500ms) ตามที่ต้องการ
       })
       .catch((error) => {
         setFetchError(

@@ -83,10 +83,10 @@ const UnlockInfo: React.FC<UnlockInfoProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap justify-between items-center w-full h-auto p-6 my-10 mx-auto rounded-3xl">
-      <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-200 p-6 my-10 mx-auto shadow-xl rounded-3xl">
+    <div className="flex flex-wrap justify-between items-center w-full h-auto p-2 my-10 mx-auto rounded-3xl">
+      <div className="flex flex-wrap justify-between items-center w-full h-auto bg-gray-200 p-6 my-10 gap-4 mx-auto shadow-xl rounded-3xl">
         {/* Card 1 */}
-        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
+        <div className="w-full md:w-64 h-80 p-3 md:p-6 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
           <div className="flex flex-col items-center">
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
               {Thai.Device_is_lock}
@@ -101,7 +101,7 @@ const UnlockInfo: React.FC<UnlockInfoProps> = ({
         </div>
 
         {/* Card 2 */}
-        <div className="w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
+        <div className="w-full md:w-64 h-80 p-3 md:p-6 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105">
           <div className="flex flex-col items-center">
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">
               {Thai.Account_is_lock}
@@ -116,7 +116,7 @@ const UnlockInfo: React.FC<UnlockInfoProps> = ({
         </div>
         {/* Card 3 */}
         <div
-          className={`w-full md:w-64 h-80 p-6 m-2 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105 ${accountTextColor} ${accountBgColor}`}
+          className={`w-full md:w-64 h-80 p-3 md:p-6 bg-white rounded-xl shadow-xl transition-transform transform hover:scale-105 ${accountTextColor} ${accountBgColor}`}
         >
           <div className="flex flex-col items-center">
             <h1 className="text-xl font-semibold text-gray-800 py-6 my-5">

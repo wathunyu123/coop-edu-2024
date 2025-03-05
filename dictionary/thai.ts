@@ -35,7 +35,7 @@ enum Thai {
   Back = "ย้อนกลับ",
   Notfound = "ไม่พบข้อมูลสมาชิก",
   Nodata = "ไม่พบข้อมูล",
-  Loading = "กำลังโหลด...",
+  Loading = "กำลังโหลดข้อมูล...",
   Device_Status = "สถานะการอุปกรณ์",
   DeviceId = "Id ของอุปกรณ์",
   Device_Type = "ประเภทของอุปกรณ์",
@@ -90,6 +90,13 @@ enum Thai {
   Req_Status = "ดูสถานะ",
   MobileApp = "ธุรกรรม Mobile App",
   Account_status = "สถานะบัญชี",
+  Submit = "เข้าสู่ระบบ",
+  This_is_OTP = "OTP ของคุณคือ :",
+  Click_Action = "กรุณากดปุ่ม Action เพื่อขอ OTP",
+  Time_left = "เวลาที่เหลือคือ :",
+  OTP_expired = " OTP หมดอายุแล้ว",
+  Request_new_password = "กรุณากดปุ่มเพื่อขอรหัสผ่านใหม่",
+  Incorrect_PIN_entered = "จำนวนที่ใส่ PIN ผิด :",
 }
 
 export default Thai;
