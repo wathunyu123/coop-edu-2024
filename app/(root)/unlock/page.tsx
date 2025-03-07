@@ -89,7 +89,7 @@ export default function UnlockPage() {
         // ใช้ setTimeout เพื่อหน่วงการตั้งค่า setIsLoading
         setTimeout(() => {
           setIsLoading(false); // เสร็จสิ้นการโหลด
-        }, 1500); // หน่วงเวลา 1.5 วินาที
+        }, 500); // หน่วงเวลา 1.5 วินาที
       }
     };
 

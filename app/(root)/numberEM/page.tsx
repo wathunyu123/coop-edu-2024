@@ -7,14 +7,8 @@ import Menubar from "@/components/menubar";
 import DeviceInfo from "@/components/diviceinfo";
 import IsLoading from "@/components/isloading";
 import ErrorPage from "@/components/404popup";
-import Link from "next/link";
-import Thai from "@/dictionary/thai";
-import { Accordion, AccordionItem } from "@/components/accordion"; // Import accordion ที่มีการจัดการสถานะ
-import Menucheng from "@/components/menucheng";
 import { AccordionProvider } from "@/contexts/accordioncontext";
-import Delete from "@/components/delete";
 import IsAccordion from "@/components/delete";
-import Button from "@/components/button";
 
 // ฟังก์ชั่นดึงข้อมูลจาก API
 const fetchDeviceData = async (appMembNo: string) => {
@@ -92,7 +86,7 @@ export default function NumberEmPage() {
 
         setTimeout(() => {
           setLoading(false);
-        }, 1000); // คุณสามารถเปลี่ยนเวลา (ในที่นี้เป็น 1500ms) ตามที่ต้องการ
+        }, 500); // คุณสามารถเปลี่ยนเวลา (ในที่นี้เป็น 1500ms) ตามที่ต้องการ
       })
       .catch((error) => {
         setFetchError(

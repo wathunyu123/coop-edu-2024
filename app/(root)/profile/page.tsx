@@ -80,7 +80,7 @@ export default function ProfilePage() {
       return new Promise<ProfileData>((resolve) => {
         setTimeout(() => {
           resolve(data);
-        }, 1500);
+        }, 500);
       });
     } catch (error) {
       setFetchError(

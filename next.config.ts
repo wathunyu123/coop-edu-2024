@@ -1,10 +1,4 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+const path = require("path");
 
 module.exports = {
   images: {
@@ -13,5 +7,9 @@ module.exports = {
       "encrypted-tbn0.gstatic.com",
       "images.ctfassets.net",
     ],
+  },
+  webpack: (config: any, { isServer }: { isServer: boolean }) => {
+    config.resolve.alias["@"] = path.resolve(__dirname, "./");
+    return config;
   },
 };

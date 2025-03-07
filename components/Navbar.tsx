@@ -35,11 +35,11 @@ export default function Navbar({ children }: NavbarProps) {
       >
         <div className="flex justify-between items-center py-5 px-10 mb-4">
           <IoClose
-            className="text-3xl cursor-pointer lg:hidden"
+            className="text-3xl cursor-pointer xl:hidden"
             onClick={toggleSidebar}
           />
         </div>
-        <Link href="/" className="flex justify-center py-5">
+        <Link href="/" className="flex justify-center py-5" prefetch={true}>
           <img
             src="https://psucoop.psu.ac.th/home/images/contact-us/logo.png"
             alt="logo"
@@ -57,6 +57,7 @@ export default function Navbar({ children }: NavbarProps) {
             <Link
               href="/changeEM "
               className="flex justify-center items-center w-full"
+              prefetch={true}
             >
               <FaExchangeAlt className="pr-3 text-4xl" />
               {Thai.Manage_transaction}

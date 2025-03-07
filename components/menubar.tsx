@@ -22,6 +22,7 @@ export default function Menubar() {
                 ? "bg-cyan-700 text-white "
                 : "hover:bg-cyan-700 hover:text-white "
             } rounded-xl`}
+            prefetch={true}
           >
             {Thai.ChangeEM || "Member No"}
           </Link>
@@ -34,6 +35,7 @@ export default function Menubar() {
                 ? "bg-cyan-700 text-white"
                 : "hover:bg-cyan-700 hover:text-white"
             } rounded-xl`}
+            prefetch={true}
           >
             Mobile App
           </Link>

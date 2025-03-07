@@ -77,6 +77,7 @@ export default function Searchbar({
           <Link
             href="/"
             className="w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center"
+            prefetch={true}
           >
             <IoHome />
           </Link>
@@ -85,6 +86,7 @@ export default function Searchbar({
             className={`w-1/2 rounded-lg hover:bg-cyan-700 hover:text-white flex justify-center ${
               isActive("/profile") ? "bg-cyan-700 text-white" : ""
             }`}
+            prefetch={true}
           >
             <FaUserCircle />
           </Link>
